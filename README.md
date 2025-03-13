@@ -13,7 +13,7 @@ Welcome to the **3D First-Person Movement Prototype**! This project is a demonst
 ---
 
 ## **Demo**
-Check out the live demo of the project here: [Netlify Deployment](https://threejs-first-person-movement.netlify.app/)  
+Check out the live demo of the project [here](https://threejs-first-person-movement.netlify.app/).
 
 ### **Video Demo**
 ![fpm_01](https://github.com/user-attachments/assets/e24b0678-8104-46e1-8d7d-6975e91db65e)
