@@ -6,7 +6,7 @@ export function CustomOrbitControls() {
     const { camera, size } = useThree(); // Access camera and canvas size
     const isRotating = useRef(false);
     const previousMousePosition = useRef({ x: 0, y: 0 });
-    const rotationSpeed = 0.00002; // Adjust this value to control rotation sensitivity
+    const rotationSpeed = 0.00003; // Adjust this value to control rotation sensitivity
 
     // Store accumulated pitch and yaw angles
     const pitch = useRef(0); // Rotation around the X-axis (up/down)

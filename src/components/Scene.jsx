@@ -18,8 +18,7 @@ export default function Scene() {
             onPointerDown={(e) => {
                 // Ensure the canvas retains focus after mouse interactions
                 e.target.setPointerCapture(e.pointerId);
-                e.target.focus(); // Explicitly focus the canvas
-                console.log("Canvas focused"); // Debugging
+                e.target.focus();
             }}
             onContextMenu={(e) => {
                 // Prevent the default context menu
@@ -32,7 +31,10 @@ export default function Scene() {
             <Environment preset="forest" />
             <ambientLight intensity={0.3} />
             <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
-            <Physics gravity={[0, -30, 0]}>
+            <Physics
+                gravity={[0, -30, 0]}
+                timeStep="vary" // Use a fixed time step for physics updates
+            >
                 <Level />
                 <Ground />
                 <Player keys={keys} /> {/* Pass keys to Player */}
