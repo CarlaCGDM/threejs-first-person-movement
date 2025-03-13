@@ -94,37 +94,6 @@ Open your browser and navigate to `http://localhost:3000` to view the project.
 
 ---
 
-## **Project Structure**
-Here’s an overview of the project structure:
-```
-src/
-├── components/        # React components (e.g., Player, Ground, Props)
-├── context/           # Context providers and hooks (e.g., SettingsContext)
-├── hooks/             # Custom hooks (e.g., useCustomKeyboardControls)
-├── setup/             # Setup files for props, levels, etc.
-├── utils/             # Utility functions and helpers
-├── App.js             # Main application component
-└── main.js            # Entry point for the app
-```
-
----
-
-## **Customization**
-You can customize the following settings in real time using the overlay:
-- **Camera Rotation Speed**: Adjust how fast the camera rotates when looking around.
-- **Player Walk Speed**: Adjust how fast the player moves.
-
----
-
-## **Contributing**
-Contributions are welcome! If you'd like to contribute, please follow these steps:
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Commit your changes and push to your branch.
-4. Submit a pull request.
-
----
-
 ## **License**
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
@@ -139,8 +108,8 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## **Contact**
 If you have any questions or feedback, feel free to reach out:
-- **Your Name** - [your.email@example.com](mailto:your.email@example.com)
-- **GitHub**: [your-username](https://github.com/your-username)
+- **Your Name** - [nadinaccg@gmail.com](mailto:nadinaccg@gmail.com)
+- **GitHub**: [CarlaCGDM](https://github.com/CarlaCGDM)
 
 ---
 
