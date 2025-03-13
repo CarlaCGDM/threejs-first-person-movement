@@ -97,6 +97,12 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl }, re
                 <Model modelUrl={validUrl} onComputedSize={setSize} onMaterialsLoaded={setMaterials} />
             </Suspense>
 
+            {/* Wireframe for debugging */}
+            <mesh position={[0,size.y * 0.5,0]}>
+                <boxGeometry args={[size.x, size.y, size.z]} />
+                <meshBasicMaterial color="black" wireframe />
+            </mesh>
+
             {/* Floating name */}
             <Html as="div" center position={[0, size.y + 0.3, 0]}>
                 <p style={{
