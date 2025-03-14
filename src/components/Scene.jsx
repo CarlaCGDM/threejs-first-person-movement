@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import {useRef} from "react";
 import { Sky, Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./Ground";
@@ -7,10 +8,16 @@ import { Player } from "./Player";
 import { PropsSetup } from "./setup/PropsSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
-import { Overlay } from "./html/Overlay";
+import { Overlay } from "./UI/Overlay";
+import propsData from "../data/propsData.json";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
+    const playerRef = useRef(); // Create a ref for the player's RigidBody
+    const cameraRef = useRef();
+
+    console.log("Player ref in Scene:", playerRef.current); // Debug log
+    console.log("Camera ref in Scene:", cameraRef.current); // Debug log
 
     return (
         <>
@@ -36,12 +43,12 @@ export default function Scene() {
                 <Physics gravity={[0, -30, 0]}>
                     <Level />
                     <Ground />
-                    <Player keys={keys} /> {/* Pass keys to Player */}
-                    <PropsSetup />
+                    <Player ref={playerRef} keys={keys} />
+                    <PropsSetup props={propsData} />
                 </Physics>
                 <CustomOrbitControls /> {/* Add custom orbit controls here */}
             </Canvas>
-            <Overlay /> {/* Add the overlay */}
+            <Overlay props={propsData} playerRef={playerRef} cameraRef={cameraRef} /> {/* Add the overlay */}
         </>
     );
 }
