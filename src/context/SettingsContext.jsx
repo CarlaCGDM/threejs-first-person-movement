@@ -2,8 +2,8 @@ import { createContext, useReducer, useContext } from "react";
 
 // Define initial settings
 const initialSettings = {
-    cameraRotationSpeed: 3,
-    playerWalkSpeed: 3,
+    cameraRotationSpeed: 1.50,
+    playerWalkSpeed: 2.5,
 };
 
 // Create a context for settings

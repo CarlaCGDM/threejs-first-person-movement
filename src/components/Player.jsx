@@ -9,18 +9,15 @@ const frontVector = new THREE.Vector3();
 const sideVector = new THREE.Vector3();
 
 export function Player({ keys }) {
-
-    const { settings } = useSettings(); // Access settings
-    const { playerWalkSpeed } = settings;
-
     const groupRef = useRef(); // Ref for the Three.js Group
     const rigidBodyRef = useRef(); // Ref for the RigidBody
     const { camera } = useThree(); // Access the camera
     const { world } = useRapier(); // Access the Rapier physics world
+    const { settings } = useSettings(); // Access settings
+    const { playerWalkSpeed } = settings;
 
-    // Smoothing variables
-    const targetPosition = useRef(new THREE.Vector3());
-    const currentPosition = useRef(new THREE.Vector3());
+    // Store the player's horizontal velocity
+    const horizontalVelocity = useRef(new THREE.Vector3());
 
     // Attach the camera to the player
     useEffect(() => {
@@ -37,7 +34,7 @@ export function Player({ keys }) {
         };
     }, [camera]);
 
-    useFrame((state, delta) => {
+    useFrame(() => {
         const { forward, backward, left, right } = keys;
         const velocity = rigidBodyRef.current.linvel();
 
@@ -47,24 +44,25 @@ export function Player({ keys }) {
         direction
             .subVectors(frontVector, sideVector)
             .normalize()
-            .multiplyScalar(playerWalkSpeed)
+            .multiplyScalar(playerWalkSpeed) // Use playerWalkSpeed
             .applyEuler(camera.rotation);
 
-        // Apply movement velocity
-        rigidBodyRef.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+        // Apply movement velocity only if keys are pressed
+        if (forward || backward || left || right) {
+            rigidBodyRef.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+        } else {
+            // Lock horizontal movement (X and Z axes) when no keys are pressed
+            rigidBodyRef.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
+        }
 
         // Wake up the RigidBody if it's sleeping
         if (rigidBodyRef.current.isSleeping()) {
             rigidBodyRef.current.wakeUp();
         }
 
-        // Update the target position
+        // Update the group's position to match the RigidBody's position
         const { x, y, z } = rigidBodyRef.current.translation();
-        targetPosition.current.set(x, y, z);
-
-        // Smoothly interpolate the camera's position
-        currentPosition.current.lerp(targetPosition.current, 0.1); // Adjust the lerp factor for smoother movement
-        groupRef.current.position.copy(currentPosition.current);
+        groupRef.current.position.set(x, y, z);
 
         // Step the physics world to ensure updates are synchronized
         world.step();
@@ -80,7 +78,9 @@ export function Player({ keys }) {
                 position={[0, 10, 0]}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider args={[0.75, 0.5]} />
+                <CapsuleCollider
+                    args={[0.75, 0.5]}
+                />
             </RigidBody>
         </group>
     );
