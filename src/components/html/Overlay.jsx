@@ -3,14 +3,14 @@ import { useSettings } from "../../context/SettingsContext";
 export function Overlay() {
     const { settings, dispatch } = useSettings();
 
-    const handleIncrement = (type, step = 0.5) => {
+    const handleIncrement = (type, step = 0.25) => {
         dispatch({
             type,
             payload: settings[type === "UPDATE_CAMERA_ROTATION_SPEED" ? "cameraRotationSpeed" : "playerWalkSpeed"] + step,
         });
     };
 
-    const handleDecrement = (type, step = 0.5) => {
+    const handleDecrement = (type, step = 0.25) => {
         dispatch({
             type,
             payload: settings[type === "UPDATE_CAMERA_ROTATION_SPEED" ? "cameraRotationSpeed" : "playerWalkSpeed"] - step,
@@ -37,7 +37,7 @@ export function Overlay() {
                             type="range"
                             min="1"
                             max="10"
-                            step="0.5"
+                            step="0.25"
                             value={settings.cameraRotationSpeed}
                             onChange={(e) =>
                                 dispatch({
@@ -70,7 +70,7 @@ export function Overlay() {
                             type="range"
                             min="1"
                             max="10"
-                            step="0.5"
+                            step="0.25"
                             value={settings.playerWalkSpeed}
                             onChange={(e) =>
                                 dispatch({
