@@ -2,13 +2,17 @@ import * as THREE from "three";
 import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
+import { useSettings } from "../context/SettingsContext";
 
-const SPEED = 3;
 const direction = new THREE.Vector3();
 const frontVector = new THREE.Vector3();
 const sideVector = new THREE.Vector3();
 
 export function Player({ keys }) {
+
+    const { settings } = useSettings(); // Access settings
+    const { playerWalkSpeed } = settings;
+
     const groupRef = useRef(); // Ref for the Three.js Group
     const rigidBodyRef = useRef(); // Ref for the RigidBody
     const { camera } = useThree(); // Access the camera
@@ -43,7 +47,7 @@ export function Player({ keys }) {
         direction
             .subVectors(frontVector, sideVector)
             .normalize()
-            .multiplyScalar(SPEED)
+            .multiplyScalar(playerWalkSpeed)
             .applyEuler(camera.rotation);
 
         // Apply movement velocity

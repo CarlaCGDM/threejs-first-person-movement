@@ -1,13 +1,11 @@
 import './App.css'
-import Scene from './components/Scene'
+import { SettingsProvider } from "./context/SettingsContext";
+import Scene from "./components/Scene";
 
-function App() {
-
-  return (
-    <>
-      <Scene />
-    </>
-  )
+export default function App() {
+    return (
+        <SettingsProvider>
+            <Scene />
+        </SettingsProvider>
+    );
 }
-
-export default App

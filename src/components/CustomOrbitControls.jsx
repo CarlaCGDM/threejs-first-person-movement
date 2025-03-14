@@ -1,12 +1,17 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
+import { useSettings } from "../context/SettingsContext";
 
 export function CustomOrbitControls() {
     const { camera, size } = useThree(); // Access camera and canvas size
     const isRotating = useRef(false);
     const previousMousePosition = useRef({ x: 0, y: 0 });
-    const rotationSpeed = 0.00003; // Adjust this value to control rotation sensitivity
+    
+    const { settings } = useSettings(); // Access settings
+    const { cameraRotationSpeed } = settings;
+
+    const scaledRotationSpeed = cameraRotationSpeed * 0.00001; // Adjust scaling factor as needed
 
     // Store accumulated pitch and yaw angles
     const pitch = useRef(0); // Rotation around the X-axis (up/down)
@@ -59,8 +64,8 @@ export function CustomOrbitControls() {
             const deltaY = previousMousePosition.current.y - size.height / 2;
 
             // Update pitch and yaw angles based on mouse position
-            yaw.current -= deltaX * rotationSpeed; // Horizontal rotation (left/right)
-            pitch.current -= deltaY * rotationSpeed; // Vertical rotation (up/down)
+            yaw.current -= deltaX * scaledRotationSpeed; // Horizontal rotation (left/right)
+            pitch.current -= deltaY * scaledRotationSpeed; // Vertical rotation (up/down)
 
             // Clamp pitch to avoid flipping
             pitch.current = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch.current));
