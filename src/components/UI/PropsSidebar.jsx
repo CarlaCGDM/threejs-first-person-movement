@@ -11,15 +11,17 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
     // Teleport the player
     teleportPlayer(prop);
 
-    // Look at the prop after teleporting
-    if (orbitControlsRef.current) {
-      const propPosition = new THREE.Vector3(...prop.position);
-      orbitControlsRef.current.lookAt(propPosition);
-    }
+    // Wait a short time to ensure the player has moved, then rotate
+    setTimeout(() => {
+        if (orbitControlsRef.current) {
+            const propPosition = new THREE.Vector3(...prop.position);
+            orbitControlsRef.current.lookAt(propPosition);
+        }
+    }, 50); // 50ms delay to ensure teleportation completes
 
     // Mark prop as visited
     setVisitedProps((prev) => ({ ...prev, [prop.name]: true }));
-  };
+};
 
   return (
     <div style={{...styles.sidebar, pointerEvents:"auto"}}>
