@@ -47,7 +47,7 @@ export function useTeleportPlayer(playerRef) {
     console.log("New position:", newPosition);
 
     // Set the player's new position
-    console.log(playerRef)
+    console.log(playerRef);
     playerRef.current.setTranslation(newPosition, true);
     console.log("Player position updated.");
 
