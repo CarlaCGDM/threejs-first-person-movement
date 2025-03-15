@@ -2,20 +2,27 @@ import { useState } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import { PropButton } from "./PropButton"; 
 import { useTeleportPlayer } from "../../hooks/useTeleportPlayer";
+import * as THREE from "three";
 
-export function Overlay({ props, playerRef }) {
+export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
   const [visitedProps, setVisitedProps] = useState({}); // Track visited props
 
   const teleportPlayer = useTeleportPlayer(playerRef);
 
-  // Handle teleport button click
   const handleTeleport = (prop) => {
-    console.log("Teleporting to:", prop.name);
-    teleportPlayer(prop); // Teleport the player
-    setVisitedProps((prev) => ({ ...prev, [prop.name]: true })); // Mark prop as visited
-  };
+    // Teleport the player
+    teleportPlayer(prop);
 
+    // Look at the prop after teleporting
+    if (orbitControlsRef.current) {
+      const propPosition = new THREE.Vector3(...prop.position);
+      orbitControlsRef.current.lookAt(propPosition);
+    }
+
+    // Mark prop as visited
+    setVisitedProps((prev) => ({ ...prev, [prop.name]: true }));
+  };
   const handleIncrement = (type, step = 0.25) => {
         dispatch({
             type,
