@@ -4,7 +4,8 @@ import { RigidBody, CuboidCollider } from '@react-three/rapier';
 import * as THREE from 'three';
 
 export function Level() {
-    const { scene } = useGLTF('/assets/meshcollider.glb');
+    //const { scene } = useGLTF('/assets/meshcollider.glb');
+    const { scene } = useGLTF('/assets/models/CovaBonica_LODs/covabonica_meshcollider.glb');
     const [colliders, setColliders] = useState([]);
     const [slopeColliders, setSlopeColliders] = useState([]);
 

@@ -13,11 +13,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     const { camera } = useThree(); // Access the camera
     const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
-    const { playerWalkSpeed } = settings;
-
-    // Store the player's horizontal velocity
-    const horizontalVelocity = useRef(new THREE.Vector3());
-
+    const { playerWalkSpeed, initialPlayerPosition } = settings;
 
     // Attach the camera to the player
     useEffect(() => {
@@ -75,7 +71,7 @@ export const Player = forwardRef(({ keys }, ref) => {
                 colliders={false}
                 mass={1}
                 type="dynamic"
-                position={[0, 10, 0]}
+                position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
             >
                 <CapsuleCollider args={[0.75, 0.5]} />
