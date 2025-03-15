@@ -22,14 +22,17 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
         lookAt: (targetPosition) => {
             // Update the camera's rotation to look at the target
             camera.lookAt(targetPosition);
-
+    
             // Calculate the new pitch and yaw based on the camera's quaternion
-            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion);
+            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, "YXZ");
             pitch.current = euler.x;
             yaw.current = euler.y;
-
-            // Reset previousMousePosition to avoid snapping back to the old rotation
-            previousMousePosition.current = { x: 0, y: 0 };
+    
+            // Instead of resetting, update the previous mouse position based on the new rotation
+            previousMousePosition.current = {
+                x: yaw.current,
+                y: pitch.current,
+            };
         },
     }));
 
