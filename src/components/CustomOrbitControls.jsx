@@ -1,13 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
 import { useThree, useFrame } from "@react-three/fiber";
 import { useSettings } from "../context/SettingsContext";
 
-export function CustomOrbitControls() {
+export const CustomOrbitControls = forwardRef((props, ref) => {
     const { camera, size } = useThree(); // Access camera and canvas size
     const isRotating = useRef(false);
     const previousMousePosition = useRef({ x: 0, y: 0 });
-    
+
     const { settings } = useSettings(); // Access settings
     const { cameraRotationSpeed } = settings;
 
@@ -16,6 +16,22 @@ export function CustomOrbitControls() {
     // Store accumulated pitch and yaw angles
     const pitch = useRef(0); // Rotation around the X-axis (up/down)
     const yaw = useRef(0); // Rotation around the Y-axis (left/right)
+
+    // Expose a method to look at a specific point
+    useImperativeHandle(ref, () => ({
+        lookAt: (targetPosition) => {
+            // Update the camera's rotation to look at the target
+            camera.lookAt(targetPosition);
+
+            // Calculate the new pitch and yaw based on the camera's quaternion
+            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion);
+            pitch.current = euler.x;
+            yaw.current = euler.y;
+
+            // Reset previousMousePosition to avoid snapping back to the old rotation
+            previousMousePosition.current = { x: 0, y: 0 };
+        },
+    }));
 
     useEffect(() => {
         const handleMouseDown = (event) => {
@@ -86,4 +102,4 @@ export function CustomOrbitControls() {
     });
 
     return null; // This component doesn't render anything
-}
+});
