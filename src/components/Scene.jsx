@@ -3,6 +3,7 @@ import {useRef} from "react";
 import { Sky, Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./Ground";
+import { Cave } from "./Cave";
 import { Level } from "./Level";
 import { Player } from "./Player";
 import { PropsSetup } from "./setup/PropsSetup";
@@ -40,7 +41,7 @@ export default function Scene() {
                 <ambientLight intensity={0.3} />
                 <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
                 <Physics gravity={[0, -30, 0]}>
-                    <Level />
+                    <Cave />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />

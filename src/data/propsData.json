@@ -1,24 +1,24 @@
 [
     {
       "name": "medieval cart",
-      "position": [-2, 0, -6],
+      "position": [5.5, -2.1, 2.75],
       "rotation": [0, 0, 0],
       "description": "this is a medieval cart",
       "modelUrl": "/assets/models/medievalCart.glb",
-      "teleportRotation": 90
+      "teleportRotation": 270
     },
     {
       "name": "tabby cat",
-      "position": [-2, 0, -9],
-      "rotation": [0, 90, 0],
+      "position": [5.94, -0.42, -4.37],
+      "rotation": [0, 0, 0],
       "description": "this is a tabby cat",
       "modelUrl": "/assets/models/tabbyCat.glb",
       "teleportRotation": 0
     },
     {
       "name": "treasure chest",
-      "position": [2, 0, -9],
-      "rotation": [0, 0, 0],
+      "position": [-4.7, -4.94, -3.6],
+      "rotation": [0, 90, 0],
       "description": "this is a treasure chest",
       "modelUrl": "/assets/models/treasureChest.glb",
       "teleportRotation": 0

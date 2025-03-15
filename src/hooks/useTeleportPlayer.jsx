@@ -18,12 +18,16 @@ export function useTeleportPlayer(playerRef) {
     // Log prop data
     console.log("Prop position:", prop.position);
     console.log("Prop size:", prop.size);
+    console.log("Prop rotation:", prop.rotation);
     console.log("Prop teleportRotation:", prop.teleportRotation);
 
     // Calculate the teleport position
     const propPosition = new THREE.Vector3(...prop.position);
     const propSize = prop.size ? new THREE.Vector3(...prop.size) : new THREE.Vector3(1, 1, 1); // Default size if not provided
-    const teleportRotation = THREE.MathUtils.degToRad(prop.teleportRotation);
+    const totalRotation = prop.teleportRotation + prop.rotation[1]; // Add original prop rotation
+
+    console.log("Total rotation: " + totalRotation)
+    const teleportRotation = THREE.MathUtils.degToRad(totalRotation);
 
     // Log calculated values
     console.log("Prop position (Vector3):", propPosition);
@@ -33,7 +37,7 @@ export function useTeleportPlayer(playerRef) {
     // Calculate the offset based on the teleportRotation
     const offset = new THREE.Vector3(
       Math.sin(teleportRotation) * (propSize.x / 2 + 1.0), // 0.5 meters away
-      0,
+      1,
       Math.cos(teleportRotation) * (propSize.z / 2 + 1.0) // 0.5 meters away
     );
 
