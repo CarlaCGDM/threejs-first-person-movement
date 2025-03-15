@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useRef, useEffect } from "react";
+import { useRef, forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
 import { useSettings } from "../context/SettingsContext";
@@ -8,9 +8,8 @@ const direction = new THREE.Vector3();
 const frontVector = new THREE.Vector3();
 const sideVector = new THREE.Vector3();
 
-export function Player({ keys }) {
+export const Player = forwardRef(({ keys }, ref) => {
     const groupRef = useRef(); // Ref for the Three.js Group
-    const rigidBodyRef = useRef(); // Ref for the RigidBody
     const { camera } = useThree(); // Access the camera
     const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
@@ -18,6 +17,7 @@ export function Player({ keys }) {
 
     // Store the player's horizontal velocity
     const horizontalVelocity = useRef(new THREE.Vector3());
+
 
     // Attach the camera to the player
     useEffect(() => {
@@ -36,7 +36,7 @@ export function Player({ keys }) {
 
     useFrame(() => {
         const { forward, backward, left, right } = keys;
-        const velocity = rigidBodyRef.current.linvel();
+        const velocity = ref.current.linvel();
 
         // Movement logic
         frontVector.set(0, 0, backward - forward);
@@ -49,19 +49,19 @@ export function Player({ keys }) {
 
         // Apply movement velocity only if keys are pressed
         if (forward || backward || left || right) {
-            rigidBodyRef.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+            ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
         } else {
             // Lock horizontal movement (X and Z axes) when no keys are pressed
-            rigidBodyRef.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
+            ref.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
         }
 
         // Wake up the RigidBody if it's sleeping
-        if (rigidBodyRef.current.isSleeping()) {
-            rigidBodyRef.current.wakeUp();
+        if (ref.current.isSleeping()) {
+            ref.current.wakeUp();
         }
 
         // Update the group's position to match the RigidBody's position
-        const { x, y, z } = rigidBodyRef.current.translation();
+        const { x, y, z } = ref.current.translation();
         groupRef.current.position.set(x, y, z);
 
         // Step the physics world to ensure updates are synchronized
@@ -71,17 +71,15 @@ export function Player({ keys }) {
     return (
         <group ref={groupRef}>
             <RigidBody
-                ref={rigidBodyRef}
+                ref={ref} // Internal ref for player logic
                 colliders={false}
                 mass={1}
                 type="dynamic"
                 position={[0, 10, 0]}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider
-                    args={[0.75, 0.5]}
-                />
+                <CapsuleCollider args={[0.75, 0.5]} />
             </RigidBody>
         </group>
     );
-}
+});

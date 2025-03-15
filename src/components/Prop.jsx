@@ -27,7 +27,7 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
     return <Clone object={gltf.scene} />;
 };
 
-const Prop = forwardRef(({ position, rotation, name, description, modelUrl }, ref) => {
+const Prop = forwardRef(({ position, rotation, name, description, modelUrl, teleportRotation = 0 }, ref) => {
     const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
     const [isClicked, setIsClicked] = useState(false); // Track click state
@@ -36,6 +36,14 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl }, re
 
     // Convert degrees to radians
     const radRotation = rotation.map(THREE.MathUtils.degToRad);
+    const radTeleportRotation = THREE.MathUtils.degToRad(teleportRotation);
+
+    // Calculate the teleport position
+    const teleportOffset = new THREE.Vector3(
+        Math.sin(radTeleportRotation) * (size.x / 2 + 1.0), // 0.5 meters away
+        0.125,
+        Math.cos(radTeleportRotation) * (size.z / 2 + 1.0) // 0.5 meters away
+    );
 
     // Highlight effect on hover
     useEffect(() => {
@@ -98,9 +106,15 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl }, re
             </Suspense>
 
             {/* Wireframe for debugging */}
-            <mesh position={[0,size.y * 0.5,0]}>
+            <mesh position={[0, size.y * 0.5, 0]}>
                 <boxGeometry args={[size.x, size.y, size.z]} />
                 <meshBasicMaterial color="black" wireframe />
+            </mesh>
+
+            {/* Debug plane for teleport position */}
+            <mesh position={teleportOffset}>
+                <boxGeometry args={[0.25, 0.25, 0.25]} />
+                <meshBasicMaterial color="red" />
             </mesh>
 
             {/* Floating name */}
