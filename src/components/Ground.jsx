@@ -2,16 +2,16 @@ import { useGLTF, Html, useProgress } from "@react-three/drei";
 import { useMemo, Suspense } from "react";
 
 const MemoizedModel = ({ modelUrl }) => {
-    const gltf = useGLTF(modelUrl);
+  const gltf = useGLTF(modelUrl);
 
-    // Memoize the cloned scene to avoid re-cloning on every render
-    const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+  // Memoize the cloned scene to avoid re-cloning on every render
+  const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
 
-    return <primitive object={scene} />;
+  return <primitive object={scene} />;
 };
 
 const Loader = () => {
-    const { progress, loaded, total } = useProgress();
+  const { progress, loaded, total } = useProgress();
   return (
     <Html center>
       <div style={{
@@ -44,21 +44,22 @@ const Loader = () => {
       </div>
     </Html>
   );
-  }
+}
 
 export function Ground() {
 
-    return (
+  return (
+    <>
+      <Suspense fallback={
         <>
-            <Suspense fallback={
-                <>
-                    <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_00.glb'} />
-                    <Loader />
-                </>
-            }>
-                <MemoizedModel modelUrl={'/api/scl/fi/1sghvj9jv5rxfngifhoim/LOD_03.glb?rlkey=52bi7z1xnx6o5qdehvjtercff&st=emj2viuv&dl=1'} />
-            </Suspense>
-            <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/visible_path.glb'} />s
+          <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_00.glb'} />
+          <Loader />
         </>
-    );
+      }>
+        <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
+        {/* <MemoizedModel modelUrl={'/api/scl/fi/1sghvj9jv5rxfngifhoim/LOD_03.glb?rlkey=52bi7z1xnx6o5qdehvjtercff&st=emj2viuv&dl=1'} /> */}
+      </Suspense>
+      <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/visible_path.glb'} />s
+    </>
+  );
 }
