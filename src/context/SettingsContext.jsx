@@ -4,7 +4,8 @@ import { createContext, useReducer, useContext } from "react";
 const initialSettings = {
     cameraRotationSpeed: 1.50,
     playerWalkSpeed: 2.5,
-    initialPlayerPosition: [0.91,10,8.8],
+    playerJumpForce: 4,
+    initialPlayerPosition: [0.91,0.2,8.8],
 };
 
 // Create a context for settings
@@ -17,6 +18,8 @@ function settingsReducer(state, action) {
             return { ...state, cameraRotationSpeed: action.payload };
         case "UPDATE_PLAYER_WALK_SPEED":
             return { ...state, playerWalkSpeed: action.payload };
+        case "UPDATE_PLAYER_JUMP_FORCE":
+            return { ...state, playerJumpForce: action.payload };
         default:
             return state;
     }

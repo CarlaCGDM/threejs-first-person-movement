@@ -17,7 +17,7 @@ export default function Scene() {
     const playerRef = useRef(); // Create a ref for the player's RigidBody
     const orbitControlsRef = useRef();
 
-    console.log("Player ref in Scene:", playerRef.current); // Debug log
+    //console.log("Player ref in Scene:", playerRef.current); // Debug log
 
     return (
         <>
@@ -46,7 +46,7 @@ export default function Scene() {
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />
                 </Physics>
-                <CustomOrbitControls ref={orbitControlsRef}/> {/* Add custom orbit controls here */}
+                <CustomOrbitControls ref={orbitControlsRef}/> 
             </Canvas>
             <Overlay props={propsData} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> {/* Add the overlay */}
         </>

@@ -13,7 +13,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     const { camera } = useThree(); // Access the camera
     const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
-    const { playerWalkSpeed, initialPlayerPosition } = settings;
+    const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
     // Attach the camera to the player
     useEffect(() => {
@@ -31,7 +31,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     }, [camera]);
 
     useFrame(() => {
-        const { forward, backward, left, right } = keys;
+        const { forward, backward, left, right, jump } = keys;
         const velocity = ref.current.linvel();
 
         // Movement logic
@@ -49,6 +49,13 @@ export const Player = forwardRef(({ keys }, ref) => {
         } else {
             // Lock horizontal movement (X and Z axes) when no keys are pressed
             ref.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
+        }
+
+        // Jump logic
+
+        if (jump) {
+            console.log("Jumping!")
+            ref.current.setLinvel({ x: direction.x, y: playerJumpForce, z: direction.z });
         }
 
         // Wake up the RigidBody if it's sleeping

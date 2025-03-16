@@ -6,6 +6,7 @@ export function useCustomKeyboardControls() {
         backward: false,
         left: false,
         right: false,
+        jump: false, // Add jump state
     });
 
     useEffect(() => {
@@ -30,6 +31,10 @@ export function useCustomKeyboardControls() {
                 case "D":
                 case "ArrowRight":
                     setKeys((prev) => ({ ...prev, right: true }));
+                    break;
+                case " ":
+                    setKeys((prev) => ({ ...prev, jump: true })); // Set jump to true
+                    console.log("Jump key pressed"); // Debug log
                     break;
                 default:
                     break;
@@ -57,6 +62,10 @@ export function useCustomKeyboardControls() {
                 case "D":
                 case "ArrowRight":
                     setKeys((prev) => ({ ...prev, right: false }));
+                    break;
+                case " ":
+                    setKeys((prev) => ({ ...prev, jump: false })); // Reset jump to false
+                    console.log("Jump key released"); // Debug log
                     break;
                 default:
                     break;

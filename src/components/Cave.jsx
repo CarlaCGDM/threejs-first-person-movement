@@ -2,10 +2,10 @@ import { useGLTF } from "@react-three/drei";
 import { RigidBody, TrimeshCollider } from "@react-three/rapier";
 
 export function Cave() {
-    const { scene } = useGLTF("/assets/models/CovaBonica_LODs/covabonica_meshcollider.glb");
+    const { scene } = useGLTF("/assets/models/CovaBonica_LODs/meshcollider_path.glb");
 
     // Log the scene to inspect its structure
-    console.log("GLTF Scene:", scene);
+    // console.log("GLTF Scene:", scene);
 
     // Extract the geometry from the mesh
     const geometry = scene.children[0].geometry;
@@ -13,11 +13,10 @@ export function Cave() {
     return (
         <RigidBody type="fixed" colliders={false}>
             <TrimeshCollider args={[geometry.attributes.position.array, geometry.index.array]} />
-            {/* s */}
             {/* Debug wireframe */}
-            <mesh geometry={geometry}>
+            {/* <mesh geometry={geometry}>
                 <meshBasicMaterial color="red" wireframe />
-            </mesh>
+            </mesh> */}
         </RigidBody>
     );
 }
