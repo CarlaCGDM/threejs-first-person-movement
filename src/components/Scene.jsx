@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import {useRef} from "react";
+import { useRef } from "react";
 import { Sky, Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./Ground";
@@ -22,8 +22,11 @@ export default function Scene() {
     return (
         <>
             <Canvas
+                frameloop="always" 
+                gl={{ antialias: false }} 
+                vsync={true}
                 shadows
-                camera={{ fov: 45 }}
+                camera={{ fov: 60 }}
                 onPointerDown={(e) => {
                     // Ensure the canvas retains focus after mouse interactions
                     e.target.setPointerCapture(e.pointerId);
@@ -36,7 +39,7 @@ export default function Scene() {
                 tabIndex={0} // Make the canvas focusable
                 style={{ outline: "none" }} // Remove outline when focused
             >
-                 <Stats /> {/* Add this to monitor performance */}
+                <Stats /> {/* Add this to monitor performance */}
                 <Sky sunPosition={[100, 20, 100]} />
                 <Environment preset="forest" />
                 <ambientLight intensity={0.3} />
@@ -47,7 +50,7 @@ export default function Scene() {
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />
                 </Physics>
-                <CustomOrbitControls ref={orbitControlsRef}/> 
+                <CustomOrbitControls ref={orbitControlsRef} />
             </Canvas>
             <Overlay props={propsData} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> {/* Add the overlay */}
         </>

@@ -93,7 +93,7 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
 
     const dampingFactor = 0.1; // Adjust for smoother rotation
 
-useFrame(() => {
+useFrame((state, delta) => {
     if (isRotating.current) {
         // Smoothly interpolate pitch and yaw
         const targetPitch = pitch.current;
