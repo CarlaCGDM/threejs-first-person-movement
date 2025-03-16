@@ -2,6 +2,7 @@ import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
+import { useSettings } from "../context/SettingsContext";
 
 const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
     const gltf = useGLTF(modelUrl);
@@ -33,6 +34,7 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
     const [isClicked, setIsClicked] = useState(false); // Track click state
     const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
+    const { dispatch } = useSettings();
 
     // Convert degrees to radians
     const radRotation = rotation.map(THREE.MathUtils.degToRad);
@@ -65,7 +67,12 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
 
     // Handle click events
     const handleClick = () => {
-        setIsClicked(!isClicked); // Toggle description visibility
+        console.log("size is: " + size.x)
+        // Notify the SettingsContext that this prop was clicked
+        dispatch({
+            type: "SELECT_PROP",
+            payload: { name, description, modelUrl, size },
+        });
     };
 
     // Handle hover events
@@ -128,22 +135,6 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
                     {name}
                 </p>
             </Html>
-
-            {/* Description popup */}
-            {isClicked && (
-                <Html as="div" center position={[0, size.y + 1, 0]}>
-                    <div style={{
-                        color: "white",
-                        backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        padding: "10px",
-                        borderRadius: "5px",
-                        maxWidth: "200px",
-                        textAlign: "center"
-                    }}>
-                        {description}
-                    </div>
-                </Html>
-            )}
         </group>
     );
 });
