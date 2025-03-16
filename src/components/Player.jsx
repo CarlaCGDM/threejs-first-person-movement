@@ -34,29 +34,21 @@ export const Player = forwardRef(({ keys }, ref) => {
         const { forward, backward, left, right, jump } = keys;
         const velocity = ref.current.linvel();
 
-        // Movement logic
+        // Calculate movement direction
         frontVector.set(0, 0, backward - forward);
         sideVector.set(left - right, 0, 0);
         direction
             .subVectors(frontVector, sideVector)
             .normalize()
-            .multiplyScalar(playerWalkSpeed) // Use playerWalkSpeed
+            .multiplyScalar(playerWalkSpeed)
             .applyEuler(camera.rotation);
 
-        // Apply movement velocity only if keys are pressed
-        if (forward || backward || left || right) {
-            ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
-        } else {
-            // Lock horizontal movement (X and Z axes) when no keys are pressed
-            ref.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
-        }
-
-        // Jump logic
-
-        if (jump) {
-            console.log("Jumping!")
-            ref.current.setLinvel({ x: direction.x, y: playerJumpForce, z: direction.z });
-        }
+        // Apply movement
+        ref.current.setLinvel({
+            x: forward || backward || left || right ? direction.x : 0,
+            y: jump ? playerJumpForce : velocity.y,
+            z: forward || backward || left || right ? direction.z : 0,
+        });
 
         // Wake up the RigidBody if it's sleeping
         if (ref.current.isSleeping()) {

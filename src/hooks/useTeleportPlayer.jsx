@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export function useTeleportPlayer(playerRef) {
-  const teleport = (prop) => {
+  const teleportToProp = (prop) => {
     console.log("Teleporting to:", prop.name);
 
     if (!playerRef.current) {
@@ -69,5 +69,36 @@ export function useTeleportPlayer(playerRef) {
     console.log("Player rotation updated.");
   };
 
-  return teleport;
+  // Teleport to the start position (new functionality)
+  const teleportToStart = (initialPlayerPosition) => { // Accept settings as an argument
+    console.log("Teleporting to start position");
+
+    if (!playerRef.current) {
+      console.error("Player RigidBody reference is not available.");
+      return;
+    }
+
+    // Ensure the RigidBody is initialized
+    if (!playerRef.current.setTranslation || !playerRef.current.setRotation) {
+      console.error("RigidBody methods are not available.");
+      return;
+    }
+
+    // Get the initial position from the settings
+    const newPosition = new THREE.Vector3(...initialPlayerPosition);
+
+    // Set the player's new position
+    playerRef.current.setTranslation(newPosition, true);
+
+    // Reset the player's rotation to face forward
+    const initialRotation = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(0, 0, 0) // Default rotation
+    );
+
+    // Set the player's new rotation
+    playerRef.current.setRotation(initialRotation, true);
+    console.log("Player returned to start position.");
+  };
+
+  return { teleportToProp, teleportToStart }; // Return both functions
 }

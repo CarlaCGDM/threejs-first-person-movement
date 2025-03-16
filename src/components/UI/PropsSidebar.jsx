@@ -1,31 +1,48 @@
 import { useState } from "react";
 import { PropButton } from "./PropButton";
 import { useTeleportPlayer } from "../../hooks/useTeleportPlayer";
+import { useSettings } from "../../context/SettingsContext";
 import * as THREE from "three";
 
 export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
   const [visitedProps, setVisitedProps] = useState({});
-  const teleportPlayer = useTeleportPlayer(playerRef);
+  const { teleportToProp, teleportToStart } = useTeleportPlayer(playerRef);
+  const { settings } = useSettings(); // Access settings
 
   const handleTeleport = (prop) => {
     // Teleport the player
-    teleportPlayer(prop);
+    teleportToProp(prop);
 
     // Wait a short time to ensure the player has moved, then rotate
     setTimeout(() => {
-        if (orbitControlsRef.current) {
-            const propPosition = new THREE.Vector3(...prop.position);
-            orbitControlsRef.current.lookAt(propPosition);
-        }
+      if (orbitControlsRef.current) {
+        const propPosition = new THREE.Vector3(...prop.position);
+        orbitControlsRef.current.lookAt(propPosition);
+      }
     }, 50); // 50ms delay to ensure teleportation completes
 
     // Mark prop as visited
     setVisitedProps((prev) => ({ ...prev, [prop.name]: true }));
-};
+  };
+
+  const handleReturnToStart = () => {
+    // Teleport the player to the initial position
+    teleportToStart(settings.initialPlayerPosition);
+
+    // Look at the initial position
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.lookAt(initialPosition);
+    }
+  };
 
   return (
-    <div style={{...styles.sidebar, pointerEvents:"auto"}}>
+    <div style={{ ...styles.sidebar, pointerEvents: "auto" }}>
       <h2 style={styles.heading}>Props</h2>
+      {/* "Return to Start Position" Button */}
+      <button onClick={handleReturnToStart} style={styles.returnButton}>
+        Return to Start Position
+      </button>
+      {/* List of Props */}
       {props.map((prop, index) => (
         <PropButton
           key={index}
@@ -52,5 +69,18 @@ const styles = {
   heading: {
     margin: "0 0 10px 0",
     fontSize: "18px",
+  },
+  returnButton: {
+    display: "block",
+    width: "100%",
+    padding: "10px",
+    margin: "5px 0",
+    color: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    textAlign: "left",
+    fontSize: "14px",
   },
 };

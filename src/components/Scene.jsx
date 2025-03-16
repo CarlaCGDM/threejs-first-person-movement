@@ -4,12 +4,12 @@ import { Sky, Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./Ground";
 import { Cave } from "./Cave";
-import { Level } from "./Level";
 import { Player } from "./Player";
 import { PropsSetup } from "./setup/PropsSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
+import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
 
 export default function Scene() {
@@ -36,6 +36,7 @@ export default function Scene() {
                 tabIndex={0} // Make the canvas focusable
                 style={{ outline: "none" }} // Remove outline when focused
             >
+                 <Stats /> {/* Add this to monitor performance */}
                 <Sky sunPosition={[100, 20, 100]} />
                 <Environment preset="forest" />
                 <ambientLight intensity={0.3} />
