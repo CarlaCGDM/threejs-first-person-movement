@@ -1,6 +1,6 @@
 # **3D First-Person Movement Prototype**
 
-Welcome to the **3D First-Person Movement Prototype**! This project is a demonstration of first-person movement and camera controls in a 3D environment using **React Three Fiber**, **Rapier Physics**, and **Three.js**. It includes features like walking, looking around, and interacting with objects in the scene.
+Welcome to the **3D First-Person Movement Prototype**! This project is a demonstration of first-person movement and camera controls in a 3D environment using **React Three Fiber**, **Rapier Physics**, and **Three.js**. It includes features like walking, looking around, interacting with objects, and teleporting to specific locations.
 
 ---
 
@@ -8,26 +8,57 @@ Welcome to the **3D First-Person Movement Prototype**! This project is a demonst
 - **First-Person Movement**: Move around the environment using `WASD` or arrow keys.
 - **Camera Controls**: Look around by holding the right mouse button.
 - **Physics-Based Collisions**: Realistic collisions with walls, slopes, and other objects.
-- **Interactive Props**: Click on objects to interact with them.
+- **Interactive Props**: Click on objects to interact with them and view descriptions.
+- **Teleportation**: Teleport to specific locations near props or return to the starting position.
+- **Dynamic Settings**: Adjust camera rotation speed and player walk speed in real-time.
 
 ---
 
 ## **Demo**
-Check out the live demo of the project [here](https://threejs-first-person-movement.netlify.app/).
+Check out the live demo of the project [here](https://cova-bonica-test.netlify.app/).
 
 ### **Video Demo**
-![fpm_01](https://github.com/user-attachments/assets/e24b0678-8104-46e1-8d7d-6975e91db65e)
-![fpm_02-ezgif com-optimize (1)](https://github.com/user-attachments/assets/3e952ef4-0183-43ea-8e68-ae589752fce8)
+
+![image](https://github.com/user-attachments/assets/6341f88f-a296-4b2b-b796-a7d935c2f371)
 
 
 ---
 
+# Application Workflow
+
+```mermaid
+graph TD
+    A[Scene] --> B[Canvas]
+    A --> C[Physics]
+    A --> D[Overlay]
+
+    B --> E[Player]
+    B --> F[Cave]
+    B --> G[Props]
+
+    C --> E
+    C --> F
+    C --> G
+
+    D --> H[Settings Panel]
+    D --> I[Props Sidebar]
+    D --> J[Instructions Panel]
+
+    I --> K[Prop Button]
+    I --> L[Return to Start Button]
+
+    E --> M[useTeleportPlayer Hook]
+    K --> M
+    L --> M
+````
+---
 
 ## **Technologies Used**
 - **[React Three Fiber](https://docs.pmnd.rs/react-three-fiber)**: A React renderer for Three.js.
 - **[Rapier Physics](https://rapier.rs/)**: A fast and deterministic physics engine.
 - **[Three.js](https://threejs.org/)**: A 3D library for rendering and animation.
 - **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces.
+- **[Drei](https://github.com/pmndrs/drei)**: A collection of useful helpers for React Three Fiber.
 
 ---
 
@@ -53,6 +84,14 @@ This project presented several interesting technical challenges, which were over
 ### **5. Focus Management**
 - **Problem**: Keyboard input would stop working after interacting with the canvas using the mouse, as the canvas would lose focus.
 - **Solution**: The canvas was explicitly focused on mouse interactions using the `onPointerDown` event, ensuring it retained focus and continued to capture keyboard events.
+
+### **6. Teleportation Logic**
+- **Problem**: Teleporting the player to specific locations required precise calculations for position and rotation.
+- **Solution**: A custom `useTeleportPlayer` hook was created to handle teleportation logic, including calculating offsets based on prop size and rotation.
+
+### **7. Complex Collision Meshes**
+- **Problem**: The cave environment required precise collision detection, which was challenging with complex geometry.
+- **Solution**: A `TrimeshCollider` was used to accurately represent the cave's geometry for collisions.
 
 ---
 
