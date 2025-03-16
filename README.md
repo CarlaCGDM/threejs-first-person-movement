@@ -49,8 +49,7 @@ graph TD
     I --> K[Prop Button]
     I --> L[Return to Start Button]
 
-    E --> M[useTeleportPlayer Hook]
-    K --> M
+    K --> M[useTeleportPlayer Hook]
     L --> M
 ````
 ---
