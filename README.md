@@ -56,7 +56,7 @@ graph TD
     N --> P[Player Rotation]
 
     F --> Q[TrimeshCollider]
-    G --> R[Prop Colliders]
+    G --> R[CuboidColliders]
 
     H --> S[Camera Rotation Speed]
     H --> T[Player Walk Speed]
