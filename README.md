@@ -19,7 +19,7 @@ Check out the live demo of the project [here](https://cova-bonica-test.netlify.a
 
 ### **Video Demo**
 
-![image](https://github.com/user-attachments/assets/6341f88f-a296-4b2b-b796-a7d935c2f371)
+![image](https://github.com/user-attachments/assets/0f6974e1-0aea-4eca-88c0-904b106a0c5f)
 
 
 ---
