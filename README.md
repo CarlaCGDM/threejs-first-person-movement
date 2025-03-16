@@ -40,29 +40,16 @@ graph TD
     C --> F
     C --> G
 
-    D --> H[SettingsPanel]
-    D --> I[PropsSidebar]
-    D --> J[InstructionsPanel]
+    D --> H[Settings Panel]
+    D --> I[Props Sidebar]
+    D --> J[Instructions Panel]
 
-    I --> K[PropButton]
+    I --> K[Prop Button]
     I --> L[Return to Start Button]
 
     E --> M[useTeleportPlayer Hook]
-    I --> M
+    K --> M
     L --> M
-
-    M --> N[RigidBody]
-    N --> O[Player Position]
-    N --> P[Player Rotation]
-
-    F --> Q[TrimeshCollider]
-    G --> R[CuboidColliders]
-
-    H --> S[Camera Rotation Speed]
-    H --> T[Player Walk Speed]
-
-    J --> U[WASD Controls]
-    J --> V[Right Mouse Button]
 ````
 ---
 
