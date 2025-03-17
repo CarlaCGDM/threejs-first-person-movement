@@ -20,6 +20,8 @@ Check out the live demo of the project [here](https://cova-bonica-test.netlify.a
 ### **Video Demo**
 
 ![image](https://github.com/user-attachments/assets/0f6974e1-0aea-4eca-88c0-904b106a0c5f)
+![image](https://github.com/user-attachments/assets/844465d5-348f-47f1-87aa-c591c5f37577)
+
 
 
 ---
@@ -47,8 +49,7 @@ graph TD
     I --> K[Prop Button]
     I --> L[Return to Start Button]
 
-    E --> M[useTeleportPlayer Hook]
-    K --> M
+    K --> M[useTeleportPlayer Hook]
     L --> M
 ````
 ---
@@ -62,36 +63,61 @@ graph TD
 
 ---
 
-## **Technical Challenges**
-This project presented several interesting technical challenges, which were overcome with creative solutions:
+## **Technically Challenging Features**
 
-### **1. Camera Jittering**
-- **Problem**: When moving and rotating the camera simultaneously, the screen would jitter due to unsynchronized updates between the physics engine and rendering loop.
-- **Solution**: The camera was attached to the player as a child object, ensuring that its position and rotation updates were synchronized. Additionally, the physics engine was stepped manually in the `useFrame` loop to ensure consistent updates.
+This project includes several advanced features that required creative problem-solving and deep integration of React, Three.js, and physics engines. Here are the most challenging aspects:
 
-### **2. Roll in Camera Rotation**
-- **Problem**: Accumulating rotations directly using quaternions introduced unintended roll (twisting around the view axis), causing the horizon to skew.
-- **Solution**: Instead of accumulating rotations directly, pitch and yaw angles were stored separately and converted into quaternions only when applying the rotation to the camera. This eliminated roll and ensured smooth, stable rotations.
+---
 
-### **3. RigidBody Sleeping**
-- **Problem**: The player's `RigidBody` would go to sleep after inactivity, causing movement to stop unexpectedly.
-- **Solution**: The `RigidBody` was explicitly woken up in the `useFrame` loop whenever movement or rotation was detected, ensuring it remained active and responsive.
+### **1. Custom First-Person Camera Controls**
+- Implemented smooth, responsive camera rotation using mouse movement deltas.
+- Added pitch and yaw clamping to prevent camera flipping.
+- Integrated with the `pointerlock` API for a seamless first-person experience.
+- Applied damping and smoothing to eliminate jitter during rotation.
 
-### **4. Continuous Camera Rotation**
-- **Problem**: The camera would stop rotating when the mouse stopped moving, even if the right mouse button was still held down.
-- **Solution**: The rotation logic was updated to accumulate rotation based on the mouse position relative to the screen center, allowing continuous rotation while the mouse button was held down.
+---
 
-### **5. Focus Management**
-- **Problem**: Keyboard input would stop working after interacting with the canvas using the mouse, as the canvas would lose focus.
-- **Solution**: The canvas was explicitly focused on mouse interactions using the `onPointerDown` event, ensuring it retained focus and continued to capture keyboard events.
+### **2. Physics-Based Player Movement**
+- Integrated `@react-three/rapier` for realistic physics-based movement.
+- Implemented custom keyboard controls for player movement (WASD) and jumping.
+- Added collision detection and grounded checks to prevent double jumps.
+- Synchronized physics updates with the rendering loop for smooth gameplay.
 
-### **6. Teleportation Logic**
-- **Problem**: Teleporting the player to specific locations required precise calculations for position and rotation.
-- **Solution**: A custom `useTeleportPlayer` hook was created to handle teleportation logic, including calculating offsets based on prop size and rotation.
+---
 
-### **7. Complex Collision Meshes**
-- **Problem**: The cave environment required precise collision detection, which was challenging with complex geometry.
-- **Solution**: A `TrimeshCollider` was used to accurately represent the cave's geometry for collisions.
+### **3. Dynamic Prop System**
+- Created a reusable `Prop` component for interactive 3D objects.
+- Added hover and click interactions with material highlighting.
+- Implemented teleportation logic to move the player to specific prop locations.
+- Used `useGLTF` and `Suspense` for efficient model loading and rendering.
+
+---
+
+### **4. Environment Optimization**
+- Added a toggle for switching between high-resolution and standard-resolution environments.
+- Memoized environment models to prevent unnecessary re-renders.
+- Preloaded models to reduce delays when toggling between resolutions.
+
+---
+
+### **5. Performance Optimization**
+- Used `useMemo` and `React.memo` to optimize rendering performance.
+- Implemented lazy loading for large 3D models to reduce initial load times.
+- Added a performance monitor using the `Stats` component from `@react-three/drei`.
+
+---
+
+### **6. Settings and UI Integration**
+- Created a centralized `SettingsContext` for managing global settings (e.g., player speed, camera sensitivity).
+- Built a dynamic settings panel with sliders and toggles for real-time adjustments.
+- Integrated the UI overlay with the 3D scene using `Html` from `@react-three/drei`.
+
+---
+
+### **7. Debugging and Profiling**
+- Used the browser’s **Performance** tab to identify and resolve bottlenecks.
+- Added debug logs and visual aids (e.g., wireframes, collider visualizations) to troubleshoot issues.
+- Tested and optimized the project across multiple devices and browsers.
 
 ---
 
