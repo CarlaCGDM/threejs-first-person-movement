@@ -18,7 +18,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     // Attach the camera to the player
     useEffect(() => {
         if (groupRef.current) {
-            camera.position.set(0, 1.5, 0); // Adjust camera height relative to the player
+            camera.position.set(0, 1.0, 0); // Adjust camera height relative to the player
             groupRef.current.add(camera);
         }
 
@@ -73,7 +73,7 @@ export const Player = forwardRef(({ keys }, ref) => {
                 position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider args={[0.75, 0.5]} />
+                <CapsuleCollider args={[0.25, 0.5]} />
             </RigidBody>
         </group>
     );
