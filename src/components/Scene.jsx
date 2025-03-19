@@ -12,7 +12,6 @@ import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
 import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
-import { GalaxySky } from "./environment/GalaxySky";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -20,22 +19,6 @@ export default function Scene() {
     const orbitControlsRef = useRef();
 
     //console.log("Player ref in Scene:", playerRef.current); // Debug log
-
-    function StarrySky() {
-        const starTexture = useTexture("/assets/textures/stars_02.jpg"); // Load a starry texture
-
-        // Adjust the texture's repeat property
-        starTexture.wrapS = THREE.RepeatWrapping;
-        starTexture.wrapT = THREE.RepeatWrapping;
-        starTexture.repeat.set(4, 4); // Repeat the texture 4 times along U and V axes
-
-        return (
-            <mesh>
-                <sphereGeometry args={[500, 32, 32]} /> {/* Large sphere for the sky */}
-                <meshBasicMaterial map={starTexture} side={THREE.BackSide} transparent opacity={0.9} /> {/* Apply the texture */}
-            </mesh>
-        );
-    }
 
     return (
         <>
@@ -59,19 +42,9 @@ export default function Scene() {
             >
                 <Stats /> {/* Add this to monitor performance */}
                 
-                <Sky
-                    sunPosition={[0, -1, 0]} // Sun below the horizon (nighttime)
-                    turbidity={1} // Lower turbidity for a clearer sky
-                    rayleigh={0.1} // Lower rayleigh scattering for a darker sky
-                    mieCoefficient={0.005} // Lower mie coefficient for less atmospheric haze
-                    mieDirectionalG={0.8} // Adjust for a softer glow
-                    inclination={0.5} // Adjust the angle of the sky
-                    azimuth={0.25} // Adjust the rotation of the sky
-                    distance={450000} // Distance to the sky (keep this large)
-                />
-                <Environment preset="night" />
-                <ambientLight intensity={0.3} />
-                <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />
+                <Environment background blur={0.5} files="/assets/textures/pexels-george-chambers-1k.jpg" />
+                <ambientLight intensity={1} />
+                <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />ww
                 <Physics gravity={[0, -30, 0]}>
                     <Cave />
                     <Ground />
