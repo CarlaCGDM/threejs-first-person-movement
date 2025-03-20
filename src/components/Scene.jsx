@@ -1,17 +1,19 @@
 import { Canvas } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-import { Sky, Environment, useTexture } from "@react-three/drei";
+import { Sky, Environment, useTexture, Point } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
-import { Ground } from "./environment/CaveEnvironment";
-import { Cave } from "./environment/EnvironmentColliders";
+import { Ground } from "./caveEnvironment/CaveEnvironment";
+import { Cave } from "./caveEnvironment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./props/PropsSetup";
+import { PointsOfInterestSetup } from "./pois/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
 import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
+import POIsData from "../data/POIsData.json";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -50,6 +52,7 @@ export default function Scene() {
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />
+                    <PointsOfInterestSetup POIs={POIsData}/>
                 </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
             </Canvas>

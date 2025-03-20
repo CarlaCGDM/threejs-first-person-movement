@@ -2,16 +2,21 @@ import { SettingsPanel } from "./SettingsPanel";
 import { PropsSidebar } from "../props/PropsSidebar";
 import { InstructionsPanel } from "./InstructionsPanel";
 import PropInfo from "../props/PropInfo";
+import PointOfInterestInfo from "../pois/PointOfInterestInfo"; // Import the PointOfInterestInfo component
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
-import { Minimap } from "../environment/Minimap";
+import { Minimap } from "../caveEnvironment/Minimap";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
-  const { selectedProp } = settings;
+  const { selectedProp, selectedPOI } = settings;
 
   const handleClosePropInfo = () => {
     dispatch({ type: "CLEAR_SELECTED_PROP" });
+  };
+
+  const handleClosePointOfInterestInfo = () => {
+    dispatch({ type: "CLEAR_SELECTED_POI" });
   };
 
   useEffect(() => {
@@ -29,7 +34,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
   }, []);
 
   return (
-    <div style={{ ...styles.overlay, pointerEvents: selectedProp ? "auto" : "none" }}>
+    <div style={{ ...styles.overlay, pointerEvents: selectedProp || selectedPOI ? "auto" : "none" }}>
       <SettingsPanel />
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       <InstructionsPanel />
@@ -42,6 +47,16 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
           detailedModelFile={selectedProp.detailedModelFile}
           size={selectedProp.size}
           onClose={handleClosePropInfo}
+        />
+      )}
+
+      {/* Render PointOfInterestInfo if a POI is selected */}
+      {selectedPOI && (
+        <PointOfInterestInfo
+          poiName={selectedPOI.poiName}
+          metadata={selectedPOI.metadata}
+          imageFile={selectedPOI.imageFile}
+          onClose={handleClosePointOfInterestInfo}
         />
       )}
 

@@ -6,8 +6,9 @@ const initialSettings = {
   playerJumpForce: 4,
   initialPlayerPosition: [0.91, 0.2, 8.8],
   showHDEnvironment: false,
-  selectedProp: null, // New state for the selected prop
-  devMode: false
+  selectedProp: null, // State for the selected prop
+  selectedPOI: null, // New state for the selected POI
+  devMode: false,
 };
 
 const SettingsContext = createContext();
@@ -26,6 +27,10 @@ function settingsReducer(state, action) {
       return { ...state, selectedProp: action.payload }; // Update selected prop
     case "CLEAR_SELECTED_PROP":
       return { ...state, selectedProp: null }; // Clear selected prop
+    case "SELECT_POI":
+      return { ...state, selectedPOI: action.payload }; // Update selected POI
+    case "CLEAR_SELECTED_POI":
+      return { ...state, selectedPOI: null }; // Clear selected POI
     case "TOGGLE_DEV_MODE":
       return { ...state, devMode: !state.devMode }; // Toggle devMode
     default:

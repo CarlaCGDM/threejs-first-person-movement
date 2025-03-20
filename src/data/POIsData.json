@@ -1,0 +1,20 @@
+[
+    {
+      "poiName": "Point of interest 1",
+      "position": [-0.639, -2.039, 4.846],
+      "metadata": {
+        "description": "This is the description for POI 1. It provides interesting information about this location."
+      },
+      "modelFile": "/assets/models/POIs/POI1.glb",
+      "imageFile": "/assets/images/POIs/POI1.PNG"
+    },
+    {
+      "poiName": "Point of interest 2",
+      "position": [4.023, -2.899, 1.866],
+      "metadata": {
+        "description": "This is the description for POI 2. It highlights the significance of this point of interest."
+      },
+      "modelFile": "/assets/models/POIs/POI2.glb",
+      "imageFile": "/assets/images/POIs/POI2.PNG"
+    }
+  ]
