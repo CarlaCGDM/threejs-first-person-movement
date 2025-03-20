@@ -35,6 +35,8 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch, settings } = useSettings();
     const { devMode } = settings;
+    const { selectedProp } = settings;
+    const { selectedPOI } = settings;
 
     // Convert degrees to radians
     const radRotation = rotation.map(THREE.MathUtils.degToRad);
@@ -130,7 +132,7 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
             )}
 
             {/* Floating name */}
-            <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
+            {!selectedPOI && !selectedProp && <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
                 <p style={{
                     color: "white",
                     backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -139,7 +141,7 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
                 }}>
                     {artifactName}
                 </p>
-            </Html>
+            </Html>}
         </group>
     );
 });

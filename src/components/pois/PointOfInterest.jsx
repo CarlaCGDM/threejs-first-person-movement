@@ -39,6 +39,8 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch, settings } = useSettings();
     const { devMode } = settings;
+    const { selectedProp } = settings;
+    const { selectedPOI } = settings;
 
     // Highlight material for hover effect
     const highlightedMaterial = new THREE.MeshBasicMaterial({
@@ -129,7 +131,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
                     {poiName}
                 </p>
             </Html>}
-            {!isHovered && <PulsatingIndicator position={position} />}
+            {!isHovered && !selectedPOI && !selectedProp &&  <PulsatingIndicator position={position} />}
         </group>
     );
 });
