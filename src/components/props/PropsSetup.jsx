@@ -1,6 +1,6 @@
 import { useGLTF } from "@react-three/drei";
 import { useRef } from "react";
-import Prop from "../Prop";
+import Prop from "./Prop";
 
 export function PropsSetup({ props }) {
 

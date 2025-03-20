@@ -1,7 +1,7 @@
 import { SettingsPanel } from "./SettingsPanel";
-import { PropsSidebar } from "./PropsSidebar";
+import { PropsSidebar } from "../props/PropsSidebar";
 import { InstructionsPanel } from "./InstructionsPanel";
-import PropInfo from "./PropInfo";
+import PropInfo from "../props/PropInfo";
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
 

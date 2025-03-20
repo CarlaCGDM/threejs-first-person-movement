@@ -2,7 +2,7 @@ import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useSettings } from "../context/SettingsContext";
+import { useSettings } from "../../context/SettingsContext";
 
 const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
     const gltf = useGLTF(modelUrl);
