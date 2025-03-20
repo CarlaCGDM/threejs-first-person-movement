@@ -28,17 +28,13 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
     return <Clone object={gltf.scene} />;
 };
 
-const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0 }, ref) => {
+const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0, occlusionMeshRef }, ref) => {
     const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
-    const [isClicked, setIsClicked] = useState(false); // Track click state
     const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
-    const { dispatch } = useSettings();
-
-    console.log(detailedModelFile)
-    console.log(artifactName)
-    console.log(metadata)
+    const { dispatch, settings } = useSettings();
+    const { devMode } = settings;
 
     // Convert degrees to radians
     const radRotation = rotation.map(THREE.MathUtils.degToRad);
@@ -116,20 +112,25 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
                 <Model modelUrl={validUrl} onComputedSize={setSize} onMaterialsLoaded={setMaterials} />
             </Suspense>
 
-            {/* Wireframe for debugging */}
-            <mesh position={[0, size.y * 0.5, 0]}>
-                <boxGeometry args={[size.x, size.y, size.z]} />
-                <meshBasicMaterial color="black" wireframe />
-            </mesh>
+            {/* Debug meshes (only visible in devMode) */}
+            {devMode && (
+                <>
+                    {/* Model bounding box for debugging */}
+                    <mesh position={[0, size.y * 0.5, 0]}>
+                        <boxGeometry args={[size.x, size.y, size.z]} />
+                        <meshBasicMaterial color="black" wireframe />
+                    </mesh>
 
-            {/* Debug plane for teleport position */}
-            <mesh position={teleportOffset}>
-                <boxGeometry args={[0.25, 0.25, 0.25]} />
-                <meshBasicMaterial color="red" />
-            </mesh>
+                    {/* Teleport position marker for debugging */}
+                    <mesh position={teleportOffset}>
+                        <boxGeometry args={[0.25, 0.25, 0.25]} />
+                        <meshBasicMaterial color="red" />
+                    </mesh>
+                </>
+            )}
 
             {/* Floating name */}
-            <Html as="div" center position={[0, size.y + 0.3, 0]}>
+            <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
                 <p style={{
                     color: "white",
                     backgroundColor: "rgba(0, 0, 0, 0.8)",

@@ -42,7 +42,7 @@ export default function Scene() {
             >
                 <Stats /> {/* Add this to monitor performance */}
                 
-                <Environment background blur={0.5} files="/assets/textures/pexels-george-chambers-1k.jpg" />
+                <Environment background blur={0.5} files="/assets/textures/pexels-bryan-vega-sanchez-1k.jpg" />
                 <ambientLight intensity={1} />
                 <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />ww
                 <Physics gravity={[0, -30, 0]}>

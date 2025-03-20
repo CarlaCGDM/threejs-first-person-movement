@@ -9,24 +9,28 @@ export function SettingsPanel() {
       UPDATE_PLAYER_WALK_SPEED: "playerWalkSpeed",
       UPDATE_PLAYER_JUMP_FORCE: "playerJumpForce",
     };
-  
+
     dispatch({
       type,
       payload: settings[keyMap[type]] + step,
     });
   };
-  
+
   const handleDecrement = (type, step = 0.25) => {
     const keyMap = {
       UPDATE_CAMERA_ROTATION_SPEED: "cameraRotationSpeed",
       UPDATE_PLAYER_WALK_SPEED: "playerWalkSpeed",
       UPDATE_PLAYER_JUMP_FORCE: "playerJumpForce",
     };
-  
+
     dispatch({
       type,
       payload: settings[keyMap[type]] - step,
     });
+  };
+
+  const handleToggleDevMode = () => {
+    dispatch({ type: "TOGGLE_DEV_MODE" });
   };
 
   return (
@@ -98,7 +102,7 @@ export function SettingsPanel() {
           </button>
         </div>
       </div>
-      <div style={styles.setting}>
+      {/* <div style={styles.setting}>
         <label style={styles.label}>
           Player Jump Force: {settings.playerJumpForce.toFixed(2)}
         </label>
@@ -130,6 +134,35 @@ export function SettingsPanel() {
             +
           </button>
         </div>
+      </div> */}
+      {/* Dev Mode Toggle */}
+      <div style={styles.setting}>
+        <label style={styles.label}>
+          Dev Mode:
+          <div style={styles.toggleContainer}>
+            <input
+              type="checkbox"
+              checked={settings.devMode}
+              onChange={handleToggleDevMode}
+              id="devModeToggle"
+              style={styles.hiddenCheckbox}
+            />
+            <label
+              htmlFor="devModeToggle"
+              style={{
+                ...styles.toggleSwitch,
+                backgroundColor: settings.devMode ? "#4CAF50" : "#555",
+              }}
+            >
+              <div
+                style={{
+                  ...styles.toggleThumb,
+                  transform: settings.devMode ? "translateX(20px)" : "translateX(0)",
+                }}
+              />
+            </label>
+          </div>
+        </label>
       </div>
     </div>
   );
@@ -175,5 +208,34 @@ const styles = {
   slider: {
     flex: 1,
     cursor: "pointer",
+  },
+  toggleContainer: {
+    display: "inline-block",
+    position: "relative",
+    width: "40px",
+    height: "20px",
+    marginLeft: "10px",
+  },
+  hiddenCheckbox: {
+    display: "none",
+  },
+  toggleSwitch: {
+    position: "relative",
+    cursor: "pointer",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#555",
+    borderRadius: "20px",
+    transition: "background 0.3s ease",
+    display: "flex",
+    alignItems: "center",
+    padding: "2px",
+  },
+  toggleThumb: {
+    width: "16px",
+    height: "16px",
+    backgroundColor: "white",
+    borderRadius: "50%",
+    transition: "transform 0.3s ease",
   },
 };

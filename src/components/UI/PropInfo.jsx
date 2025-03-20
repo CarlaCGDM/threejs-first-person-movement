@@ -46,7 +46,7 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                     <p style={styles.description}><strong>Localización actual</strong></p><p style={styles.description}> {metadata.currentLocation}</p>
                     <p style={styles.description}><strong>Descripción</strong></p><p style={styles.description}> {metadata.description}</p>
                     <p style={styles.description}><strong>Dimensiones</strong></p><p style={styles.description}> {metadata.size}</p>
-                    <p style={styles.description}><strong>Digitalización</strong></p><p style={styles.description}> {metadata.digitalizedBy}</p>
+                    <p style={styles.description}><strong>Digitalización</strong></p><p style={styles.description}> {metadata.digitizedBy}</p>
                 </div>
             </div>
         </div>
