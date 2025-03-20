@@ -32,22 +32,25 @@ function MinimapScene({ playerRef }) {
 
     // Update player sphere position to match the main player's position
     useEffect(() => {
-        if (playerRef.current.translation()) {const updatePlayerPosition = () => {
+        if (!playerRef?.current) return; // Ensure playerRef.current is valid
+    
+        const updatePlayerPosition = () => {
+            if (!playerRef.current) return; // Double-check inside the function
             const newPlayerPosition = playerRef.current.translation();
             setPlayerPosition([
                 newPlayerPosition.x * 0.3,
                 newPlayerPosition.y * 0.3,
                 newPlayerPosition.z * 0.3
-            ])
+            ]);
             requestAnimationFrame(updatePlayerPosition);
         };
-
+    
         updatePlayerPosition();
-
+    
         // Cleanup
         return () => {
             cancelAnimationFrame(updatePlayerPosition);
-        };}
+        };
     }, [playerRef]);
 
     return (
