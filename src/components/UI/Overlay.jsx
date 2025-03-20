@@ -4,6 +4,7 @@ import { InstructionsPanel } from "./InstructionsPanel";
 import PropInfo from "../props/PropInfo";
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
+import { Minimap } from "../environment/Minimap";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -43,6 +44,8 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
           onClose={handleClosePropInfo}
         />
       )}
+
+      <Minimap playerRef={playerRef} />
     </div>
   );
 }

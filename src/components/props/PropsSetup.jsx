@@ -21,6 +21,7 @@ export function PropsSetup({ props }) {
           metadata={prop.metadata}
           modelFile={prop.modelFile}
           detailedModelFile={prop.detailedModelFile}
+          iconFolder={prop.iconFolder}
           teleportRotationAngle={prop.teleportRotationAngle}
           occlusionMeshRef={occlusionMeshRef}
         />

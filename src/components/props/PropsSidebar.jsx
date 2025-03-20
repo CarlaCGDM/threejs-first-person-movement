@@ -38,10 +38,8 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
   return (
     <div style={{ ...styles.sidebar, pointerEvents: "auto" }}>
       <h2 style={styles.heading}>Props</h2>
-      {/* "Return to Start Position" Button */}
-      <button onClick={handleReturnToStart} style={styles.returnButton}>
-        Return to Start Position
-      </button>
+       {/* "Return to Start Position" Button */}
+      <button onClick={handleReturnToStart} style={styles.returnButton}>📍 Start</button>
       {/* List of Props */}
       {props.map((prop, index) => (
         <PropButton
@@ -80,7 +78,7 @@ const styles = {
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-    textAlign: "left",
+    textAlign: "center",
     fontSize: "14px",
   },
 };

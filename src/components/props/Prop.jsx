@@ -118,7 +118,7 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
                     {/* Model bounding box for debugging */}
                     <mesh position={[0, size.y * 0.5, 0]}>
                         <boxGeometry args={[size.x, size.y, size.z]} />
-                        <meshBasicMaterial color="black" wireframe />
+                        <meshBasicMaterial color="red" wireframe />
                     </mesh>
 
                     {/* Teleport position marker for debugging */}
