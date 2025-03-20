@@ -8,10 +8,11 @@ export function PropsSetup({ props }) {
           key={index}
           position={prop.position}
           rotation={prop.rotation}
-          name={prop.name}
-          description={prop.description}
-          modelUrl={prop.modelUrl}
-          teleportRotation={prop.teleportRotation}
+          artifactName={prop.artifactName}
+          metadata={prop.metadata}
+          modelFile={prop.modelFile}
+          detailedModelFile={prop.detailedModelFile}
+          teleportRotationAngle={prop.teleportRotationAngle}
         />
       ))}
     </>

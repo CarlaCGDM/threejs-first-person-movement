@@ -1,26 +1,66 @@
 [
     {
-      "name": "medieval cart",
-      "position": [5.5, -2.1, 2.75],
-      "rotation": [0, 0, 0],
-      "description": "this is a medieval cart",
-      "modelUrl": "/assets/models/medievalCart.glb",
-      "teleportRotation": 270
+      "artifactName": "Palaeoloxodon antiquus",
+      "position": [5.666, 0.034, -7.234],
+      "rotation": [1.791, -34.677, -3.79],
+      "metadata": {
+        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
+        "description":"Esqueleto en conexión anatómica de una cría de elefante de la especie conocida como elefante antiguo. Se trata de un macho de entre 6 y 10 años de edad que debía de pesar alrededor de 2.300-2.700 kg, que vivió hace 120.000 años.",
+        "size": "263 cm de largo x 200 cm de alto",
+        "digitizedBy":"Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/ElefanteSinCaja_LODs/LOD_02.glb",
+      "detailedModelFile": "/assets/models/Elefante_LODs/LOD_02.glb",
+      "teleportRotationAngle": 0
     },
     {
-      "name": "tabby cat",
-      "position": [5.94, -0.42, -4.37],
-      "rotation": [0, 0, 0],
-      "description": "this is a tabby cat",
-      "modelUrl": "/assets/models/tabbyCat.glb",
-      "teleportRotation": 0
+      "artifactName": "Haploidoceros mediterraneus",
+      "position": [0.106, -1.544, -7.646],
+      "rotation": [22.8, 30.633, -7.39],
+      "metadata": {
+        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
+        "description":"Cráneo de ciervo del mediterráneo, una especie hoy extinguida y prácticamente desconocida. Se caracteriza por las grandes dimensiones de sus cuernos, con tan sólo dos puntas cada una, la principal de las cuales tiene forma de hoz. Su peso corporal era de unos 70-80 kg y vivió hace 90.000 años.",
+        "size": "51,3 cm de largo x 45,2 de ancho",
+        "digitizedBy":"Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
+      "detailedModelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
+      "teleportRotationAngle": 270
     },
     {
-      "name": "treasure chest",
-      "position": [-4.7, -4.94, -3.6],
-      "rotation": [0, 90, 0],
-      "description": "this is a treasure chest",
-      "modelUrl": "/assets/models/treasureChest.glb",
-      "teleportRotation": 0
+      "artifactName": "Maxilar león",
+      "position": [5.825, -2.129, 2.659],
+      "rotation": [-12.074, -110.73, 0.099],
+      "metadata": {
+        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
+        "description":"Maxilar de un ejemplar de león que vivió hace más de 80.000 años.",
+        "size": "12 cm de largo x 7,57 cm de ancho",
+        "digitizedBy":"Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
+      "detailedModelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
+      "teleportRotationAngle": 0
+    },
+    {
+      "artifactName": "Stephannorhinus hundsheimensis",
+      "position": [-5.967, -4.714, -3.330],
+      "rotation": [-87.363, 71.27, 10.978],
+      "metadata": {
+        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
+        "description":"Cráneo de rinoceronte de Hundsheim, una familia considerada más rara y menos extendida que el resto de especies. Se trata de un individuo juvenil, que vivió hace 150.000 años.",
+        "size": "66,8 cm de largo x 42,2 cm de ancho",
+        "digitizedBy":"Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/Rino_LODs/LOD_02.glb",
+      "detailedModelFile": "/assets/models/Rino_LODs/LOD_02.glb",
+      "teleportRotationAngle": 0
     }
   ]

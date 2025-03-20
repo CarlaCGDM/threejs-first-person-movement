@@ -28,7 +28,7 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
     return <Clone object={gltf.scene} />;
 };
 
-const Prop = forwardRef(({ position, rotation, name, description, modelUrl, teleportRotation = 0 }, ref) => {
+const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0 }, ref) => {
     const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
     const [isClicked, setIsClicked] = useState(false); // Track click state
@@ -36,9 +36,13 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch } = useSettings();
 
+    console.log(detailedModelFile)
+    console.log(artifactName)
+    console.log(metadata)
+
     // Convert degrees to radians
     const radRotation = rotation.map(THREE.MathUtils.degToRad);
-    const radTeleportRotation = THREE.MathUtils.degToRad(teleportRotation);
+    const radTeleportRotation = THREE.MathUtils.degToRad(teleportRotationAngle);
 
     // Calculate the teleport position
     const teleportOffset = new THREE.Vector3(
@@ -71,7 +75,7 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
         // Notify the SettingsContext that this prop was clicked
         dispatch({
             type: "SELECT_PROP",
-            payload: { name, description, modelUrl, size },
+            payload: { artifactName, metadata, detailedModelFile, size },
         });
     };
 
@@ -88,10 +92,10 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
     useCursor(isHovered);
 
     useEffect(() => {
-        if (modelUrl) {
-            setValidUrl(modelUrl);
+        if (modelFile) {
+            setValidUrl(modelFile);
         }
-    }, [modelUrl]);
+    }, [modelFile]);
 
     return (
         <group
@@ -132,7 +136,7 @@ const Prop = forwardRef(({ position, rotation, name, description, modelUrl, tele
                     padding: "5px",
                     borderRadius: "5px"
                 }}>
-                    {name}
+                    {artifactName}
                 </p>
             </Html>
         </group>

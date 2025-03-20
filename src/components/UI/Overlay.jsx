@@ -36,9 +36,9 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (
         <PropInfo
-          name={selectedProp.name}
-          description={selectedProp.description}
-          modelUrl={selectedProp.modelUrl}
+          artifactName={selectedProp.artifactName}
+          metadata={selectedProp.metadata}
+          detailedModelFile={selectedProp.detailedModelFile}
           size={selectedProp.size}
           onClose={handleClosePropInfo}
         />

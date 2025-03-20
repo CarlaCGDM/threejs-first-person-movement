@@ -23,7 +23,7 @@ export function PropButton({ prop, onClick, isVisited }) {
         transition: "all 0.2s ease",
       }}
     >
-      <span style={styles.buttonText}>{prop.name}</span>
+      <span style={styles.buttonText}>{prop.artifactName}</span>
     </button>
   );
 }

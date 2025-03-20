@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Sky, Environment, useTexture } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./environment/CaveModel";
-import { Cave } from "./EnvironmentColliders";
+import { Cave } from "./environment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./setup/PropsSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";

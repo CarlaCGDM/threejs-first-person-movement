@@ -22,7 +22,7 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
     }, 50); // 50ms delay to ensure teleportation completes
 
     // Mark prop as visited
-    setVisitedProps((prev) => ({ ...prev, [prop.name]: true }));
+    setVisitedProps((prev) => ({ ...prev, [prop.artifactName]: true }));
   };
 
   const handleReturnToStart = () => {
@@ -48,7 +48,7 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
           key={index}
           prop={prop}
           onClick={handleTeleport}
-          isVisited={visitedProps[prop.name]}
+          isVisited={visitedProps[prop.artifactName]}
         />
       ))}
     </div>

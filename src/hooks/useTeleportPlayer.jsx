@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 export function useTeleportPlayer(playerRef) {
   const teleportToProp = (prop) => {
-    console.log("Teleporting to:", prop.name);
+    console.log("Teleporting to:", prop.artifactName);
 
     if (!playerRef.current) {
       console.error("Player RigidBody reference is not available.");
@@ -19,12 +19,12 @@ export function useTeleportPlayer(playerRef) {
     console.log("Prop position:", prop.position);
     console.log("Prop size:", prop.size);
     console.log("Prop rotation:", prop.rotation);
-    console.log("Prop teleportRotation:", prop.teleportRotation);
+    console.log("Prop teleportRotation:", prop.teleportRotationAngle);
 
     // Calculate the teleport position
     const propPosition = new THREE.Vector3(...prop.position);
     const propSize = prop.size ? new THREE.Vector3(...prop.size) : new THREE.Vector3(1, 1, 1); // Default size if not provided
-    const totalRotation = prop.teleportRotation + prop.rotation[1]; // Add original prop rotation
+    const totalRotation = prop.teleportRotationAngle + prop.rotation[1]; // Add original prop rotation
 
     console.log("Total rotation: " + totalRotation)
     const teleportRotation = THREE.MathUtils.degToRad(totalRotation);
