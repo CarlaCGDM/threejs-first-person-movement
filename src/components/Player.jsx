@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useRef, forwardRef, useEffect, useImperativeHandle } from "react";
+import { useRef, forwardRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
 import { useSettings } from "../context/SettingsContext";

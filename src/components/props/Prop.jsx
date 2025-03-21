@@ -1,5 +1,5 @@
 import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
-import { forwardRef, Suspense, useState, useEffect, useMemo } from "react";
+import { forwardRef, Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import { useSettings } from "../../context/SettingsContext";

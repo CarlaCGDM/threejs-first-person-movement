@@ -1,0 +1,26 @@
+{
+    "Palaeoloxodon antiquus": {
+      "wordScramble": {
+        "scrambledWords": ["etnafeel", "eeglafn tineuano", "10 y 6", "2.700-2.300", "000.021"],
+        "correctAnswers": ["elefante", "elefante antiguo", "6 y 10", "2.300-2.700", "120.000"]
+      }
+    },
+    "Haploidoceros mediterraneus": {
+      "wordScramble": {
+        "scrambledWords": ["vcieor del rráneetmédioa", "sornecu", "taspun", "zoh", "08-07", "000.09"],
+        "correctAnswers": ["ciervo del mediterráneo", "cuernos", "puntas", "hoz", "70-80", "90.000"]
+      }
+    },
+    "Maxilar león": {
+      "wordScramble": {
+        "scrambledWords": ["ónel", "000.08", "Cova del Rinoceront, Castelldefels"],
+        "correctAnswers": ["león", "80.000", "Cova del Rinoceront, Castelldefels"]
+      }
+    },
+    "Stephannorhinus hundsheimensis": {
+      "wordScramble": {
+        "scrambledWords": ["rinoceronte de Hundsheim", "juvenil", "150.000"],
+        "correctAnswers": ["rinoceronte de Hundsheim", "juvenil", "150.000"]
+      }
+    }
+  }
