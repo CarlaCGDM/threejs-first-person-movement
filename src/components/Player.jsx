@@ -13,16 +13,12 @@ export const Player = forwardRef(({ keys }, ref) => {
     const { camera } = useThree(); // Access the camera
     const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
-    const { playerWalkSpeed } = settings;
-
-    // Store the player's horizontal velocity
-    const horizontalVelocity = useRef(new THREE.Vector3());
-
+    const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
     // Attach the camera to the player
     useEffect(() => {
         if (groupRef.current) {
-            camera.position.set(0, 1.5, 0); // Adjust camera height relative to the player
+            camera.position.set(0, 1.0, 0); // Adjust camera height relative to the player
             groupRef.current.add(camera);
         }
 
@@ -35,25 +31,24 @@ export const Player = forwardRef(({ keys }, ref) => {
     }, [camera]);
 
     useFrame(() => {
-        const { forward, backward, left, right } = keys;
+        const { forward, backward, left, right, jump } = keys;
         const velocity = ref.current.linvel();
 
-        // Movement logic
+        // Calculate movement direction
         frontVector.set(0, 0, backward - forward);
         sideVector.set(left - right, 0, 0);
         direction
             .subVectors(frontVector, sideVector)
             .normalize()
-            .multiplyScalar(playerWalkSpeed) // Use playerWalkSpeed
+            .multiplyScalar(playerWalkSpeed)
             .applyEuler(camera.rotation);
 
-        // Apply movement velocity only if keys are pressed
-        if (forward || backward || left || right) {
-            ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
-        } else {
-            // Lock horizontal movement (X and Z axes) when no keys are pressed
-            ref.current.setLinvel({ x: 0, y: velocity.y, z: 0 });
-        }
+        // Apply movement
+        ref.current.setLinvel({
+            x: forward || backward || left || right ? direction.x : 0,
+            y: jump ? playerJumpForce : velocity.y,
+            z: forward || backward || left || right ? direction.z : 0,
+        });
 
         // Wake up the RigidBody if it's sleeping
         if (ref.current.isSleeping()) {
@@ -75,10 +70,10 @@ export const Player = forwardRef(({ keys }, ref) => {
                 colliders={false}
                 mass={1}
                 type="dynamic"
-                position={[0, 10, 0]}
+                position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider args={[0.75, 0.5]} />
+                <CapsuleCollider args={[0.25, 0.5]} />
             </RigidBody>
         </group>
     );

@@ -11,8 +11,6 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
     const { settings } = useSettings(); // Access settings
     const { cameraRotationSpeed } = settings;
 
-    const scaledRotationSpeed = cameraRotationSpeed * 0.00001; // Adjust scaling factor as needed
-
     // Store accumulated pitch and yaw angles
     const pitch = useRef(0); // Rotation around the X-axis (up/down)
     const yaw = useRef(0); // Rotation around the Y-axis (left/right)
@@ -24,16 +22,15 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
             camera.lookAt(targetPosition);
 
             // Calculate the new pitch and yaw based on the camera's quaternion
-            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion);
+            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, "YXZ");
             pitch.current = euler.x;
             yaw.current = euler.y;
-
-            // Reset previousMousePosition to avoid snapping back to the old rotation
-            previousMousePosition.current = { x: 0, y: 0 };
         },
     }));
 
     useEffect(() => {
+        const canvas = document.querySelector("canvas"); // Get the canvas element
+
         const handleMouseDown = (event) => {
             if (event.button === 2) { // Right mouse button
                 isRotating.current = true;
@@ -41,65 +38,84 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
                     x: event.clientX,
                     y: event.clientY,
                 };
+
+                // Request pointer lock when right mouse button is pressed
+                canvas.requestPointerLock();
             }
         };
 
         const handleMouseUp = (event) => {
             if (event.button === 2) { // Right mouse button
                 isRotating.current = false;
+
+                // Exit pointer lock when right mouse button is released
+                document.exitPointerLock();
             }
         };
 
         const handleMouseMove = (event) => {
             if (isRotating.current) {
-                // Update previous mouse position
-                previousMousePosition.current = {
-                    x: event.clientX,
-                    y: event.clientY,
-                };
+                // Calculate mouse movement delta
+                const deltaX = event.movementX || 0; // Use movementX for pointer lock
+                const deltaY = event.movementY || 0; // Use movementY for pointer lock
+
+                // Update pitch and yaw angles based on mouse movement
+                yaw.current -= deltaX * cameraRotationSpeed * 0.0001; // Horizontal rotation (left/right)
+                pitch.current -= deltaY * cameraRotationSpeed * 0.0001; // Vertical rotation (up/down)
+
+                // Clamp pitch to avoid flipping
+                pitch.current = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch.current));
+            }
+        };
+
+        const handlePointerLockChange = () => {
+            if (document.pointerLockElement === canvas) {
+                isRotating.current = true;
+            } else {
+                isRotating.current = false;
             }
         };
 
         // Add event listeners
-        window.addEventListener("mousedown", handleMouseDown);
-        window.addEventListener("mouseup", handleMouseUp);
-        window.addEventListener("mousemove", handleMouseMove);
+        canvas.addEventListener("mousedown", handleMouseDown);
+        canvas.addEventListener("mouseup", handleMouseUp);
+        canvas.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("pointerlockchange", handlePointerLockChange);
 
         // Cleanup
         return () => {
-            window.removeEventListener("mousedown", handleMouseDown);
-            window.removeEventListener("mouseup", handleMouseUp);
-            window.removeEventListener("mousemove", handleMouseMove);
+            canvas.removeEventListener("mousedown", handleMouseDown);
+            canvas.removeEventListener("mouseup", handleMouseUp);
+            canvas.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("pointerlockchange", handlePointerLockChange);
         };
-    }, []);
+    }, [cameraRotationSpeed]);
 
-    useFrame(() => {
-        if (isRotating.current) {
-            // Calculate mouse movement delta
-            const deltaX = previousMousePosition.current.x - size.width / 2;
-            const deltaY = previousMousePosition.current.y - size.height / 2;
+    const dampingFactor = 0.1; // Adjust for smoother rotation
 
-            // Update pitch and yaw angles based on mouse position
-            yaw.current -= deltaX * scaledRotationSpeed; // Horizontal rotation (left/right)
-            pitch.current -= deltaY * scaledRotationSpeed; // Vertical rotation (up/down)
+useFrame((state, delta) => {
+    if (isRotating.current) {
+        // Smoothly interpolate pitch and yaw
+        const targetPitch = pitch.current;
+        const targetYaw = yaw.current;
 
-            // Clamp pitch to avoid flipping
-            pitch.current = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch.current));
+        pitch.current = THREE.MathUtils.lerp(pitch.current, targetPitch, dampingFactor);
+        yaw.current = THREE.MathUtils.lerp(yaw.current, targetYaw, dampingFactor);
 
-            // Create quaternions for pitch and yaw
-            const pitchQuaternion = new THREE.Quaternion();
-            pitchQuaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), pitch.current);
+        // Create quaternions for pitch and yaw
+        const pitchQuaternion = new THREE.Quaternion();
+        pitchQuaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), pitch.current);
 
-            const yawQuaternion = new THREE.Quaternion();
-            yawQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw.current);
+        const yawQuaternion = new THREE.Quaternion();
+        yawQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw.current);
 
-            // Combine the quaternions
-            const combinedQuaternion = yawQuaternion.multiply(pitchQuaternion);
+        // Combine the quaternions
+        const combinedQuaternion = yawQuaternion.multiply(pitchQuaternion);
 
-            // Apply the combined quaternion to the camera
-            camera.quaternion.copy(combinedQuaternion);
-        }
-    });
+        // Apply the combined quaternion to the camera
+        camera.quaternion.copy(combinedQuaternion);
+    }
+});
 
     return null; // This component doesn't render anything
 });

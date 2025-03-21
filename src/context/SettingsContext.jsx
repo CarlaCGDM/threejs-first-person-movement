@@ -1,38 +1,53 @@
 import { createContext, useReducer, useContext } from "react";
 
-// Define initial settings
 const initialSettings = {
-    cameraRotationSpeed: 1.50,
-    playerWalkSpeed: 2.5,
+  cameraRotationSpeed: 4.0,
+  playerWalkSpeed: 2.5,
+  playerJumpForce: 4,
+  initialPlayerPosition: [0.91, 0.2, 8.8],
+  showHDEnvironment: false,
+  selectedProp: null, // State for the selected prop
+  selectedPOI: null, // New state for the selected POI
+  devMode: false,
 };
 
-// Create a context for settings
 const SettingsContext = createContext();
 
-// Define a reducer to handle updates
 function settingsReducer(state, action) {
-    switch (action.type) {
-        case "UPDATE_CAMERA_ROTATION_SPEED":
-            return { ...state, cameraRotationSpeed: action.payload };
-        case "UPDATE_PLAYER_WALK_SPEED":
-            return { ...state, playerWalkSpeed: action.payload };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case "UPDATE_CAMERA_ROTATION_SPEED":
+      return { ...state, cameraRotationSpeed: action.payload };
+    case "UPDATE_PLAYER_WALK_SPEED":
+      return { ...state, playerWalkSpeed: action.payload };
+    case "UPDATE_PLAYER_JUMP_FORCE":
+      return { ...state, playerJumpForce: action.payload };
+    case "TOGGLE_HD_ENVIRONMENT":
+      return { ...state, showHDEnvironment: !state.showHDEnvironment };
+    case "SELECT_PROP":
+      return { ...state, selectedProp: action.payload }; // Update selected prop
+    case "CLEAR_SELECTED_PROP":
+      return { ...state, selectedProp: null }; // Clear selected prop
+    case "SELECT_POI":
+      return { ...state, selectedPOI: action.payload }; // Update selected POI
+    case "CLEAR_SELECTED_POI":
+      return { ...state, selectedPOI: null }; // Clear selected POI
+    case "TOGGLE_DEV_MODE":
+      return { ...state, devMode: !state.devMode }; // Toggle devMode
+    default:
+      return state;
+  }
 }
 
-// Create a provider component
 export function SettingsProvider({ children }) {
-    const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
+  const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
-    return (
-        <SettingsContext.Provider value={{ settings, dispatch }}>
-            {children}
-        </SettingsContext.Provider>
-    );
+  return (
+    <SettingsContext.Provider value={{ settings, dispatch }}>
+      {children}
+    </SettingsContext.Provider>
+  );
 }
 
-// Custom hook to access settings
 export function useSettings() {
-    return useContext(SettingsContext);
+  return useContext(SettingsContext);
 }
