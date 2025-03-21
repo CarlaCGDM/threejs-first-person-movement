@@ -28,7 +28,14 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
 
                 {/* 3D Model Viewer */}
                 <div style={styles.modelViewer}>
-                    <Canvas camera={{ position: [cameraDistance, cameraDistance, cameraDistance], fov: 45 }}>
+                    <Canvas
+                        camera={{
+                            position: [cameraDistance, cameraDistance, cameraDistance],
+                            fov: 45,
+                            near: 0.01, // Adjust the near clipping plane
+                            far: 1000,  // Adjust the far clipping plane
+                        }}
+                    >
                         <Physics>
                             <ambientLight intensity={4.5} />
                             <pointLight position={[10, 10, 10]} intensity={0.5} />
