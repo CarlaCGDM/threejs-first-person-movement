@@ -57,7 +57,7 @@ export function Ground() {
         </>
       }>
         <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
-        {/* <MemoizedModel modelUrl={'/api/scl/fi/1sghvj9jv5rxfngifhoim/LOD_03.glb?rlkey=52bi7z1xnx6o5qdehvjtercff&st=emj2viuv&dl=1'} /> */}
+
       </Suspense>
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />s
     </>

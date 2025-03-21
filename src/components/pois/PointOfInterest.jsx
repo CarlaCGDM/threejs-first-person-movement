@@ -1,5 +1,5 @@
 import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
-import { forwardRef, Suspense, useState, useEffect, useMemo } from "react";
+import { forwardRef, Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import * as THREE from "three";
 import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import { useSettings } from "../../context/SettingsContext";
@@ -31,31 +31,39 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded, highlightedMateria
     return <Clone object={gltf.scene} />;
 };
 
-
 const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, imageFile, occlusionMeshRef }, ref) => {
     const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
     const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch, settings } = useSettings();
-    const { devMode } = settings;
-    const { selectedProp } = settings;
-    const { selectedPOI } = settings;
+    const { devMode, selectedProp, selectedPOI } = settings;
 
     // Highlight material for hover effect
-    const highlightedMaterial = new THREE.MeshBasicMaterial({
+    const highlightedMaterial = useMemo(() => new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
         opacity: 0.3,
         side: THREE.DoubleSide, // Ensure both sides are rendered
-    });
+    }), []);
 
-    const transparentMaterial = new THREE.MeshBasicMaterial({
+    const transparentMaterial = useMemo(() => new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
         opacity: 0,
         side: THREE.DoubleSide, // Ensure both sides are rendered
-    });
+    }), []);
+
+    // Memoize callbacks to prevent unnecessary re-renders
+    const handleComputedSize = useCallback((newSize) => {
+        if (!newSize.equals(size)) {
+            setSize(newSize);
+        }
+    }, [size]);
+
+    const handleMaterialsLoaded = useCallback((newMaterials) => {
+        setMaterials(newMaterials);
+    }, []);
 
     // Handle hover events
     const handlePointerOver = () => {
@@ -92,17 +100,15 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
             onPointerOut={handlePointerOut}
             onClick={handleClick}
         >
-            
-
             {/* Load the model with suspense */}
-            {<Suspense fallback={<Html center><span>Loading...</span></Html>}>
+            <Suspense fallback={<Html center><span>Loading...</span></Html>}>
                 <Model
                     modelUrl={validUrl}
-                    onComputedSize={setSize}
-                    onMaterialsLoaded={setMaterials}
+                    onComputedSize={handleComputedSize}
+                    onMaterialsLoaded={handleMaterialsLoaded}
                     highlightedMaterial={isHovered ? highlightedMaterial : transparentMaterial}
                 />
-            </Suspense>}
+            </Suspense>
 
             {/* Debug meshes (only visible in devMode) */}
             {devMode && (
@@ -116,22 +122,23 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
             )}
 
             {/* Floating name */}
-            { isHovered && <Html as="div" center position={[0, 0, 0]}d>
-                <p style={{
-                    display: "inline-block",  // Ensures it fits the text width
-                    whiteSpace: "nowrap",  // Prevents word wrapping
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    padding: "5px",
-                    borderRadius: "5px",
-                }}>
-                    {poiName}
-                </p>
-            </Html>}
-            {!isHovered && !selectedPOI && !selectedProp &&  <PulsatingIndicator position={position} />}
+            {isHovered && (
+                <Html as="div" center position={[0, 0, 0]}>
+                    <p style={{
+                        display: "inline-block",  // Ensures it fits the text width
+                        whiteSpace: "nowrap",  // Prevents word wrapping
+                        color: "white",
+                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                        padding: "5px",
+                        borderRadius: "5px",
+                    }}>
+                        {poiName}
+                    </p>
+                </Html>
+            )}
+            {!isHovered && !selectedPOI && !selectedProp && <PulsatingIndicator position={position} />}
         </group>
     );
 });
-
 
 export default PointOfInterest;
