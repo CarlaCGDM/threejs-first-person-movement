@@ -92,10 +92,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
             onPointerOut={handlePointerOut}
             onClick={handleClick}
         >
-            {/* Physics collider */}
-            <RigidBody type="fixed" colliders="cuboid">
-                <CuboidCollider args={[size.x / 2, size.y / 2, size.z / 2]} position={[0, size.y / 2, 0]} />
-            </RigidBody>
+            
 
             {/* Load the model with suspense */}
             {<Suspense fallback={<Html center><span>Loading...</span></Html>}>
