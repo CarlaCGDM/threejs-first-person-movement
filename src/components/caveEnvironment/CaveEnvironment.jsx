@@ -1,4 +1,4 @@
-import { useGLTF, Html, useProgress } from "@react-three/drei";
+import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
 import { useMemo, Suspense } from "react";
 
 const MemoizedModel = ({ modelUrl }) => {
@@ -7,7 +7,7 @@ const MemoizedModel = ({ modelUrl }) => {
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
 
-  return <primitive object={scene} />;
+  return <Clone object={scene} />;
 };
 
 const Loader = () => {

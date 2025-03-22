@@ -137,7 +137,7 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
 
             {/* Floating name */}
             {!selectedPOI && !selectedProp && (
-                <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
+                <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]} distanceFactor={3}>
                     <p style={{
                         color: "white",
                         backgroundColor: "rgba(0, 0, 0, 0.8)",
