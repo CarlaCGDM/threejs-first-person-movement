@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
@@ -8,71 +7,88 @@ function MinimapScene({ playerRef }) {
     const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb"); 
     const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb"); 
 
-    const [playerPosition, setPlayerPosition] = useState([0, 0, 0])
+    const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
+    const [isPlayerReady, setIsPlayerReady] = useState(false); // 🔹 Track when playerRef is valid
 
     // Clone and scale the cave model
-    const miniModel = useMemo(() => model.clone(), [model]); // Memoize the cloned scene to avoid re-cloning on every render
-    miniModel.scale.set(0.3, 0.3, 0.3); // Scale up to 0.5
-    // Traverse the model and replace materials with a white material
-    miniModel.traverse((child) => {
-        if (child.isMesh) {
-            child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
-        }
-    });
+    const miniModel = useMemo(() => {
+        const clone = model.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+            }
+        });
+        return clone;
+    }, [model]);
 
     // Clone and scale the path model
-    const miniPath = useMemo(() => path.clone(), [path]); // Memoize the cloned scene to avoid re-cloning on every render
-    miniPath.scale.set(0.3, 0.3, 0.3); // Scale up to 0.5
-    // Traverse the model and replace materials with a white material
-    miniPath.traverse((child) => {
-        if (child.isMesh) {
-            child.material = new THREE.MeshBasicMaterial({ color: "blue", transparent: true, opacity: 1, side: THREE.DoubleSide});
-        }
-    });
+    const miniPath = useMemo(() => {
+        const clone = path.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "blue", transparent: true, opacity: 1, side: THREE.DoubleSide });
+            }
+        });
+        return clone;
+    }, [path]);
 
-    // Update player sphere position to match the main player's position
+    // Wait for playerRef to become available
     useEffect(() => {
-        if (!playerRef?.current) return; // Ensure playerRef.current is valid
-    
+        if (!playerRef?.current) {
+            const checkInterval = setInterval(() => {
+                if (playerRef.current) {
+                    setIsPlayerReady(true);
+                    clearInterval(checkInterval);
+                }
+            }, 100); // Check every 100ms
+
+            return () => clearInterval(checkInterval);
+        } else {
+            setIsPlayerReady(true);
+        }
+    }, [playerRef]);
+
+    // Update player position when ref is available
+    useEffect(() => {
+        if (!isPlayerReady) return;
+
         const updatePlayerPosition = () => {
-            if (!playerRef.current) return; // Double-check inside the function
-            const newPlayerPosition = playerRef.current.translation();
-            setPlayerPosition([
-                newPlayerPosition.x * 0.3,
-                newPlayerPosition.y * 0.3,
-                newPlayerPosition.z * 0.3
-            ]);
+            if (playerRef.current) {
+                const newPlayerPosition = playerRef.current.translation();
+                setPlayerPosition([
+                    newPlayerPosition.x * 0.3,
+                    newPlayerPosition.y * 0.3,
+                    newPlayerPosition.z * 0.3
+                ]);
+            }
             requestAnimationFrame(updatePlayerPosition);
         };
-    
+
         updatePlayerPosition();
-    
-        // Cleanup
-        return () => {
-            cancelAnimationFrame(updatePlayerPosition);
-        };
-    }, [playerRef]);
+
+        return () => cancelAnimationFrame(updatePlayerPosition);
+    }, [isPlayerReady]); // 🔹 Start updating only when playerRef is ready
 
     return (
         <>
-            {/* Add the mini model */}
             <Clone object={miniModel} />
             <Clone object={miniPath} />
 
-            {/* Add a sphere to represent the player */}
-            <mesh position={playerPosition}>
-                <sphereGeometry args={[0.2, 16, 16]} />
-                <meshBasicMaterial color="red" />
-            </mesh>
+            {/* Player Indicator */}
+            {isPlayerReady && (
+                <mesh position={playerPosition}>
+                    <sphereGeometry args={[0.2, 16, 16]} />
+                    <meshBasicMaterial color="red" />
+                </mesh>
+            )}
 
-            {/* Add a grid helper */}
+            {/* Grid Helper */}
             <gridHelper args={[10, 10]} />
 
-            {/* Add OrbitControls */}
-            <OrbitControls
-                enableZoom={false} // Disable zooming
-                enablePan={false} // Disable panning
-            />
+            {/* Controls */}
+            <OrbitControls enableZoom={false} enablePan={false} />
         </>
     );
 }
@@ -81,7 +97,7 @@ export function Minimap({ playerRef }) {
     return (
         <div style={styles.minimapContainer}>
             <Canvas
-                camera={{ position: [5, 5, 5], fov: 50 }} // Adjust camera position and field of view
+                camera={{ position: [5, 5, 5], fov: 50 }}
                 style={styles.minimapCanvas}
             >
                 <MinimapScene playerRef={playerRef} />
@@ -101,7 +117,7 @@ const styles = {
         border: "2px solid white",
         borderRadius: "8px",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-        overflow: "hidden", // Ensure the canvas doesn't overflow
+        overflow: "hidden",
     },
     minimapCanvas: {
         width: "100%",
