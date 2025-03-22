@@ -52,8 +52,8 @@
     },
     {
       "artifactName": "Stephannorhinus hundsheimensis",
-      "position": [-5.967, -4.714, -3.330],
-      "rotation": [-87.363, 71.27, 10.978],
+      "position": [-4.567, -4.914, -3.330],
+      "rotation": [-90, 0, 90],
       "metadata": {
         "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
         "excavationSite":"Cova del Rinoceront, Castelldefels",

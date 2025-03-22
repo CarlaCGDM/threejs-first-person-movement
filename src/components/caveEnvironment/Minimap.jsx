@@ -1,7 +1,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
 
 function MinimapScene({ playerRef }) {
@@ -56,8 +56,8 @@ function MinimapScene({ playerRef }) {
     return (
         <>
             {/* Add the mini model */}
-            <primitive object={miniModel} />
-            <primitive object={miniPath} />
+            <Clone object={miniModel} />
+            <Clone object={miniPath} />
 
             {/* Add a sphere to represent the player */}
             <mesh position={playerPosition}>

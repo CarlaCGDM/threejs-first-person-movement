@@ -42,7 +42,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     const highlightedMaterial = useMemo(() => new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.3,
+        opacity: 0.5,
         side: THREE.DoubleSide, // Ensure both sides are rendered
     }), []);
 

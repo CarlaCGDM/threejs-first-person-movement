@@ -39,14 +39,19 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     const { selectedPOI } = settings;
 
     // Convert degrees to radians
-    const radRotation = rotation.map(THREE.MathUtils.degToRad);
-    const radTeleportRotation = THREE.MathUtils.degToRad(teleportRotationAngle);
+    const radRotation = rotation ? rotation.map(THREE.MathUtils.degToRad) : [0, 0, 0];
 
     // Calculate the teleport position
-    const teleportOffset = new THREE.Vector3(
-        Math.sin(radTeleportRotation) * (size.x / 2 + 1.0), // 0.5 meters away
-        0.125,
-        Math.cos(radTeleportRotation) * (size.z / 2 + 1.0) // 0.5 meters away
+    const propSize = size ? new THREE.Vector3(...size) : new THREE.Vector3(1, 1, 1); // Default size if not provided
+    const totalRotation = teleportRotationAngle + rotation[1]; // Add original prop rotation
+
+    const teleportRotation = THREE.MathUtils.degToRad(totalRotation);
+
+    // Calculate the offset based on the teleportRotation
+    const offset = new THREE.Vector3(
+        Math.sin(teleportRotation) * (propSize.x / 2 + 1.0), // 0.5 meters away
+        0,
+        Math.cos(teleportRotation) * (propSize.z / 2 + 1.0) // 0.5 meters away
     );
 
     // Highlight effect on hover
@@ -98,50 +103,51 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     return (
         <group
             ref={ref}
-            position={position}
-            rotation={radRotation || [0, 0, 0]}
-            onPointerOver={handlePointerOver}
-            onPointerOut={handlePointerOut}
-            onClick={handleClick}
-        >
-            {/* Physics collider */}
-            <RigidBody type="fixed" colliders="cuboid">
-                <CuboidCollider args={[size.x / 2, size.y / 2, size.z / 2]} position={[0, size.y / 2, 0]} />
-            </RigidBody>
+            position={position}>
 
-            {/* Load the model with suspense */}
-            <Suspense fallback={<Html center><span>Loading...</span></Html>}>
-                <Model modelUrl={validUrl} onComputedSize={setSize} onMaterialsLoaded={setMaterials} />
-            </Suspense>
+            {/* Rotated Group (For Model & Colliders) */}
+            <group
+                rotation={radRotation || [0, 0, 0]}
+                onPointerOver={handlePointerOver}
+                onPointerOut={handlePointerOut}
+                onClick={handleClick}>
 
-            {/* Debug meshes (only visible in devMode) */}
+                {/* Load the model with suspense */}
+                <Suspense fallback={<Html center><span>Loading...</span></Html>}>
+                    <Model modelUrl={validUrl} onComputedSize={setSize} onMaterialsLoaded={setMaterials} />
+                </Suspense>
+
+                {/* Model bounding box for debugging */}
+                {devMode && <mesh position={[0, 0, 0]}>
+                    <boxGeometry args={[size.x, size.y, size.z]}/>
+                    <meshBasicMaterial color="red" wireframe />
+                </mesh>}
+            </group>
+
+            {/* Debug Group (No Rotation) */}
             {devMode && (
-                <>
-                    {/* Model bounding box for debugging */}
-                    <mesh position={[0, 0, 0]}>
-                        <boxGeometry args={[size.x, size.y, size.z]} />
-                        <meshBasicMaterial color="red" wireframe />
-                    </mesh>
-
+                <group>
                     {/* Teleport position marker for debugging */}
-                    <mesh position={teleportOffset}>
+                    <mesh position={offset}>
                         <boxGeometry args={[0.25, 0.25, 0.25]} />
                         <meshBasicMaterial color="red" />
                     </mesh>
-                </>
+                </group>
             )}
 
             {/* Floating name */}
-            {!selectedPOI && !selectedProp && <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
-                <p style={{
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.8)",
-                    padding: "5px",
-                    borderRadius: "5px"
-                }}>
-                    {artifactName}
-                </p>
-            </Html>}
+            {!selectedPOI && !selectedProp && (
+                <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]}>
+                    <p style={{
+                        color: "white",
+                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                        padding: "5px",
+                        borderRadius: "5px"
+                    }}>
+                        {artifactName}
+                    </p>
+                </Html>
+            )}
         </group>
     );
 });
