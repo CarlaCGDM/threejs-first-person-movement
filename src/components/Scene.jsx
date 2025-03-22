@@ -44,8 +44,8 @@ export default function Scene() {
             >
                 <Stats /> {/* Add this to monitor performance */}
                 
-                <Environment background="only" backgroundIntensity={0.5} environmentIntensity={0.2} blur={1} files="assets\textures\hdr\HDR_05.hdr" />
-                <ambientLight intensity={2.0} />
+                <Environment background backgroundIntensity={0.5} environmentIntensity={0.2} blur={1} files="assets\textures\hdr\HDR_05.hdr" />
+                <ambientLight intensity={3.0} />
                 <pointLight intensity={0.2} position={[100, 100, 100]} />
                 <Physics gravity={[0, -30, 0]}>
                     <Cave />

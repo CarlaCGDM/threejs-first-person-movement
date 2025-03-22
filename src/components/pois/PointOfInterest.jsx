@@ -76,6 +76,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     // Handle click events
     const handleClick = () => {
         // Notify the SettingsContext that this POI was clicked
+        setIsHovered(false);
         dispatch({
             type: "SELECT_POI",
             payload: { poiName, metadata, imageFile },
@@ -95,9 +96,6 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
         <group
             ref={ref}
             position={position}
-            onPointerOver={handlePointerOver}
-            onPointerOut={handlePointerOut}
-            onClick={handleClick}
         >
             {/* Load the model with suspense */}
             <Suspense fallback={<Html center><span>Loading...</span></Html>}>
@@ -121,8 +119,8 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
             )}
 
             {/* Floating name */}
-            {isHovered && (
-                <Html as="div" center position={[0, 0, 0]}>
+            {isHovered && !selectedPOI && !selectedProp && (
+                <Html as="div" center position={[0, 0.5, 0]}>
                     <p style={{
                         display: "inline-block",  // Ensures it fits the text width
                         whiteSpace: "nowrap",  // Prevents word wrapping
@@ -135,7 +133,15 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
                     </p>
                 </Html>
             )}
-            {!isHovered && !selectedPOI && !selectedProp && <PulsatingIndicator position={position} />}
+
+            {/* Pulsating Indicator */}
+            {!selectedPOI && !selectedProp && (
+                <PulsatingIndicator
+                    onPointerOver={handlePointerOver}
+                    onPointerOut={handlePointerOut}
+                    onClick={handleClick}
+                />
+            )}
         </group>
     );
 });
