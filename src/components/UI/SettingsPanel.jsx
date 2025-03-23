@@ -102,7 +102,7 @@ export function SettingsPanel() {
           </button>
         </div>
       </div>
-      <div style={styles.setting}>
+      {/* <div style={styles.setting}>
         <label style={styles.label}>
           Player Jump Force: {settings.playerJumpForce.toFixed(2)}
         </label>
@@ -134,7 +134,7 @@ export function SettingsPanel() {
             +
           </button>
         </div>
-      </div>
+      </div> */}
       {/* Dev Mode Toggle */}
       <div style={styles.setting}>
         <label style={styles.label}>

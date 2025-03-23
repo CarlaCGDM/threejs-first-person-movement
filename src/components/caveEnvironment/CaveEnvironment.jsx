@@ -19,7 +19,6 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
   scene.frustumCulled = false
   scene.traverse((child) => {
     if (child.isMesh && child.material) {
-      console.log(child)
       child.material.alphaTest = 0.5
       child.material.depthWrite = true
       child.material.transparent = false

@@ -33,8 +33,7 @@ export function useCustomKeyboardControls() {
                     setKeys((prev) => ({ ...prev, right: true }));
                     break;
                 case " ":
-                    setKeys((prev) => ({ ...prev, jump: true })); // Set jump to true
-                    console.log("Jump key pressed"); // Debug log
+                    setKeys((prev) => ({ ...prev, jump: true }));
                     break;
                 default:
                     break;
@@ -64,8 +63,7 @@ export function useCustomKeyboardControls() {
                     setKeys((prev) => ({ ...prev, right: false }));
                     break;
                 case " ":
-                    setKeys((prev) => ({ ...prev, jump: false })); // Reset jump to false
-                    console.log("Jump key released"); // Debug log
+                    setKeys((prev) => ({ ...prev, jump: false }));
                     break;
                 default:
                     break;

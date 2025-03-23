@@ -6,9 +6,7 @@ import * as THREE from "three";
 
 function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
 
-    console.log(detailedModelFile)
     const gltf = useGLTF(detailedModelFile);
-
 
     // Default size if not provided
     const defaultSize = new THREE.Vector3(1, 1, 1);

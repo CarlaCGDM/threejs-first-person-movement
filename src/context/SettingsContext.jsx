@@ -2,7 +2,7 @@ import { createContext, useReducer, useContext } from "react";
 
 const initialSettings = {
   cameraRotationSpeed: 4.0,
-  playerWalkSpeed: 2.5,
+  playerWalkSpeed: 1.5,
   playerJumpForce: 4,
   initialPlayerPosition: [0.91, 0.2, 8.8],
   showHDEnvironment: false,

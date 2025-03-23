@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export const usePlayerMovement = (ref, keys, camera, playerWalkSpeed, playerJumpForce) => {
+export const usePlayerMovement = (ref, keys, camera, playerWalkSpeed, playerJumpForce, isGrounded) => {
     const direction = new THREE.Vector3();
     const frontVector = new THREE.Vector3();
     const sideVector = new THREE.Vector3();
@@ -22,9 +22,14 @@ export const usePlayerMovement = (ref, keys, camera, playerWalkSpeed, playerJump
         // Apply movement
         ref.current.setLinvel({
             x: forward || backward || left || right ? direction.x : 0,
-            y: jump ? playerJumpForce : velocity.y,
+            y: velocity.y, // Allow jumping only when grounded
             z: forward || backward || left || right ? direction.z : 0,
         });
+
+        // Prevent sliding when standing still on stairs
+        if (!forward && !backward && !left && !right && isGrounded) {
+            ref.current.setLinvel({ x: 0, y: 0.15, z: 0 });
+        }
 
         // Wake up the RigidBody if it's sleeping
         if (ref.current.isSleeping()) {

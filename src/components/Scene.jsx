@@ -49,7 +49,7 @@ export default function Scene() {
                 <ambientLight intensity={0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
-                <Physics gravity={[0, -30, 0]}>
+                <Physics gravity={[0, -9.81, 0]}>
                     <Cave />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
