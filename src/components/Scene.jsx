@@ -45,7 +45,7 @@ export default function Scene() {
 
                 < SceneWithRoomEnvironment />
 
-                <ambientLight intensity={2.0} />
+                <ambientLight intensity={1.0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
                 <Physics gravity={[0, -30, 0]}>
