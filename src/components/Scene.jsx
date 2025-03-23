@@ -15,6 +15,7 @@ import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
+import { Effects } from "./caveEnvironment/Effects";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -56,6 +57,7 @@ export default function Scene() {
                     <PointsOfInterestSetup POIs={POIsData} />
                 </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
+                <Effects />
             </Canvas>
             <Overlay props={propsData} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> {/* Add the overlay */}
         </>
