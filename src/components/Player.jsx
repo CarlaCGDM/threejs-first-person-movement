@@ -1,67 +1,25 @@
-import * as THREE from "three";
-import { useRef, forwardRef, useEffect } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
+import { useRef, forwardRef } from "react";
+import { useThree } from "@react-three/fiber";
+import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { useSettings } from "../context/SettingsContext";
-
-const direction = new THREE.Vector3();
-const frontVector = new THREE.Vector3();
-const sideVector = new THREE.Vector3();
+import { usePlayerCamera } from "../hooks/usePlayerCamera"; // Camera hook
+import { usePlayerMovement } from "../hooks/usePlayerMovement"; // Movement hook
+import { usePlayerPhysics } from "../hooks/usePlayerPhysics"; // Physics hook
 
 export const Player = forwardRef(({ keys }, ref) => {
     const groupRef = useRef(); // Ref for the Three.js Group
     const { camera } = useThree(); // Access the camera
-    const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
     const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
-    // Attach the camera to the player
-    useEffect(() => {
-        if (groupRef.current) {
-            camera.position.set(0, 1.0, 0); // Adjust camera height relative to the player
-            groupRef.current.add(camera);
-        }
+    // Use the camera hook
+    usePlayerCamera(groupRef, camera);
 
-        // Cleanup: Detach the camera when the component unmounts
-        return () => {
-            if (groupRef.current) {
-                groupRef.current.remove(camera);
-            }
-        };
-    }, [camera]);
+    // Use the movement hook
+    usePlayerMovement(ref, keys, camera, playerWalkSpeed, playerJumpForce);
 
-    useFrame(() => {
-        const { forward, backward, left, right, jump } = keys;
-        const velocity = ref.current.linvel();
-
-        // Calculate movement direction
-        frontVector.set(0, 0, backward - forward);
-        sideVector.set(left - right, 0, 0);
-        direction
-            .subVectors(frontVector, sideVector)
-            .normalize()
-            .multiplyScalar(playerWalkSpeed)
-            .applyEuler(camera.rotation);
-
-        // Apply movement
-        ref.current.setLinvel({
-            x: forward || backward || left || right ? direction.x : 0,
-            y: jump ? playerJumpForce : velocity.y,
-            z: forward || backward || left || right ? direction.z : 0,
-        });
-
-        // Wake up the RigidBody if it's sleeping
-        if (ref.current.isSleeping()) {
-            ref.current.wakeUp();
-        }
-
-        // Update the group's position to match the RigidBody's position
-        const { x, y, z } = ref.current.translation();
-        groupRef.current.position.set(x, y, z);
-
-        // Step the physics world to ensure updates are synchronized
-        world.step();
-    });
+    // Use the physics hook
+    usePlayerPhysics(ref, groupRef);
 
     return (
         <group ref={groupRef}>

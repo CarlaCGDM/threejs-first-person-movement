@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { PropButton } from "./PropButton";
-import { useTeleportPlayer } from "../../hooks/useTeleportPlayer";
+import { usePlayerTeleport } from "../../hooks/usePlayerTeleport";
 import { useSettings } from "../../context/SettingsContext";
 import * as THREE from "three";
 
 export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
   const [visitedProps, setVisitedProps] = useState({});
-  const { teleportToProp, teleportToStart } = useTeleportPlayer(playerRef);
+  const { teleportToProp, teleportToStart } = usePlayerTeleport(playerRef);
   const { settings } = useSettings(); // Access settings
 
   const handleTeleport = (prop) => {
@@ -53,7 +53,7 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
   );
 }
 
-// Styles (same as before)
+// Styles
 const styles = {
   sidebar: {
     position: "absolute",

@@ -1,98 +1,47 @@
 import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
-import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import { useSettings } from "../../context/SettingsContext";
-
-const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded }) => {
-    const gltf = useGLTF(modelUrl);
-
-    useEffect(() => {
-        if (gltf.scene) {
-            const bbox = new THREE.Box3().setFromObject(gltf.scene);
-            const size = new THREE.Vector3();
-            bbox.getSize(size);
-            onComputedSize(size); // Pass the computed size to the parent
-
-            // Collect materials for highlighting
-            const materials = [];
-            gltf.scene.traverse((child) => {
-                if (child.isMesh && child.material) {
-                    materials.push(child.material);
-                }
-            });
-            onMaterialsLoaded(materials); // Pass materials to the parent
-        }
-    }, [gltf.scene, onComputedSize, onMaterialsLoaded]);
-
-    return <Clone object={gltf.scene} />;
-};
+import { degreesToRadians } from "../../utils/math";
+import { useModelLoader } from "../../hooks/useModelLoader";
+import { useHoverEffect } from "../../hooks/useHoverEffect";
+import { useTeleportPosition } from "../../hooks/useTeleportPosition";
+import { DebugCube } from "../DebugCube";
+import { TeleportMarker } from "../TeleportMarker";
+import { FloatingName } from "../FloatingName";
 
 const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0, occlusionMeshRef }, ref) => {
     const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
-    const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch, settings } = useSettings();
     const { devMode } = settings;
     const { selectedProp } = settings;
     const { selectedPOI } = settings;
 
+    // Use the model loader hook
+    const modelScene = useModelLoader(validUrl, setSize, setMaterials);
+
     // Convert degrees to radians
-    const radRotation = rotation ? rotation.map(THREE.MathUtils.degToRad) : [0, 0, 0];
+    const radRotation = degreesToRadians(rotation || [0, 0, 0]);
 
-    // Calculate the teleport position
-    const propSize = size ? new THREE.Vector3(...size) : new THREE.Vector3(1, 1, 1); // Default size if not provided
-    const totalRotation = teleportRotationAngle + rotation[1]; // Add original prop rotation
+    // Use the teleport position hook
+    const offset = useTeleportPosition(size, rotation, teleportRotationAngle);
 
-    const teleportRotation = THREE.MathUtils.degToRad(totalRotation);
+    // Use the hover effect hook
+    const [isHovered, hoverEventHandlers] = useHoverEffect(materials);
 
-    // Calculate the offset based on the teleportRotation
-    const offset = new THREE.Vector3(
-        Math.sin(teleportRotation) * (propSize.x / 2 + 1.0), // 0.5 meters away
-        0,
-        Math.cos(teleportRotation) * (propSize.z / 2 + 1.0) // 0.5 meters away
-    );
-
-    // Highlight effect on hover
-    useEffect(() => {
-        if (materials.length > 0) {
-            materials.forEach((material) => {
-                if (isHovered) {
-                    // Increase emissive intensity for highlight effect
-                    material.emissive = new THREE.Color(0xffffff);
-                    material.emissiveIntensity = 0.5;
-                } else {
-                    // Reset emissive properties
-                    material.emissive = new THREE.Color(0x000000);
-                    material.emissiveIntensity = 0;
-                }
-                material.needsUpdate = true; // Ensure the material updates
-            });
-        }
-    }, [isHovered, materials]);
+    // Use cursor hook for visual feedback
+    useCursor(isHovered);
 
     // Handle click events
     const handleClick = () => {
-        console.log("size is: " + size.x)
         // Notify the SettingsContext that this prop was clicked
         dispatch({
             type: "SELECT_PROP",
             payload: { artifactName, metadata, detailedModelFile, size },
         });
     };
-
-    // Handle hover events
-    const handlePointerOver = () => {
-        setIsHovered(true);
-    };
-
-    const handlePointerOut = () => {
-        setIsHovered(false);
-    };
-
-    // Use cursor hook for visual feedback
-    useCursor(isHovered);
 
     useEffect(() => {
         if (modelFile) {
@@ -101,52 +50,33 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     }, [modelFile]);
 
     return (
-        <group
-            ref={ref}
-            position={position}>
-
+        <group ref={ref} position={position}>
             {/* Rotated Group (For Model & Colliders) */}
             <group
                 rotation={radRotation || [0, 0, 0]}
-                onPointerOver={handlePointerOver}
-                onPointerOut={handlePointerOut}
-                onClick={handleClick}>
-
+                {...hoverEventHandlers} // Spread hover event handlers
+                onClick={handleClick}
+            >
                 {/* Load the model with suspense */}
                 <Suspense fallback={<Html center><span>Loading...</span></Html>}>
-                    <Model modelUrl={validUrl} onComputedSize={setSize} onMaterialsLoaded={setMaterials} />
+                    <Clone object={modelScene} />
                 </Suspense>
 
-                {/* Model bounding box for debugging */}
-                {devMode && <mesh position={[0, 0, 0]}>
-                    <boxGeometry args={[size.x, size.y, size.z]}/>
-                    <meshBasicMaterial color="red" wireframe />
-                </mesh>}
+                {/* Render bounding box debug */}
+                {devMode && <DebugCube position={[0, 0, 0]} size={size} color="red" />}
             </group>
 
-            {/* Debug Group (No Rotation) */}
-            {devMode && (
-                <group>
-                    {/* Teleport position marker for debugging */}
-                    <mesh position={offset}>
-                        <boxGeometry args={[0.25, 0.25, 0.25]} />
-                        <meshBasicMaterial color="red" />
-                    </mesh>
-                </group>
-            )}
+            {/* Render teleport debug */}
+            {devMode && <TeleportMarker position={offset} />}
 
-            {/* Floating name */}
+            {/* Render floating name */}
             {!selectedPOI && !selectedProp && (
-                <Html as="div" center occlude={[occlusionMeshRef]} position={[0, size.y + 0.3, 0]} distanceFactor={3}>
-                    <p style={{
-                        color: "white",
-                        backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        padding: "5px",
-                        borderRadius: "5px"
-                    }}>
-                        {artifactName}
-                    </p>
-                </Html>
+                <FloatingName
+                    name={artifactName}
+                    position={[0, size.y + 0.3, 0]}
+                    occlusionMeshRef={occlusionMeshRef}
+                    distanceFactor={3}
+                />
             )}
         </group>
     );
