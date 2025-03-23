@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-import { Sky, Environment, useTexture, Point } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./caveEnvironment/CaveEnvironment";
 import { Cave } from "./caveEnvironment/EnvironmentColliders";
@@ -14,13 +14,12 @@ import { Overlay } from "./UI/Overlay";
 import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
+import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
     const playerRef = useRef(); // Create a ref for the player's RigidBody
     const orbitControlsRef = useRef();
-
-    //console.log("Player ref in Scene:", playerRef.current); // Debug log
 
     return (
         <>
@@ -43,16 +42,18 @@ export default function Scene() {
                 style={{ outline: "none" }} // Remove outline when focused
             >
                 <Stats /> {/* Add this to monitor performance */}
-                
-                <Environment background backgroundIntensity={0.5} environmentIntensity={0.2} blur={1} files="assets\textures\hdr\HDR_05.hdr" />
-                <ambientLight intensity={3.0} />
-                <pointLight intensity={0.2} position={[100, 100, 100]} />
+
+                < SceneWithRoomEnvironment />
+
+                <ambientLight intensity={2.0} />
+                {/* <pointLight intensity={100} position={[0,0,0]} /> */}
+
                 <Physics gravity={[0, -30, 0]}>
                     <Cave />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />
-                    <PointsOfInterestSetup POIs={POIsData}/>
+                    <PointsOfInterestSetup POIs={POIsData} />
                 </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
             </Canvas>
