@@ -42,8 +42,8 @@ export const Player = forwardRef(({ keys }, ref) => {
 
                 {/* Ground check sensor (small sphere below the player) */}
                 <CuboidCollider
-                    args={[0.25, 0.1, 0.25]} // Small box (adjust size as needed)
-                    position={[0, -1.16, 0]} // Positioned slightly below the player
+                    args={[0.25, 0.15, 0.25]} // Small box (adjust size as needed)
+                    position={[0, -0.8, 0]} // Positioned slightly below the player
                     sensor
                     onIntersectionEnter={() => setIsGrounded(true)} // Called when the sensor touches the ground
                     onIntersectionExit={() => setIsGrounded(false)} // Called when the sensor leaves the ground
