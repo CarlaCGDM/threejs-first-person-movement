@@ -38,7 +38,7 @@ export const Player = forwardRef(({ keys }, ref) => {
                 position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider args={[0.75, 0.5]} />
+                <CapsuleCollider args={[0.75, 0.25]} />
 
                 {/* Ground check sensor (small sphere below the player) */}
                 <CuboidCollider
