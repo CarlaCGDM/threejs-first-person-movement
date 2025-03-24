@@ -13,7 +13,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
     // State to track if the player is grounded
-    const [isGrounded, setIsGrounded] = useState(false);
+    const [isGrounded, setIsGrounded] = useState(true);
 
     // Use the camera hook
     usePlayerCamera(groupRef, camera);
@@ -26,7 +26,7 @@ export const Player = forwardRef(({ keys }, ref) => {
 
     useEffect(() => {
         console.log("isGrounded: " + isGrounded)
-      }, [isGrounded]);
+    }, [isGrounded]);
 
     return (
         <group ref={groupRef}>
@@ -42,11 +42,11 @@ export const Player = forwardRef(({ keys }, ref) => {
 
                 {/* Ground check sensor (small sphere below the player) */}
                 <CuboidCollider
-                    args={[0.25, 0.15, 0.25]} // Small box (adjust size as needed)
-                    position={[0, -0.8, 0]} // Positioned slightly below the player
+                    args={[0.5, 0.5, 0.5]} // Small box (adjust size as needed)
+                    position={[0, -1, 0]} // Positioned slightly below the player
                     sensor
                     onIntersectionEnter={() => setIsGrounded(true)} // Called when the sensor touches the ground
-                    onIntersectionExit={() => setIsGrounded(false)} // Called when the sensor leaves the ground
+                    // onIntersectionExit={() => setIsGrounded(false)} // Called when the sensor leaves the ground
                 />
             </RigidBody>
         </group>
