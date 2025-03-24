@@ -1,7 +1,7 @@
 import { useGLTF } from "@react-three/drei";
 import { RigidBody, TrimeshCollider } from "@react-three/rapier";
 
-export function Cave() {
+export function EnvironmentColliders() {
     const { scene } = useGLTF("/assets/models/CovaBonica_LODs/cb_trimeshcollider.glb");
 
     // Log the scene to inspect its structure

@@ -11,8 +11,8 @@
         "size": "263 cm de largo x 200 cm de alto",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/ElefanteSinCaja_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Elefante_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "detailedModelFile": "/assets/models/Elefante_LODs",
       "iconFolder": "/assets/icons/Elefante/",
       "teleportRotationAngle": 0
     },
@@ -28,8 +28,8 @@
         "size": "51,3 cm de largo x 45,2 de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
       "iconFolder": "/assets/icons/Hapleidoceros/",
       "teleportRotationAngle": 290
     },
@@ -45,8 +45,8 @@
         "size": "12 cm de largo x 7,57 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/MaxilarLeon_LODs",
+      "detailedModelFile": "/assets/models/MaxilarLeon_LODs",
       "iconFolder": "/assets/icons/MaxilarLeon/",
       "teleportRotationAngle": 0
     },
@@ -62,8 +62,8 @@
         "size": "66,8 cm de largo x 42,2 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Rino_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Rino_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/Rino_LODs",
+      "detailedModelFile": "/assets/models/Rino_LODs",
       "iconFolder": "/assets/icons/Rino/",
       "teleportRotationAngle": 0
     }

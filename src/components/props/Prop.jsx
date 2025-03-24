@@ -1,4 +1,4 @@
-import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
+import { Html, Clone, useCursor, Detailed } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect } from "react";
 import * as THREE from "three";
 import { useSettings } from "../../context/SettingsContext";
@@ -11,7 +11,7 @@ import { TeleportMarker } from "../TeleportMarker";
 import { FloatingName } from "../FloatingName";
 
 const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0, occlusionMeshRef }, ref) => {
-    const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
+    const [validUrl, setValidUrl] = useState("assets/models/Hapleidoceros_LODs"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
     const [materials, setMaterials] = useState([]); // Store materials for highlighting
     const { dispatch, settings } = useSettings();
@@ -20,7 +20,9 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     const { selectedPOI } = settings;
 
     // Use the model loader hook
-    const modelScene = useModelLoader(validUrl, setSize, setMaterials);
+    const lowResModelScene = useModelLoader(validUrl + "/LOD_00.glb", setSize, setMaterials);
+    const midResModelScene = useModelLoader(validUrl + "/LOD_01.glb", setSize, setMaterials);
+    const highResModelScene = useModelLoader(validUrl + "/LOD_02.glb", setSize, setMaterials);
 
     // Convert degrees to radians
     const radRotation = degreesToRadians(rotation || [0, 0, 0]);
@@ -58,8 +60,12 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
                 onClick={handleClick}
             >
                 {/* Load the model with suspense */}
-                <Suspense fallback={<Html center><span>Loading...</span></Html>}>
-                    <Clone object={modelScene} />
+                <Suspense fallback={lowResModelScene ? <Clone object={lowResModelScene} /> : <Html center><span>Loading...</span></Html>}>
+                    <Detailed distances={[0, 10, 20]}>
+                        {highResModelScene && <Clone object={highResModelScene} />}
+                        {midResModelScene && <Clone object={midResModelScene} />}
+                        {lowResModelScene && <Clone object={lowResModelScene} />}
+                    </Detailed>
                 </Suspense>
 
                 {/* Render bounding box debug */}

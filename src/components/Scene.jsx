@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./caveEnvironment/CaveEnvironment";
-import { Cave } from "./caveEnvironment/EnvironmentColliders";
+import { EnvironmentColliders } from "./caveEnvironment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./props/PropsSetup";
 import { PointsOfInterestSetup } from "./pois/PointsOfInterestSetup";
@@ -50,7 +50,7 @@ export default function Scene() {
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
                 <Physics gravity={[0, -9.81, 0]}>
-                    <Cave />
+                    <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />

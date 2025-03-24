@@ -1,12 +1,13 @@
-import { useGLTF } from "@react-three/drei";
+import { Suspense } from "react";
+import { useGLTF, OrbitControls, Clone } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { Physics } from "@react-three/rapier";
 import * as THREE from "three";
 
 function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
 
-    const gltf = useGLTF(detailedModelFile);
+    const lowResModel = useGLTF(detailedModelFile + "/LOD_00.glb");
+    const highResModel = useGLTF(detailedModelFile + "/LOD_02.glb");
+    const highestResModel = useGLTF(detailedModelFile + "/LOD_04.glb");
 
     // Default size if not provided
     const defaultSize = new THREE.Vector3(1, 1, 1);
@@ -34,12 +35,33 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                             far: 1000,  // Adjust the far clipping plane
                         }}
                     >
-                        <Physics>
-                            <ambientLight intensity={4.5} />
-                            <pointLight position={[10, 10, 10]} intensity={0.5} />
-                            <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, -size.y * 0.5, 0]} />
-                            <OrbitControls enablePan={true} enableZoom={true} />
-                        </Physics>
+
+                        <ambientLight intensity={4.5} />
+                        <pointLight position={[10, 10, 10]} intensity={0.5} />
+
+                        {/* Load the model with suspense */}
+                        <Suspense
+                            fallback={
+                                lowResModel ?
+                                    <Clone
+                                        object={lowResModel.scene}
+                                        scale={[1, 1, 1]}
+                                        position={[0, -size.y * 0.5, 0]} />
+                                    : <Html center><span>Loading...</span></Html> // Show loading indicator if not even the low res model has loaded yet
+                            }
+                        >
+                            {highResModel &&
+                                <Clone
+                                    object={highResModel.scene}
+                                    scale={[1, 1, 1]}
+                                    position={[0, -size.y * 0.5, 0]} />
+                            }
+                        </Suspense>
+
+
+
+                        <OrbitControls enablePan={true} enableZoom={true} />
+
                     </Canvas>
                 </div>
 
