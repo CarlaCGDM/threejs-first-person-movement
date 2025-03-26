@@ -11,8 +11,8 @@
         "size": "263 cm de largo x 200 cm de alto",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/ElefanteSinCaja_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Elefante_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "detailedModelFile": "/assets/models/Elefante_LODs",
       "iconFolder": "/assets/icons/Elefante/",
       "teleportRotationAngle": 0
     },
@@ -28,10 +28,10 @@
         "size": "51,3 cm de largo x 45,2 de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Hapleidoceros_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
       "iconFolder": "/assets/icons/Hapleidoceros/",
-      "teleportRotationAngle": 270
+      "teleportRotationAngle": 290
     },
     {
       "artifactName": "Maxilar león",
@@ -45,15 +45,15 @@
         "size": "12 cm de largo x 7,57 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/MaxilarLeon_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/MaxilarLeon_LODs",
+      "detailedModelFile": "/assets/models/MaxilarLeon_LODs",
       "iconFolder": "/assets/icons/MaxilarLeon/",
       "teleportRotationAngle": 0
     },
     {
       "artifactName": "Stephannorhinus hundsheimensis",
-      "position": [-5.967, -4.714, -3.330],
-      "rotation": [-87.363, 71.27, 10.978],
+      "position": [-4.567, -4.914, -3.330],
+      "rotation": [-90, 0, 90],
       "metadata": {
         "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
         "excavationSite":"Cova del Rinoceront, Castelldefels",
@@ -62,8 +62,8 @@
         "size": "66,8 cm de largo x 42,2 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Rino_LODs/LOD_02.glb",
-      "detailedModelFile": "/assets/models/Rino_LODs/LOD_02.glb",
+      "modelFile": "/assets/models/Rino_LODs",
+      "detailedModelFile": "/assets/models/Rino_LODs",
       "iconFolder": "/assets/icons/Rino/",
       "teleportRotationAngle": 0
     }

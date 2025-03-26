@@ -1,67 +1,32 @@
-import * as THREE from "three";
-import { useRef, forwardRef, useEffect, useImperativeHandle } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
+import { useRef, forwardRef, useState, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
+import { CapsuleCollider, CuboidCollider, RigidBody } from "@react-three/rapier";
 import { useSettings } from "../context/SettingsContext";
-
-const direction = new THREE.Vector3();
-const frontVector = new THREE.Vector3();
-const sideVector = new THREE.Vector3();
+import { usePlayerCamera } from "../hooks/usePlayerCamera"; // Camera hook
+import { usePlayerMovement } from "../hooks/usePlayerMovement"; // Movement hook
+import { usePlayerPhysics } from "../hooks/usePlayerPhysics"; // Physics hook
 
 export const Player = forwardRef(({ keys }, ref) => {
     const groupRef = useRef(); // Ref for the Three.js Group
     const { camera } = useThree(); // Access the camera
-    const { world } = useRapier(); // Access the Rapier physics world
     const { settings } = useSettings(); // Access settings
     const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
-    // Attach the camera to the player
+    // State to track if the player is grounded
+    const [isGrounded, setIsGrounded] = useState(true);
+
+    // Use the camera hook
+    usePlayerCamera(groupRef, camera);
+
+    // Use the movement hook
+    usePlayerMovement(ref, keys, camera, playerWalkSpeed, playerJumpForce, isGrounded);
+
+    // Use the physics hook
+    usePlayerPhysics(ref, groupRef);
+
     useEffect(() => {
-        if (groupRef.current) {
-            camera.position.set(0, 1.0, 0); // Adjust camera height relative to the player
-            groupRef.current.add(camera);
-        }
-
-        // Cleanup: Detach the camera when the component unmounts
-        return () => {
-            if (groupRef.current) {
-                groupRef.current.remove(camera);
-            }
-        };
-    }, [camera]);
-
-    useFrame(() => {
-        const { forward, backward, left, right, jump } = keys;
-        const velocity = ref.current.linvel();
-
-        // Calculate movement direction
-        frontVector.set(0, 0, backward - forward);
-        sideVector.set(left - right, 0, 0);
-        direction
-            .subVectors(frontVector, sideVector)
-            .normalize()
-            .multiplyScalar(playerWalkSpeed)
-            .applyEuler(camera.rotation);
-
-        // Apply movement
-        ref.current.setLinvel({
-            x: forward || backward || left || right ? direction.x : 0,
-            y: jump ? playerJumpForce : velocity.y,
-            z: forward || backward || left || right ? direction.z : 0,
-        });
-
-        // Wake up the RigidBody if it's sleeping
-        if (ref.current.isSleeping()) {
-            ref.current.wakeUp();
-        }
-
-        // Update the group's position to match the RigidBody's position
-        const { x, y, z } = ref.current.translation();
-        groupRef.current.position.set(x, y, z);
-
-        // Step the physics world to ensure updates are synchronized
-        world.step();
-    });
+        console.log("isGrounded: " + isGrounded)
+    }, [isGrounded]);
 
     return (
         <group ref={groupRef}>
@@ -73,7 +38,16 @@ export const Player = forwardRef(({ keys }, ref) => {
                 position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
             >
-                <CapsuleCollider args={[0.25, 0.5]} />
+                <CapsuleCollider args={[0.75, 0.25]} />
+
+                {/* Ground check sensor (small sphere below the player) */}
+                <CuboidCollider
+                    args={[0.5, 0.5, 0.5]} // Small box (adjust size as needed)
+                    position={[0, -1, 0]} // Positioned slightly below the player
+                    sensor
+                    onIntersectionEnter={() => setIsGrounded(true)} // Called when the sensor touches the ground
+                    // onIntersectionExit={() => setIsGrounded(false)} // Called when the sensor leaves the ground
+                />
             </RigidBody>
         </group>
     );

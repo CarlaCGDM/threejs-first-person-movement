@@ -1,0 +1,78 @@
+{
+    "Palaeoloxodon antiquus": {
+      "quiz": [
+        {
+          "question": "¿De qué época es el esqueleto de Palaeoloxodon antiquus?",
+          "correctAnswer": "Final del Pleistoceno medio",
+          "incorrectAnswers": ["Edad de Bronce", "Era Mesozoica"]
+        },
+        {
+          "question": "¿Dónde fue excavado el esqueleto de Palaeoloxodon antiquus?",
+          "correctAnswer": "Cova del Rinoceront, Castelldefels",
+          "incorrectAnswers": ["Cueva de Altamira", "Atapuerca"]
+        },
+        {
+          "question": "¿Cuál es el peso estimado de Palaeoloxodon antiquus?",
+          "correctAnswer": "2.300-2.700 kg",
+          "incorrectAnswers": ["500-700 kg", "1.000-1.500 kg"]
+        }
+      ]
+    },
+    "Haploidoceros mediterraneus": {
+      "quiz": [
+        {
+          "question": "¿Qué caracteriza los cuernos de Haploidoceros mediterraneus?",
+          "correctAnswer": "Forma de hoz",
+          "incorrectAnswers": ["Forma recta", "Forma espiral"]
+        },
+        {
+          "question": "¿Dónde se encuentra actualmente el cráneo de Haploidoceros mediterraneus?",
+          "correctAnswer": "Biblioteca Ramon Fernàndez Jurado, Castelldefels",
+          "incorrectAnswers": ["Museo del Louvre", "Museo Británico"]
+        },
+        {
+          "question": "¿Cuál era el peso corporal de Haploidoceros mediterraneus?",
+          "correctAnswer": "70-80 kg",
+          "incorrectAnswers": ["150-200 kg", "30-40 kg"]
+        }
+      ]
+    },
+    "Maxilar león": {
+      "quiz": [
+        {
+          "question": "¿De qué animal es el maxilar?",
+          "correctAnswer": "León",
+          "incorrectAnswers": ["Tigre", "Oso"]
+        },
+        {
+          "question": "¿Hace cuántos años vivió este león?",
+          "correctAnswer": "Más de 80.000 años",
+          "incorrectAnswers": ["10.000 años", "50.000 años"]
+        },
+        {
+          "question": "¿Dónde fue encontrado el maxilar?",
+          "correctAnswer": "Cova del Rinoceront, Castelldefels",
+          "incorrectAnswers": ["Cueva de Nerja", "Cueva de Tito Bustillo"]
+        }
+      ]
+    },
+    "Stephannorhinus hundsheimensis": {
+      "quiz": [
+        {
+          "question": "¿Qué tipo de animal es Stephannorhinus hundsheimensis?",
+          "correctAnswer": "Rinoceronte",
+          "incorrectAnswers": ["Elefante", "Hipopótamo"]
+        },
+        {
+          "question": "¿Dónde se encuentra actualmente el cráneo de Stephannorhinus hundsheimensis?",
+          "correctAnswer": "Biblioteca Ramon Fernàndez Jurado, Castelldefels",
+          "incorrectAnswers": ["Museo de Historia Natural de Londres", "Museo de Ciencias Naturales de Madrid"]
+        },
+        {
+          "question": "¿Hace cuántos años vivió Stephannorhinus hundsheimensis?",
+          "correctAnswer": "150.000 años",
+          "incorrectAnswers": ["50.000 años", "1 millón de años"]
+        }
+      ]
+    }
+  }

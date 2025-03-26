@@ -1,9 +1,21 @@
 import { Html } from "@react-three/drei";
 
-const PulsatingIndicator = () => {
+const PulsatingIndicator = ({ onPointerOver, onPointerOut, onClick }) => {
     return (
-        <Html center>
-            <div>
+        <Html
+            center
+            distanceFactor={5}
+            onPointerOver={onPointerOver}
+            onPointerOut={onPointerOut}
+            onClick={onClick}
+            style={{ pointerEvents: "auto" }} // Ensure the Html component is interactive
+        >
+            <div
+                onPointerOver={onPointerOver} // Attach event handlers to the div
+                onPointerOut={onPointerOut}
+                onClick={onClick}
+                style={{ pointerEvents: "auto" }} // Ensure the div is interactive
+            >
                 <style>
                     {`
                         .pulsating-circle {
@@ -36,6 +48,5 @@ const PulsatingIndicator = () => {
         </Html>
     );
 };
-
 
 export default PulsatingIndicator;

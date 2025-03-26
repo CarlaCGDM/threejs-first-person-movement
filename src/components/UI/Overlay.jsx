@@ -2,7 +2,7 @@ import { SettingsPanel } from "./SettingsPanel";
 import { PropsSidebar } from "../props/PropsSidebar";
 import { InstructionsPanel } from "./InstructionsPanel";
 import PropInfo from "../props/PropInfo";
-import PointOfInterestInfo from "../pois/PointOfInterestInfo"; // Import the PointOfInterestInfo component
+import PointOfInterestInfo from "../POIs/PointOfInterestInfo"; // Import the PointOfInterestInfo component
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
 import { Minimap } from "../caveEnvironment/Minimap";

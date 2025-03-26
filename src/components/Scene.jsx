@@ -1,26 +1,29 @@
 import { Canvas } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-import { Sky, Environment, useTexture, Point } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./caveEnvironment/CaveEnvironment";
-import { Cave } from "./caveEnvironment/EnvironmentColliders";
+import { EnvironmentColliders } from "./caveEnvironment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./props/PropsSetup";
-import { PointsOfInterestSetup } from "./pois/PointsOfInterestSetup";
+import { PointsOfInterestSetup } from "./POIs/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
 import { Stats } from "@react-three/drei";
 import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
+import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
+import { Effects } from "./caveEnvironment/Effects";
+import { NPCManager } from './NPCs/NPCManager/NPCManager';
+import CustomPathfindingTest from './CustomPathfindingTest';
+
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
     const playerRef = useRef(); // Create a ref for the player's RigidBody
     const orbitControlsRef = useRef();
-
-    //console.log("Player ref in Scene:", playerRef.current); // Debug log
 
     return (
         <>
@@ -43,18 +46,25 @@ export default function Scene() {
                 style={{ outline: "none" }} // Remove outline when focused
             >
                 <Stats /> {/* Add this to monitor performance */}
-                
-                <Environment background blur={0.5} files="/assets/textures/pexels-bryan-vega-sanchez-1k.jpg" />
-                <ambientLight intensity={1} />
-                <pointLight castShadow intensity={0.8} position={[100, 100, 100]} />ww
-                <Physics gravity={[0, -30, 0]}>
-                    <Cave />
+
+                < SceneWithRoomEnvironment />
+
+                {/* {<NPCManager />} */}
+                {/* <CustomPathfindingTest color='lime' /> */}
+                {/* <CustomPathfindingTest color='yellow' /> */}
+
+                <ambientLight intensity={0} />
+                {/* <pointLight intensity={100} position={[0,0,0]} /> */}
+
+                <Physics gravity={[0, -9.81, 0]}>
+                    <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
                     <PropsSetup props={propsData} />
-                    <PointsOfInterestSetup POIs={POIsData}/>
+                    <PointsOfInterestSetup POIs={POIsData} />
                 </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
+                <Effects />
             </Canvas>
             <Overlay props={propsData} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> {/* Add the overlay */}
         </>

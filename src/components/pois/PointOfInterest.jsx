@@ -1,9 +1,11 @@
 import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import * as THREE from "three";
-import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import { useSettings } from "../../context/SettingsContext";
 import PulsatingIndicator from "./PulsatingIndicator";
+import { FloatingName } from "../FloatingName";
+import { DebugCube } from "../DebugCube";
+import { useHighlightMaterial } from "../../hooks/useHighlightMaterial";
 
 const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded, highlightedMaterial }) => {
     const gltf = useGLTF(modelUrl);
@@ -39,20 +41,8 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     const { dispatch, settings } = useSettings();
     const { devMode, selectedProp, selectedPOI } = settings;
 
-    // Highlight material for hover effect
-    const highlightedMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.3,
-        side: THREE.DoubleSide, // Ensure both sides are rendered
-    }), []);
-
-    const transparentMaterial = useMemo(() => new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0,
-        side: THREE.DoubleSide, // Ensure both sides are rendered
-    }), []);
+    // Use the highlight material hook
+    const { highlightedMaterial, transparentMaterial } = useHighlightMaterial();
 
     // Memoize callbacks to prevent unnecessary re-renders
     const handleComputedSize = useCallback((newSize) => {
@@ -77,6 +67,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     // Handle click events
     const handleClick = () => {
         // Notify the SettingsContext that this POI was clicked
+        setIsHovered(false);
         dispatch({
             type: "SELECT_POI",
             payload: { poiName, metadata, imageFile },
@@ -96,9 +87,6 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
         <group
             ref={ref}
             position={position}
-            onPointerOver={handlePointerOver}
-            onPointerOut={handlePointerOut}
-            onClick={handleClick}
         >
             {/* Load the model with suspense */}
             <Suspense fallback={<Html center><span>Loading...</span></Html>}>
@@ -112,31 +100,30 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
 
             {/* Debug meshes (only visible in devMode) */}
             {devMode && (
-                <>
-                    {/* Model bounding box for debugging */}
-                    <mesh position={[0, 0, 0]}>
-                        <boxGeometry args={[size.x, size.y, size.z]} />
-                        <meshBasicMaterial color="blue" wireframe />
-                    </mesh>
-                </>
+                <DebugCube
+                    position={[0, 0, 0]}
+                    size={size}
+                    color="blue"
+                />
             )}
 
             {/* Floating name */}
-            {isHovered && (
-                <Html as="div" center position={[0, 0, 0]}>
-                    <p style={{
-                        display: "inline-block",  // Ensures it fits the text width
-                        whiteSpace: "nowrap",  // Prevents word wrapping
-                        color: "white",
-                        backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        padding: "5px",
-                        borderRadius: "5px",
-                    }}>
-                        {poiName}
-                    </p>
-                </Html>
+            {isHovered && !selectedPOI && !selectedProp && (
+                <FloatingName
+                    name={poiName}
+                    position={[0, 0.5, 0]}
+                    occlusionMeshRef={occlusionMeshRef}
+                />
             )}
-            {!isHovered && !selectedPOI && !selectedProp && <PulsatingIndicator position={position} />}
+
+            {/* Pulsating Indicator */}
+            {!selectedPOI && !selectedProp && (
+                <PulsatingIndicator
+                    onPointerOver={handlePointerOver}
+                    onPointerOut={handlePointerOut}
+                    onClick={handleClick}
+                />
+            )}
         </group>
     );
 });

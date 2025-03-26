@@ -1,14 +1,13 @@
-import { useGLTF } from "@react-three/drei";
+import { Suspense, useState } from "react";
+import { OrbitControls, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { Physics } from "@react-three/rapier";
 import * as THREE from "three";
+import { QualityToggle } from "./QualityToggle";
+import { LazyLoadModel } from "./LazyLoadModel";
+
 
 function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
-
-    console.log(detailedModelFile)
-    const gltf = useGLTF(detailedModelFile);
-
+    const [showHighestRes, setShowHighestRes] = useState(false);
 
     // Default size if not provided
     const defaultSize = new THREE.Vector3(1, 1, 1);
@@ -16,7 +15,21 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
 
     // Calculate camera distance based on the model's size
     const maxDimension = Math.max(modelSize.x, modelSize.y, modelSize.z);
-    const cameraDistance = maxDimension * 1; // Adjust multiplier as needed
+    const cameraDistance = maxDimension * 1;
+
+    // Determine which model to show
+    const getModelToShow = () => {
+
+        if (showHighestRes) {
+            return <Suspense fallback={<Html center><span>Loading...</span></Html>}>
+                <LazyLoadModel url={detailedModelFile + "/LOD_04.glb"} size={size} />
+            </Suspense>
+        } else {
+            return <Suspense fallback={ <Html center><span>Loading...</span></Html> }>
+                <LazyLoadModel url={detailedModelFile + "/LOD_02.glb"} size={size} />
+            </Suspense>
+        }
+    };
 
     return (
         <div style={{ ...styles.overlay, pointerEvents: "auto" }}>
@@ -27,25 +40,32 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                 </button>
 
                 {/* 3D Model Viewer */}
-                <div style={styles.modelViewer}>
+                <div style={styles.modelViewerContainer}>
+        
+                    <QualityToggle 
+                        isHighRes={showHighestRes} 
+                        onToggle={setShowHighestRes}
+                    />
+
                     <Canvas
                         camera={{
                             position: [cameraDistance, cameraDistance, cameraDistance],
                             fov: 45,
-                            near: 0.01, // Adjust the near clipping plane
-                            far: 1000,  // Adjust the far clipping plane
+                            near: 0.01,
+                            far: 1000,
                         }}
+                        style={styles.modelViewer}
                     >
-                        <Physics>
-                            <ambientLight intensity={4.5} />
-                            <pointLight position={[10, 10, 10]} intensity={0.5} />
-                            <primitive object={gltf.scene} scale={[1, 1, 1]} position={[0, -size.y * 0.5, 0]} />
-                            <OrbitControls enablePan={true} enableZoom={true} />
-                        </Physics>
+                        <ambientLight intensity={4.5} />
+                        <pointLight position={[10, 10, 10]} intensity={0.5} />
+
+                        {getModelToShow()}
+
+                        <OrbitControls enablePan={true} enableZoom={true} />
                     </Canvas>
                 </div>
 
-                {/* Model Metadata */}
+                {/* Model Metadata - shows immediately */}
                 <div style={styles.info}>
                     <h2 style={styles.name}>{artifactName}</h2>
                     <p style={styles.description}><strong>Periodo histórico</strong></p><p style={styles.description}> {metadata.historicalPeriod}</p>
@@ -60,7 +80,7 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
     );
 }
 
-// Styles
+// Updated styles
 const styles = {
     overlay: {
         position: "fixed",
@@ -72,7 +92,7 @@ const styles = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 1000, // Ensure the overlay is on top
+        zIndex: 1000,
     },
     popup: {
         backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -82,7 +102,24 @@ const styles = {
         alignItems: "center",
         gap: "20px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-        position: "relative", // Required for the close button positioning
+        position: "relative",
+    },
+    modelViewerContainer: {
+        position: "relative", // Needed for absolute positioning of toggle
+    },
+    qualityToggleContainer: {
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        zIndex: 10, // Ensure it's above the canvas
+    },
+    qualityToggle: {
+        background: "rgba(255, 255, 255, 0.8)",
+        border: "1px solid #333",
+        borderRadius: "4px",
+        padding: "5px 10px",
+        cursor: "pointer",
+        fontSize: "14px",
     },
     modelViewer: {
         width: "300px",

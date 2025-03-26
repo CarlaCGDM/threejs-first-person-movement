@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export function useTeleportPlayer(playerRef) {
+export function usePlayerTeleport(playerRef) {
   const teleportToProp = (prop) => {
     console.log("Teleporting to:", prop.artifactName);
 

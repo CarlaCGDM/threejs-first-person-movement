@@ -1,7 +1,7 @@
 [
     {
-      "poiName": "Point of interest 1",
-      "position": [-0.639, -2.039, 4.846],
+      "poiName": "Sala lateral 1",
+      "position": [4.97213, -2.49965, 2.24257],
       "metadata": {
         "description": "This is the description for POI 1. It provides interesting information about this location."
       },
@@ -9,12 +9,30 @@
       "imageFile": "/assets/images/POIs/POI1.PNG"
     },
     {
-      "poiName": "Point of interest 2",
-      "position": [4.023, -2.899, 1.866],
+      "poiName": "Restos neolíticos",
+      "position": [2.47955, -2.73506, -2.72549],
       "metadata": {
-        "description": "This is the description for POI 2. It highlights the significance of this point of interest."
+        "description": "This is the description for POI 2. It provides interesting information about this location."
       },
       "modelFile": "/assets/models/POIs/POI2.glb",
       "imageFile": "/assets/images/POIs/POI2.PNG"
+    },
+    {
+      "poiName": "Sala lateral 2",
+      "position": [9.47179, -0.489526, -2.33263],
+      "metadata": {
+        "description": "This is the description for POI 3. It provides interesting information about this location."
+      },
+      "modelFile": "/assets/models/POIs/POI3.glb",
+      "imageFile": "/assets/images/POIs/POI3.PNG"
+    },
+    {
+      "poiName": "Escombrera mina",
+      "position": [-4.38825, -3.46406, 3.71715],
+      "metadata": {
+        "description": "This is the description for POI 4. It provides interesting information about this location."
+      },
+      "modelFile": "/assets/models/POIs/POI4.glb",
+      "imageFile": "/assets/images/POIs/POI4.PNG"
     }
   ]

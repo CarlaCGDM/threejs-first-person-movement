@@ -1,11 +1,29 @@
-import { useGLTF, Html, useProgress } from "@react-three/drei";
+import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
 import { useMemo, Suspense } from "react";
+import * as THREE from "three";
 
 const MemoizedModel = ({ modelUrl }) => {
   const gltf = useGLTF(modelUrl);
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+
+  return <primitive object={scene} />;
+};
+
+const MemoizedTransparentModel = ({ modelUrl }) => {
+  const gltf = useGLTF(modelUrl);
+
+  // Memoize the cloned scene to avoid re-cloning on every render
+  const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+  scene.frustumCulled = false
+  scene.traverse((child) => {
+    if (child.isMesh && child.material) {
+      child.material.alphaTest = 0.5
+      child.material.depthWrite = true
+      child.material.transparent = false
+    }
+});
 
   return <primitive object={scene} />;
 };
@@ -50,6 +68,7 @@ export function Ground() {
 
   return (
     <>
+     <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <Suspense fallback={
         <>
           <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_00.glb'} />
@@ -59,7 +78,6 @@ export function Ground() {
         <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
 
       </Suspense>
-      <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />s
     </>
   );
 }

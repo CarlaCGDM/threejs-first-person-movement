@@ -1,0 +1,26 @@
+{
+    "Palaeoloxodon antiquus": {
+      "fillInTheBlanks": {
+        "description": "El esqueleto en conexión anatómica de una cría de ______, de la especie conocida como ______, se trata de un macho de entre ______ años de edad que debía de pesar alrededor de ______ kg, que vivió hace ______ años.",
+        "words": ["elefante", "elefante antiguo", "6 y 10", "2.300-2.700", "120.000"]
+      }
+    },
+    "Haploidoceros mediterraneus": {
+      "fillInTheBlanks": {
+        "description": "El cráneo de ______, una especie hoy extinguida, se caracteriza por las grandes dimensiones de sus ______, con tan sólo dos ______ cada una, la principal de las cuales tiene forma de ______. Su peso corporal era de unos ______ kg y vivió hace ______ años.",
+        "words": ["ciervo del mediterráneo", "cuernos", "puntas", "hoz", "70-80", "90.000"]
+      }
+    },
+    "Maxilar león": {
+      "fillInTheBlanks": {
+        "description": "El maxilar de un ejemplar de ______ que vivió hace más de ______ años fue encontrado en ______.",
+        "words": ["león", "80.000", "Cova del Rinoceront, Castelldefels"]
+      }
+    },
+    "Stephannorhinus hundsheimensis": {
+      "fillInTheBlanks": {
+        "description": "El cráneo de ______, una familia considerada más rara y menos extendida que el resto de especies, se trata de un individuo ______, que vivió hace ______ años.",
+        "words": ["rinoceronte de Hundsheim", "juvenil", "150.000"]
+      }
+    }
+  }
