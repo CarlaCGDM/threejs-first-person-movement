@@ -4,14 +4,6 @@ Welcome to the **3D First-Person Movement Prototype**! This project is a demonst
 
 ---
 
-## **Features**
-
-- **Interactive Props**: Click on objects to interact with them and view descriptions.
-- **Teleportation**: Teleport to specific locations near props or return to the starting position.
-- **Dynamic Settings**: Adjust camera rotation speed and player walk speed in real-time.
-
----
-
 ## **Demo**
 Check out the live demo of the project [here](https://cova-bonica-test.netlify.app/).
 
