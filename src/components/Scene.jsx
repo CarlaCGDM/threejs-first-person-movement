@@ -7,7 +7,7 @@ import { Ground } from "./caveEnvironment/CaveEnvironment";
 import { EnvironmentColliders } from "./caveEnvironment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./props/PropsSetup";
-import { PointsOfInterestSetup } from "./pois/PointsOfInterestSetup";
+import { PointsOfInterestSetup } from "./POIs/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
@@ -16,6 +16,9 @@ import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
 import { Effects } from "./caveEnvironment/Effects";
+import { NPCManager } from './NPCs/NPCManager/NPCManager';
+import CustomPathfindingTest from './CustomPathfindingTest';
+
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -45,6 +48,10 @@ export default function Scene() {
                 <Stats /> {/* Add this to monitor performance */}
 
                 < SceneWithRoomEnvironment />
+
+                {/* {<NPCManager />} */}
+                {/* <CustomPathfindingTest color='lime' /> */}
+                {/* <CustomPathfindingTest color='yellow' /> */}
 
                 <ambientLight intensity={0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
