@@ -21,7 +21,7 @@ export class CustomPathfinding {
       const v1 = this.getVector(a, positions);
       const v2 = this.getVector(b, positions);
       const v3 = this.getVector(c, positions);
-      
+
       const center = new THREE.Vector3()
         .add(v1).add(v2).add(v3)
         .divideScalar(3);
@@ -48,18 +48,18 @@ export class CustomPathfinding {
     // Second pass: find connections by geometric comparison
     const findNeighbors = (face, idx) => {
       const connections = [];
-      
+
       for (let otherIdx = 0; otherIdx < faces.length; otherIdx++) {
         if (otherIdx === idx) continue;
-        
+
         const otherFace = faces[otherIdx];
         const sharedVertices = this.countSharedVertices(face, otherFace, positions);
-        
+
         if (sharedVertices >= 2) {
           connections.push(otherIdx);
         }
       }
-      
+
       return connections;
     };
 
@@ -108,11 +108,11 @@ export class CustomPathfinding {
     }
 
     const { faces } = zoneData;
-    
+
     // Find nearest faces
     const startFace = this.findNearestFace(startPos, faces);
     const endFace = this.findNearestFace(endPos, faces);
-    
+
     if (!startFace || !endFace) {
       console.error('Could not find start/end faces');
       return null;
@@ -128,29 +128,29 @@ export class CustomPathfinding {
       gScore.set(index, Infinity);
       fScore.set(index, Infinity);
     });
-    
+
     gScore.set(startFace.index, 0);
     fScore.set(startFace.index, this.heuristic(startFace, endFace));
 
     while (openSet.size > 0) {
       const current = this.getLowestFScore(openSet, fScore);
-      
+
       if (current === endFace.index) {
         return this.reconstructPath(cameFrom, current, faces);
       }
 
       openSet.delete(current);
-      
+
       for (const neighbor of faces[current].neighbors) {
-        const tentativeGScore = gScore.get(current) + 
+        const tentativeGScore = gScore.get(current) +
           faces[current].center.distanceTo(faces[neighbor].center);
-        
+
         if (tentativeGScore < gScore.get(neighbor)) {
           cameFrom.set(neighbor, current);
           gScore.set(neighbor, tentativeGScore);
-          fScore.set(neighbor, tentativeGScore + 
+          fScore.set(neighbor, tentativeGScore +
             this.heuristic(faces[neighbor], endFace));
-          
+
           if (!openSet.has(neighbor)) {
             openSet.add(neighbor);
           }
@@ -169,7 +169,7 @@ export class CustomPathfinding {
   findNearestFace(position, faces) {
     let nearest = null;
     let minDistance = Infinity;
-    
+
     faces.forEach((face, index) => {
       const distance = position.distanceTo(face.center);
       if (distance < minDistance) {
@@ -177,14 +177,14 @@ export class CustomPathfinding {
         nearest = { ...face, index };
       }
     });
-    
+
     return nearest;
   }
 
   getLowestFScore(openSet, fScore) {
     let lowest = null;
     let lowestScore = Infinity;
-    
+
     openSet.forEach(index => {
       const score = fScore.get(index);
       if (score < lowestScore) {
@@ -192,7 +192,7 @@ export class CustomPathfinding {
         lowest = index;
       }
     });
-    
+
     return lowest;
   }
 

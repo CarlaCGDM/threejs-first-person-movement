@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { CustomPathfinding } from '../utils/CustomPathfinding';
 import { CustomNPCActor } from './CustomNPCActor';
+import { PathVisualizer } from './NPCs/NPCNavigation/PathVisualizer';
 
 export default function CustomPathfindingTest({color = 'hotpink'}) {
     const [navData, setNavData] = useState({ faces: [] });
@@ -160,24 +161,7 @@ export default function CustomPathfindingTest({color = 'hotpink'}) {
             {path && path.length > 1 && (
                 <>
                     {/* Path visualization */}
-                    <group>
-                        {path.map((point, index) => (
-                            <mesh key={`path-${index}`} position={[point.x, point.y + 0.1, point.z]}>
-                                <sphereGeometry args={[0.05, 16, 16]} />
-                                <meshBasicMaterial
-                                    color={index === 0 ? 'lime' :
-                                        index === path.length - 1 ? 'hotpink' : 'yellow'}
-                                />
-                            </mesh>
-                        ))}
-                        <line>
-                            <bufferGeometry attach="geometry" args={[new THREE.BufferGeometry().setFromPoints(
-                                path.map(p => new THREE.Vector3(p.x, p.y + 0.1, p.z))
-                            )]} />
-                            <lineBasicMaterial attach="material" color="yellow" linewidth={2} />
-                        </line>
-
-                    </group>
+                    <PathVisualizer path={path} color="yellow" />
 
                     {/* NPC Actor */}
                     <CustomNPCActor

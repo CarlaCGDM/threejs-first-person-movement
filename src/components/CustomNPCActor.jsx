@@ -13,7 +13,6 @@ export function CustomNPCActor({
   debug = true 
 }) {
   const groupRef = useRef();
-  const lineRef = useRef();
   const [currentPathIndex, setCurrentPathIndex] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
   const [isPerformingActions, setIsPerformingActions] = useState(false);
@@ -22,16 +21,12 @@ export function CustomNPCActor({
   const targetQuaternion = useRef(new THREE.Quaternion());
   const currentDirection = useRef(new THREE.Vector3());
   const smoothPathRef = useRef([]);
-  const curveRef = useRef(null);
   const lookAheadPoints = 5;
 
-
-  // Create smooth path when path changes
   useEffect(() => {
     if (!path || path.length < 2) return;
 
     const curve = new THREE.CatmullRomCurve3(path, false, 'centripetal', smoothness);
-    curveRef.current = curve;
     smoothPathRef.current = curve.getPoints(path.length * 10);
     
     setCurrentPathIndex(0);
@@ -44,29 +39,10 @@ export function CustomNPCActor({
       updateRotation();
     }
 
-    // Debug visualization
-    if (debug && curveRef.current) {
-      if (lineRef.current && groupRef.current?.parent) {
-        groupRef.current.parent.remove(lineRef.current);
-      }
-      
-      const points = curveRef.current.getPoints(200);
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({ color: color });
-      lineRef.current = new THREE.Line(geometry, material);
-      lineRef.current.position.y += 0.1;
-      
-      if (groupRef.current?.parent) {
-        groupRef.current.parent.add(lineRef.current);
-      }
-    }
-
     return () => {
-      if (lineRef.current && groupRef.current?.parent) {
-        groupRef.current.parent.remove(lineRef.current);
-      }
+      // Cleanup if needed
     };
-  }, [path, smoothness, debug]);
+  }, [path, smoothness]);
 
   const updateRotation = () => {
     if (!smoothPathRef.current || currentPathIndex >= smoothPathRef.current.length - 1) return;
@@ -91,7 +67,6 @@ export function CustomNPCActor({
   useFrame((_, delta) => {
     if (isPerformingActions || !isMoving || !smoothPathRef.current) return;
 
-    // Handle path completion
     if (currentPathIndex >= smoothPathRef.current.length - 1) {
       setIsMoving(false);
       setIsPerformingActions(true);
@@ -99,11 +74,9 @@ export function CustomNPCActor({
       return;
     }
 
-    // Smooth rotation
     updateRotation();
     groupRef.current.quaternion.rotateTowards(targetQuaternion.current, rotationSpeed * delta);
 
-    // Smooth movement
     const currentPosition = smoothPathRef.current[currentPathIndex];
     const nextPosition = smoothPathRef.current[currentPathIndex + 1];
     const newProgress = currentSegmentProgress + (speed * delta) / currentSegmentLengthRef.current;
@@ -128,10 +101,9 @@ export function CustomNPCActor({
 
   return (
     <group ref={groupRef}>
-      {/* NPC Visual Representation */}
       <mesh castShadow position={[0, 0.8, 0]}>
         <boxGeometry args={[0.5, 1.6, 0.5]} />
-        <meshStandardMaterial color={isPerformingActions ? 'purple' : color } />
+        <meshStandardMaterial color={isPerformingActions ? 'purple' : color} />
       </mesh>
 
       {debug && (
