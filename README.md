@@ -5,9 +5,7 @@ Welcome to the **3D First-Person Movement Prototype**! This project is a demonst
 ---
 
 ## **Features**
-- **First-Person Movement**: Move around the environment using `WASD` or arrow keys.
-- **Camera Controls**: Look around by holding the right mouse button.
-- **Physics-Based Collisions**: Realistic collisions with walls, slopes, and other objects.
+
 - **Interactive Props**: Click on objects to interact with them and view descriptions.
 - **Teleportation**: Teleport to specific locations near props or return to the starting position.
 - **Dynamic Settings**: Adjust camera rotation speed and player walk speed in real-time.
@@ -17,11 +15,29 @@ Welcome to the **3D First-Person Movement Prototype**! This project is a demonst
 ## **Demo**
 Check out the live demo of the project [here](https://cova-bonica-test.netlify.app/).
 
-### **Video Demo**
+## **Features**
 
-![image](https://github.com/user-attachments/assets/0f6974e1-0aea-4eca-88c0-904b106a0c5f)
-![image](https://github.com/user-attachments/assets/844465d5-348f-47f1-87aa-c591c5f37577)
+- ### **First-Person Movement and Camera**
+Move around the environment using `WASD` or arrow keys.
 
+Look around by holding the right mouse button.
+
+![progress_walking-ezgif com-resize](https://github.com/user-attachments/assets/63cc4e26-b97a-4c41-9c41-4f531125b718) ![progress_camera-ezgif com-resize](https://github.com/user-attachments/assets/1d8d8399-be62-4c1c-a3e2-45b222dd4786)
+
+- ### **Interactive Props**
+Teleport between and click on 3D objects to interact with them.
+
+![progress_teleport-ezgif com-optimize](https://github.com/user-attachments/assets/2a631220-7b8b-42b0-b33b-d79889e1b5e3) ![progress_props-ezgif com-optimize](https://github.com/user-attachments/assets/630b4578-e513-465e-ac87-78be8c335633) 
+
+- ### **Interactive Landmarks**
+Click on points of interest in the environment to view additional information.
+
+![progress_pointsofinterest-ezgif com-optimize](https://github.com/user-attachments/assets/a5d3e6f9-30c7-46c7-8b39-02cf69a302c0)
+
+- ### **NPCs Pathfinding**
+Watch NPCs roam around the virtual tour and make comments on what they see.
+
+![progress_pathfinding-ezgif com-optimize](https://github.com/user-attachments/assets/6c0cea66-bbaf-4cfa-ac66-a9e77970ead6)
 
 
 ---
@@ -60,64 +76,6 @@ graph TD
 - **[Three.js](https://threejs.org/)**: A 3D library for rendering and animation.
 - **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces.
 - **[Drei](https://github.com/pmndrs/drei)**: A collection of useful helpers for React Three Fiber.
-
----
-
-## **Technically Challenging Features**
-
-This project includes several advanced features that required creative problem-solving and deep integration of React, Three.js, and physics engines. Here are the most challenging aspects:
-
----
-
-### **1. Custom First-Person Camera Controls**
-- Implemented smooth, responsive camera rotation using mouse movement deltas.
-- Added pitch and yaw clamping to prevent camera flipping.
-- Integrated with the `pointerlock` API for a seamless first-person experience.
-- Applied damping and smoothing to eliminate jitter during rotation.
-
----
-
-### **2. Physics-Based Player Movement**
-- Integrated `@react-three/rapier` for realistic physics-based movement.
-- Implemented custom keyboard controls for player movement (WASD) and jumping.
-- Added collision detection and grounded checks to prevent double jumps.
-- Synchronized physics updates with the rendering loop for smooth gameplay.
-
----
-
-### **3. Dynamic Prop System**
-- Created a reusable `Prop` component for interactive 3D objects.
-- Added hover and click interactions with material highlighting.
-- Implemented teleportation logic to move the player to specific prop locations.
-- Used `useGLTF` and `Suspense` for efficient model loading and rendering.
-
----
-
-### **4. Environment Optimization**
-- Added a toggle for switching between high-resolution and standard-resolution environments.
-- Memoized environment models to prevent unnecessary re-renders.
-- Preloaded models to reduce delays when toggling between resolutions.
-
----
-
-### **5. Performance Optimization**
-- Used `useMemo` and `React.memo` to optimize rendering performance.
-- Implemented lazy loading for large 3D models to reduce initial load times.
-- Added a performance monitor using the `Stats` component from `@react-three/drei`.
-
----
-
-### **6. Settings and UI Integration**
-- Created a centralized `SettingsContext` for managing global settings (e.g., player speed, camera sensitivity).
-- Built a dynamic settings panel with sliders and toggles for real-time adjustments.
-- Integrated the UI overlay with the 3D scene using `Html` from `@react-three/drei`.
-
----
-
-### **7. Debugging and Profiling**
-- Used the browser’s **Performance** tab to identify and resolve bottlenecks.
-- Added debug logs and visual aids (e.g., wireframes, collider visualizations) to troubleshoot issues.
-- Tested and optimized the project across multiple devices and browsers.
 
 ---
 
@@ -161,13 +119,6 @@ Open your browser and navigate to `http://localhost:3000` to view the project.
 
 ## **License**
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
----
-
-## **Acknowledgments**
-- **[React Three Fiber Documentation](https://docs.pmnd.rs/react-three-fiber)**
-- **[Rapier Physics Documentation](https://rapier.rs/docs/)**
-- **[Three.js Documentation](https://threejs.org/docs/)**
 
 ---
 
