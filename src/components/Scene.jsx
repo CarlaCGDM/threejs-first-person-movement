@@ -16,7 +16,7 @@ import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
 import { Effects } from "./caveEnvironment/Effects";
-import CustomPathfindingTest from './CustomPathfindingTest';
+import NPCNavigation from './NPCs/NPCNavigation/NPCNavigation';
 
 
 export default function Scene() {
@@ -48,8 +48,8 @@ export default function Scene() {
 
                 < SceneWithRoomEnvironment />
 
-                <CustomPathfindingTest color='lime' />
-                {/* <CustomPathfindingTest color='yellow' /> */}
+                <NPCNavigation color='lime' />
+                
 
                 <ambientLight intensity={0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}

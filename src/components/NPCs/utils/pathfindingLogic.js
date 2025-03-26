@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { weldVertices } from './vertexWelder';
 
-export class CustomPathfinding {
+export class PathfindingLogic {
   constructor() {
     this.epsilon = 0.0001; // For floating-point comparisons
     this.zones = {}; // Add zones storage

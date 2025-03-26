@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 
-export function CustomNPCActor({ 
+export function NPCActor({ 
   path, 
   speed = 0.5,
   rotationSpeed = 2,

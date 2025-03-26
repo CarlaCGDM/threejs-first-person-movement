@@ -2,11 +2,12 @@ import { useEffect, useState, useRef } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
-import { CustomPathfinding } from '../utils/CustomPathfinding';
-import { CustomNPCActor } from './CustomNPCActor';
-import { PathVisualizer } from './NPCs/NPCNavigation/PathVisualizer';
+import { PathfindingLogic } from '../utils/pathfindingLogic';
+import { NPCActor } from '../NPCActor/NPCActor';
+import { PathVisualizer } from './PathVisualizer';
+import { NavMeshVisualizer } from './NavMeshVisualizer';
 
-export default function CustomPathfindingTest({color = 'hotpink'}) {
+export default function NPCNavigation({ color = 'hotpink' }) {
     const [navData, setNavData] = useState({ faces: [] });
     const [navMesh, setNavMesh] = useState(null);
     const [path, setPath] = useState(null);
@@ -77,7 +78,7 @@ export default function CustomPathfindingTest({color = 'hotpink'}) {
         setNavMesh(foundNavMesh);
 
         // Process the navmesh
-        pathfindingRef.current = new CustomPathfinding();
+        pathfindingRef.current = new PathfindingLogic();
         const data = pathfindingRef.current.processNavMesh(foundNavMesh.geometry);
         setNavData(data);
 
@@ -100,62 +101,16 @@ export default function CustomPathfindingTest({color = 'hotpink'}) {
 
     return (
         <group>
-            {/* Debug visualization of face centers */}
-            {navData.faces.map((face, index) => (
-                <mesh key={`face-${index}`} position={face.center}>
-                    <sphereGeometry args={[0.1, 8, 8]} />
-                    <meshBasicMaterial
-                        color={face.neighbors.length === 0 ? 'red' : 'blue'}
-                        transparent
-                        opacity={0.3}
-                    />
-                </mesh>
-            ))}
 
-            {/* Debug visualization of connections */}
-            {navData.faces.map((face, index) => (
-                face.neighbors.map(neighborIdx => {
-                    if (neighborIdx > index) {
-                        const neighbor = navData.faces[neighborIdx];
-                        const distance = face.center.distanceTo(neighbor.center);
-                        const direction = new THREE.Vector3()
-                            .subVectors(neighbor.center, face.center)
-                            .normalize();
-
-                        const position = new THREE.Vector3()
-                            .addVectors(face.center, neighbor.center)
-                            .multiplyScalar(0.5);
-
-                        return (
-                            <mesh
-                                key={`conn-${index}-${neighborIdx}`}
-                                position={position}
-                                quaternion={new THREE.Quaternion().setFromUnitVectors(
-                                    new THREE.Vector3(0, 1, 0),
-                                    direction
-                                )}
-                            >
-                                <cylinderGeometry args={[0.02, 0.02, distance, 4]} />
-                                <meshBasicMaterial color={"green"} transparent opacity={0.3} />
-                            </mesh>
-                        );
-                    }
-                    return null;
-                })
-            ))}
-
-            {/* Original navmesh */}
-            {navMesh && (
-                <primitive
-                    object={navMesh.clone()}
-                    material={new THREE.MeshBasicMaterial({
-                        color: 'red',
-                        wireframe: true,
-                        transparent: true,
-                        opacity: 0.2
-                    })}
-                />
-            )}
+            <NavMeshVisualizer
+                faces={navData.faces}
+                navMeshGeometry={navMesh?.geometry}
+                showFaces={true}
+                showConnections={true}
+                showWireframe={true}
+                wireframeColor="red"
+                wireframeOpacity={0.2}
+            />
 
             {/* Path and NPC */}
             {path && path.length > 1 && (
@@ -164,7 +119,7 @@ export default function CustomPathfindingTest({color = 'hotpink'}) {
                     <PathVisualizer path={path} color="yellow" />
 
                     {/* NPC Actor */}
-                    <CustomNPCActor
+                    <NPCActor
                         path={path}
                         speed={0.5}
                         onPathComplete={handlePathComplete}
