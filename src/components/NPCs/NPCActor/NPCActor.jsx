@@ -1,6 +1,6 @@
-import { useNPCMovement } from './useNPCMovement';
-import { useNPCActions } from './useNPCActions';
-import { NPCDebug } from './NPCDebug';
+import { useNPCMovement } from './hooks/useNPCMovement';
+import { useNPCActions } from './hooks/useNPCActions';
+import { NPCDebug } from './visuals/NPCDebug';
 
 export function NPCActor({ 
   path, 

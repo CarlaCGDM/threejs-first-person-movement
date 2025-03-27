@@ -1,35 +1,31 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import * as THREE from 'three';
 import { PathfindingLogic } from '../utils/pathfindingLogic';
 import { NPCActor } from '../NPCActor/NPCActor';
-import { PathVisualizer } from './PathVisualizer';
-import { NavMeshVisualizer } from './NavMeshVisualizer';
+import { PathVisualizer } from './visuals/PathVisualizer';
+import { NavMeshVisualizer } from './visuals/NavMeshVisualizer';
+import { useNavMeshLoader } from './hooks/useNavMeshLoader'; // New import
 
 export default function NPCNavigation({ color = 'hotpink' }) {
     const [navData, setNavData] = useState({ faces: [] });
-    const [navMesh, setNavMesh] = useState(null);
     const [path, setPath] = useState(null);
     const pathfindingRef = useRef();
-    const gltf = useLoader(GLTFLoader, '/assets/models/CovaBonica_LODs/cb_navmesh.glb');
+    
+    // Replaced GLTF loading with our hook
+    const navMesh = useNavMeshLoader('/assets/models/CovaBonica_LODs/cb_navmesh.glb');
 
     // Generate a new random path from a starting position
     const generateNewPath = (startPosition = null) => {
         if (!navData.faces.length) return;
 
-        // If startPosition provided, find nearest face to it
         let startFace = startPosition
             ? pathfindingRef.current.findNearestFace(startPosition, navData.faces)
             : navData.faces[Math.floor(Math.random() * navData.faces.length)];
 
-        // Pick a random destination face (different from start)
         let endFace;
         do {
             endFace = navData.faces[Math.floor(Math.random() * navData.faces.length)];
         } while (endFace === startFace);
 
-        // Calculate path
         const newPath = pathfindingRef.current.findPath(startFace.center, endFace.center);
 
         if (newPath) {
@@ -41,40 +37,25 @@ export default function NPCNavigation({ color = 'hotpink' }) {
             setPath(newPath);
         } else {
             console.warn('Failed to generate path');
-            generateNewPath(startPosition); // Retry
+            generateNewPath(startPosition);
         }
     };
 
-    // Handle path completion (start action phase then generate new path)
     const handlePathComplete = useCallback(() => {
         console.log("Generating new path from last position");
         if (path && path.length > 0) {
-          generateNewPath(path[path.length - 1]);
+            generateNewPath(path[path.length - 1]);
         } else {
-          generateNewPath();
+            generateNewPath();
         }
-      }, [path]);
+    }, [path]);
 
-    // Initialize pathfinding and generate first path
+    // Initialize pathfinding - now depends on navMesh from hook
     useEffect(() => {
-        if (!gltf) return;
+        if (!navMesh) return; // Wait until navMesh is loaded
 
-        // Find the navmesh
-        let foundNavMesh = null;
-        gltf.scene.traverse((node) => {
-            if (node.isMesh) foundNavMesh = node;
-        });
-
-        if (!foundNavMesh) {
-            console.error('No mesh found in navmesh GLTF');
-            return;
-        }
-
-        setNavMesh(foundNavMesh);
-
-        // Process the navmesh
         pathfindingRef.current = new PathfindingLogic();
-        const data = pathfindingRef.current.processNavMesh(foundNavMesh.geometry);
+        const data = pathfindingRef.current.processNavMesh(navMesh.geometry);
         setNavData(data);
 
         console.log('Navigation graph created:', {
@@ -82,19 +63,17 @@ export default function NPCNavigation({ color = 'hotpink' }) {
             connections: data.faces.reduce((sum, face) => sum + face.neighbors.length, 0)
         });
 
-        // Generate first path after short delay
         setTimeout(() => {
             generateNewPath();
         }, 500);
 
-    }, [gltf]);
+    }, [navMesh]); // Changed dependency from gltf to navMesh
 
     return (
         <group>
-
             <NavMeshVisualizer
                 faces={navData.faces}
-                navMeshGeometry={navMesh?.geometry}
+                navMeshGeometry={navMesh?.geometry} // Now using navMesh from hook
                 showFaces={true}
                 showConnections={true}
                 showWireframe={true}
@@ -102,13 +81,9 @@ export default function NPCNavigation({ color = 'hotpink' }) {
                 wireframeOpacity={0.2}
             />
 
-            {/* Path and NPC */}
             {path && path.length > 1 && (
                 <>
-                    {/* Path visualization */}
                     <PathVisualizer path={path} color="yellow" />
-
-                    {/* NPC Actor */}
                     <NPCActor
                         path={path}
                         speed={0.5}
