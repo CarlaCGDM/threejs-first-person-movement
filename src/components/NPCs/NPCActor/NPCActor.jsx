@@ -12,7 +12,8 @@ export function NPCActor({
   onPathComplete,
   color = 'hotpink',
   debug = true,
-  propsData = []
+  propsData = [],
+  poisData = []
 }) {
   const { isPerformingActions, startActions } = useNPCActions({
     onActionComplete: onPathComplete
@@ -26,19 +27,22 @@ export function NPCActor({
     lookAheadPoints: 5,
     onReachEnd: () => {
       startActions(5000);
-      findClosestProp();
+      findClosestTarget();
     }
   });
 
-  const { closestProp, findClosestProp } = useNPCPropInteraction({
+  const { closestTarget, findClosestTarget } = useNPCPropInteraction({
     groupRef,
     propsData,
+    poisData,
     isPerformingActions
   });
 
-  const speechContent = closestProp 
-    ? `I'm looking at the ${closestProp.artifactName}` 
-    : "I'm just taking a look around!";
+  const speechContent = closestTarget
+  ? closestTarget.type === 'prop'
+    ? `I'm looking at the ${closestTarget.artifactName}`
+    : `I'm observing ${closestTarget.poiName}`
+  : "I'm just taking a look around!";
 
   return (
     <group ref={groupRef}>

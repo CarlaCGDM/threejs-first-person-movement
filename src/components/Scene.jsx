@@ -47,10 +47,9 @@ export default function Scene() {
 
                 < SceneWithRoomEnvironment />
                 <ambientLight intensity={0} />
-                {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
                 <Physics gravity={[0, -9.81, 0]}>
-                    <NPCNavigation color='lime' propsData={propsData}/>
+                    <NPCNavigation color='lime' propsData={propsData} poisData={POIsData}/>
                     <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />

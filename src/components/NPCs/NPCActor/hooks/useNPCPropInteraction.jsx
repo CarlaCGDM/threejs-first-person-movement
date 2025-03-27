@@ -4,46 +4,62 @@ import { useFrame } from '@react-three/fiber';
 
 export function useNPCPropInteraction({
   groupRef,
-  propsData,
+  propsData = [],
+  poisData = [],
   isPerformingActions
 }) {
-  const [closestProp, setClosestProp] = useState(null);
+  const [closestTarget, setClosestTarget] = useState(null);
   const lookAtTarget = useRef(null);
   const isRotating = useRef(false);
 
-  // Find closest prop (unchanged)
-  const findClosestProp = () => {
+  // Unified target finding (props take priority)
+  const findClosestTarget = () => {
     if (!groupRef.current) {
-      setClosestProp(null);
+      setClosestTarget(null);
       return;
     }
-    
+
     const npcPos = groupRef.current.position;
     let closest = null;
-    let minDistance = 3;
-    
+    let minDistance = 3; // meters
+
+    // Check props first (higher priority)
     propsData.forEach(prop => {
       const propPos = new THREE.Vector3(...prop.position);
       const distance = npcPos.distanceTo(propPos);
       
       if (distance < minDistance) {
         minDistance = distance;
-        closest = prop;
+        closest = { ...prop, type: 'prop' }; // Mark as prop
       }
     });
-    
-    setClosestProp(closest);
-    lookAtTarget.current = closest ? new THREE.Vector3(...closest.position) : null;
+
+    // Only check POIs if no props found
+    if (!closest) {
+      poisData.forEach(poi => {
+        const poiPos = new THREE.Vector3(...poi.position);
+        const distance = npcPos.distanceTo(poiPos);
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          closest = { ...poi, type: 'poi' }; // Mark as poi
+        }
+      });
+    }
+
+    setClosestTarget(closest);
+    lookAtTarget.current = closest 
+      ? new THREE.Vector3(...closest.position)
+      : null;
   };
 
-  // Vertical-axis-only rotation (fixed)
+  // Rotation logic (unchanged)
   useFrame((_, delta) => {
     if (!groupRef.current || !lookAtTarget.current || !isPerformingActions) return;
 
     const npcPos = groupRef.current.position;
     const targetPos = lookAtTarget.current;
 
-    // Calculate direction on XZ plane only (ignoring Y axis)
     const direction = new THREE.Vector3()
       .subVectors(
         new THREE.Vector3(npcPos.x, 0, npcPos.z),
@@ -52,14 +68,12 @@ export function useNPCPropInteraction({
       .normalize();
 
     if (direction.length() > 0) {
-      // Calculate target Y rotation only
       const targetYRotation = Math.atan2(direction.x, direction.z);
       const targetQuat = new THREE.Quaternion().setFromAxisAngle(
-        new THREE.Vector3(0, 1, 0), // Only rotate around Y axis
+        new THREE.Vector3(0, 1, 0),
         targetYRotation
       );
       
-      // Smooth rotation
       groupRef.current.quaternion.slerp(targetQuat, 5 * delta);
       isRotating.current = true;
     }
@@ -67,14 +81,14 @@ export function useNPCPropInteraction({
 
   useEffect(() => {
     if (!isPerformingActions) {
-      setClosestProp(null);
+      setClosestTarget(null);
       lookAtTarget.current = null;
       isRotating.current = false;
     }
   }, [isPerformingActions]);
 
   return {
-    closestProp,
-    findClosestProp
+    closestTarget, // Now contains either prop or poi
+    findClosestTarget
   };
 }
