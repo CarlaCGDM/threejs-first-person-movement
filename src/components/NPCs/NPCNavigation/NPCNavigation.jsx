@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
@@ -13,7 +13,6 @@ export default function NPCNavigation({ color = 'hotpink' }) {
     const [path, setPath] = useState(null);
     const pathfindingRef = useRef();
     const gltf = useLoader(GLTFLoader, '/assets/models/CovaBonica_LODs/cb_navmesh.glb');
-    const actionTimeoutRef = useRef();
 
     // Generate a new random path from a starting position
     const generateNewPath = (startPosition = null) => {
@@ -47,18 +46,14 @@ export default function NPCNavigation({ color = 'hotpink' }) {
     };
 
     // Handle path completion (start action phase then generate new path)
-    const handlePathComplete = () => {
-        console.log("Starting 5-second action phase");
-
-        actionTimeoutRef.current = setTimeout(() => {
-            console.log("Action phase complete - generating new path from end position");
-            if (path && path.length > 0) {
-                generateNewPath(path[path.length - 1]); // Start from end of previous path
-            } else {
-                generateNewPath(); // Fallback
-            }
-        }, 15000);
-    };
+    const handlePathComplete = useCallback(() => {
+        console.log("Generating new path from last position");
+        if (path && path.length > 0) {
+          generateNewPath(path[path.length - 1]);
+        } else {
+          generateNewPath();
+        }
+      }, [path]);
 
     // Initialize pathfinding and generate first path
     useEffect(() => {
@@ -92,11 +87,6 @@ export default function NPCNavigation({ color = 'hotpink' }) {
             generateNewPath();
         }, 500);
 
-        return () => {
-            if (actionTimeoutRef.current) {
-                clearTimeout(actionTimeoutRef.current);
-            }
-        };
     }, [gltf]);
 
     return (
