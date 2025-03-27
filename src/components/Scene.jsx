@@ -18,7 +18,6 @@ import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnviron
 import { Effects } from "./caveEnvironment/Effects";
 import NPCNavigation from './NPCs/NPCNavigation/NPCNavigation';
 
-
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
     const playerRef = useRef(); // Create a ref for the player's RigidBody
@@ -47,20 +46,17 @@ export default function Scene() {
                 <Stats /> {/* Add this to monitor performance */}
 
                 < SceneWithRoomEnvironment />
-
-                <NPCNavigation color='lime' />
-                
-
                 <ambientLight intensity={0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
-                <Physics gravity={[0, -9.81, 0]}>
-                    <EnvironmentColliders />
-                    <Ground />
-                    <Player ref={playerRef} keys={keys} />
-                    <PropsSetup props={propsData} />
-                    <PointsOfInterestSetup POIs={POIsData} />
-                </Physics>
+                    <NPCNavigation color='lime' />
+                    <Physics gravity={[0, -9.81, 0]}>
+                        <EnvironmentColliders />
+                        <Ground />
+                        <Player ref={playerRef} keys={keys} />
+                        <PropsSetup props={propsData} />
+                        <PointsOfInterestSetup POIs={POIsData} />
+                    </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
                 <Effects />
             </Canvas>

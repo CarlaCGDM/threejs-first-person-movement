@@ -2,36 +2,36 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { PathfindingLogic } from '../utils/pathfindingLogic';
 import { NPCActor } from '../NPCActor/NPCActor';
 import { PathVisualizer } from './visuals/PathVisualizer';
-import { NavMeshVisualizer } from './visuals/NavMeshVisualizer';
-import { useNavMeshLoader } from './hooks/useNavMeshLoader'; // New import
+import { WaypointVisualizer } from './visuals/WaypointVisualizer'; // New visualizer for waypoints
+import * as THREE from "three";
 
 export default function NPCNavigation({ color = 'hotpink' }) {
-    const [navData, setNavData] = useState({ faces: [] });
     const [path, setPath] = useState(null);
+    const [waypointsLoaded, setWaypointsLoaded] = useState(false);
     const pathfindingRef = useRef();
     
-    // Replaced GLTF loading with our hook
-    const navMesh = useNavMeshLoader('/assets/models/CovaBonica_LODs/cb_navmesh.glb');
-
     // Generate a new random path from a starting position
     const generateNewPath = (startPosition = null) => {
-        if (!navData.faces.length) return;
+        if (!pathfindingRef.current || !waypointsLoaded) return;
 
-        let startFace = startPosition
-            ? pathfindingRef.current.findNearestFace(startPosition, navData.faces)
-            : navData.faces[Math.floor(Math.random() * navData.faces.length)];
+        let startPos = startPosition || new THREE.Vector3(
+            Math.random() * 20 - 10,
+            0,
+            Math.random() * 20 - 10
+        );
 
-        let endFace;
-        do {
-            endFace = navData.faces[Math.floor(Math.random() * navData.faces.length)];
-        } while (endFace === startFace);
+        const endPos = new THREE.Vector3(
+            Math.random() * 20 - 10,
+            0,
+            Math.random() * 20 - 10
+        );
 
-        const newPath = pathfindingRef.current.findPath(startFace.center, endFace.center);
+        const newPath = pathfindingRef.current.findPath(startPos, endPos);
 
         if (newPath) {
             console.log('New path generated', {
-                from: startFace.center,
-                to: endFace.center,
+                from: startPos,
+                to: endPos,
                 length: newPath.length
             });
             setPath(newPath);
@@ -50,36 +50,38 @@ export default function NPCNavigation({ color = 'hotpink' }) {
         }
     }, [path]);
 
-    // Initialize pathfinding - now depends on navMesh from hook
+    // Initialize pathfinding with JSON data
     useEffect(() => {
-        if (!navMesh) return; // Wait until navMesh is loaded
-
         pathfindingRef.current = new PathfindingLogic();
-        const data = pathfindingRef.current.processNavMesh(navMesh.geometry);
-        setNavData(data);
+        
+        const loadWaypoints = async () => {
+            const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
+            setWaypointsLoaded(success);
+            
+            if (success) {
+                setTimeout(() => {
+                    generateNewPath();
+                }, 500);
+            }
+        };
 
-        console.log('Navigation graph created:', {
-            faces: data.faces.length,
-            connections: data.faces.reduce((sum, face) => sum + face.neighbors.length, 0)
-        });
+        loadWaypoints();
 
-        setTimeout(() => {
-            generateNewPath();
-        }, 500);
-
-    }, [navMesh]); // Changed dependency from gltf to navMesh
+        return () => {
+            // Cleanup if needed
+        };
+    }, []);
 
     return (
         <group>
-            <NavMeshVisualizer
-                faces={navData.faces}
-                navMeshGeometry={navMesh?.geometry} // Now using navMesh from hook
-                showFaces={true}
-                showConnections={true}
-                showWireframe={true}
-                wireframeColor="red"
-                wireframeOpacity={0.2}
-            />
+            {/* Replace NavMeshVisualizer with WaypointVisualizer */}
+            {waypointsLoaded && (
+                <WaypointVisualizer
+                    pathfinding={pathfindingRef.current}
+                    showWaypoints={true}
+                    showConnections={true}
+                />
+            )}
 
             {path && path.length > 1 && (
                 <>

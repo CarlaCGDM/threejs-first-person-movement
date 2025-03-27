@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useNPCRotation } from './useNPCRotation';
@@ -10,6 +10,7 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
   const progressRef = useRef(0);
   const segmentLengthRef = useRef(0);
   const isMovingRef = useRef(false);
+  const [position, setPosition] = useState(new THREE.Vector3()); // New state
 
   const { targetQuaternion, updateRotation } = useNPCRotation();
 
@@ -17,7 +18,7 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
     if (!path || path.length < 2) return;
 
     const curve = new THREE.CatmullRomCurve3(path, false, 'centripetal', smoothness);
-    smoothPathRef.current = curve.getPoints(path.length * 10);
+    smoothPathRef.current = curve.getPoints(path.length * 5);
     currentIndexRef.current = 0;
     progressRef.current = 0;
     isMovingRef.current = true;
@@ -25,6 +26,7 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
     if (smoothPathRef.current.length > 1) {
       segmentLengthRef.current = smoothPathRef.current[0].distanceTo(smoothPathRef.current[1]);
       updateRotation(smoothPathRef.current, 0, lookAheadPoints);
+      setPosition(smoothPathRef.current[0]); // Set initial position
     }
   }, [path, smoothness, lookAheadPoints]);
 
@@ -47,6 +49,7 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
     if (progressRef.current >= 1) {
       const remaining = (progressRef.current - 1) * (segmentLengthRef.current / speed);
       groupRef.current.position.copy(nextPos);
+      setPosition(nextPos.clone()); // Update position state
 
       if (currentIndexRef.current + 1 < smoothPathRef.current.length - 1) {
         segmentLengthRef.current = nextPos.distanceTo(smoothPathRef.current[currentIndexRef.current + 2]);
@@ -57,8 +60,13 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
       }
     } else {
       groupRef.current.position.lerpVectors(currentPos, nextPos, progressRef.current);
+      setPosition(groupRef.current.position.clone()); // Update position state
     }
   });
 
-  return { groupRef, isMoving: isMovingRef.current };
+  return { 
+    groupRef, 
+    isMoving: isMovingRef.current,
+    position // Expose position to parent component
+  };
 }

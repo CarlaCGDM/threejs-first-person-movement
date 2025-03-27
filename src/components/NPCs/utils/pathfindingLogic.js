@@ -1,105 +1,50 @@
 import * as THREE from "three";
-import { weldVertices } from './vertexWelder';
 
 export class PathfindingLogic {
   constructor() {
-    this.epsilon = 0.0001; // For floating-point comparisons
-    this.zones = {}; // Add zones storage
-    this.defaultZone = 'default'; // Add default zone name
+    this.epsilon = 0.0001;
+    this.zones = {};
+    this.defaultZone = 'default';
   }
 
-  processNavMesh(geometry) {
-    // First weld the vertices
-    const weldedGeometry = weldVertices(geometry, this.epsilon);
-    const positions = weldedGeometry.attributes.position.array;
-    const indices = weldedGeometry.index.array;
-    const faces = [];
-    const edges = new Map();
-
-    // First pass: create all faces
-    const createFace = (a, b, c) => {
-      const v1 = this.getVector(a, positions);
-      const v2 = this.getVector(b, positions);
-      const v3 = this.getVector(c, positions);
-
-      const center = new THREE.Vector3()
-        .add(v1).add(v2).add(v3)
-        .divideScalar(3);
-
-      return {
-        vertices: [a, b, c],
-        vectors: [v1, v2, v3],
-        center,
-        neighbors: []
+  // New method to load and process the Blender JSON
+  async loadFromJSON(url, zone = this.defaultZone) {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      // Create waypoints from vertices
+      const waypoints = data.vertices.map(v => new THREE.Vector3(v[0], v[1], v[2]));
+      
+      // Build adjacency list
+      const adjacencyList = new Map();
+      waypoints.forEach((_, index) => {
+        adjacencyList.set(index, new Set());
+      });
+      
+      // Process connections from edges
+      data.edges.forEach(edge => {
+        const [a, b] = edge;
+        adjacencyList.get(a).add(b);
+        adjacencyList.get(b).add(a); // For bidirectional connections
+      });
+      
+      // Store the processed data
+      this.zones[zone] = {
+        waypoints,
+        adjacencyList
       };
-    };
-
-    // Process all faces
-    if (indices.length > 0) {
-      for (let i = 0; i < indices.length; i += 3) {
-        faces.push(createFace(indices[i], indices[i + 1], indices[i + 2]));
-      }
-    } else {
-      for (let i = 0; i < positions.length / 3; i += 3) {
-        faces.push(createFace(i, i + 1, i + 2));
-      }
+      
+      console.log(`Waypoint graph loaded for zone ${zone}:`, waypoints.length, "waypoints");
+      return true;
+      
+    } catch (error) {
+      console.error("Error loading waypoint graph:", error);
+      return false;
     }
-
-    // Second pass: find connections by geometric comparison
-    const findNeighbors = (face, idx) => {
-      const connections = [];
-
-      for (let otherIdx = 0; otherIdx < faces.length; otherIdx++) {
-        if (otherIdx === idx) continue;
-
-        const otherFace = faces[otherIdx];
-        const sharedVertices = this.countSharedVertices(face, otherFace, positions);
-
-        if (sharedVertices >= 2) {
-          connections.push(otherIdx);
-        }
-      }
-
-      return connections;
-    };
-
-    // Find neighbors for each face
-    faces.forEach((face, idx) => {
-      face.neighbors = findNeighbors(face, idx);
-    });
-
-    // Store the processed data in the default zone
-    this.zones[this.defaultZone] = { faces };
-
-    return this.zones[this.defaultZone];
   }
 
-  getVector(index, positions) {
-    return new THREE.Vector3(
-      positions[index * 3],
-      positions[index * 3 + 1],
-      positions[index * 3 + 2]
-    );
-  }
-
-  countSharedVertices(face1, face2, positions) {
-    const uniqueVerts = new Set([...face1.vertices, ...face2.vertices]);
-    return face1.vertices.length + face2.vertices.length - uniqueVerts.size;
-  }
-
-  countSharedVerticesGeometric(face1, face2) {
-    let count = 0;
-    for (const v1 of face1.vectors) {
-      for (const v2 of face2.vectors) {
-        if (v1.distanceTo(v2) < this.epsilon) {
-          count++;
-          break;
-        }
-      }
-    }
-    return count;
-  }
-
+  // Modified pathfinding to work with waypoints
   findPath(startPos, endPos, zone = this.defaultZone) {
     const zoneData = this.zones[zone];
     if (!zoneData) {
@@ -107,49 +52,49 @@ export class PathfindingLogic {
       return null;
     }
 
-    const { faces } = zoneData;
+    const { waypoints, adjacencyList } = zoneData;
 
-    // Find nearest faces
-    const startFace = this.findNearestFace(startPos, faces);
-    const endFace = this.findNearestFace(endPos, faces);
+    // Find nearest waypoints (instead of faces)
+    const startWaypoint = this.findNearestWaypoint(startPos, waypoints);
+    const endWaypoint = this.findNearestWaypoint(endPos, waypoints);
 
-    if (!startFace || !endFace) {
-      console.error('Could not find start/end faces');
+    if (startWaypoint === null || endWaypoint === null) {
+      console.error('Could not find start/end waypoints');
       return null;
     }
 
-    // A* implementation
-    const openSet = new Set([startFace.index]);
+    // A* implementation adapted for waypoints
+    const openSet = new Set([startWaypoint.index]);
     const cameFrom = new Map();
     const gScore = new Map();
     const fScore = new Map();
 
-    faces.forEach((_, index) => {
+    waypoints.forEach((_, index) => {
       gScore.set(index, Infinity);
       fScore.set(index, Infinity);
     });
 
-    gScore.set(startFace.index, 0);
-    fScore.set(startFace.index, this.heuristic(startFace, endFace));
+    gScore.set(startWaypoint.index, 0);
+    fScore.set(startWaypoint.index, this.heuristic(startWaypoint.position, waypoints[endWaypoint.index]));
 
     while (openSet.size > 0) {
       const current = this.getLowestFScore(openSet, fScore);
 
-      if (current === endFace.index) {
-        return this.reconstructPath(cameFrom, current, faces);
+      if (current === endWaypoint.index) {
+        return this.reconstructPath(cameFrom, current, waypoints);
       }
 
       openSet.delete(current);
 
-      for (const neighbor of faces[current].neighbors) {
+      for (const neighbor of adjacencyList.get(current)) {
         const tentativeGScore = gScore.get(current) +
-          faces[current].center.distanceTo(faces[neighbor].center);
+          waypoints[current].distanceTo(waypoints[neighbor]);
 
         if (tentativeGScore < gScore.get(neighbor)) {
           cameFrom.set(neighbor, current);
           gScore.set(neighbor, tentativeGScore);
           fScore.set(neighbor, tentativeGScore +
-            this.heuristic(faces[neighbor], endFace));
+            this.heuristic(waypoints[neighbor], waypoints[endWaypoint.index]));
 
           if (!openSet.has(neighbor)) {
             openSet.add(neighbor);
@@ -162,19 +107,23 @@ export class PathfindingLogic {
     return null;
   }
 
+  // Modified helper methods
   heuristic(a, b) {
-    return a.center.distanceTo(b.center);
+    return a.distanceTo(b);
   }
 
-  findNearestFace(position, faces) {
+  findNearestWaypoint(position, waypoints) {
     let nearest = null;
     let minDistance = Infinity;
 
-    faces.forEach((face, index) => {
-      const distance = position.distanceTo(face.center);
+    waypoints.forEach((waypoint, index) => {
+      const distance = position.distanceTo(waypoint);
       if (distance < minDistance) {
         minDistance = distance;
-        nearest = { ...face, index };
+        nearest = {
+          position: waypoint,
+          index
+        };
       }
     });
 
@@ -196,12 +145,47 @@ export class PathfindingLogic {
     return lowest;
   }
 
-  reconstructPath(cameFrom, current, faces) {
-    const path = [faces[current].center.clone()];
+  reconstructPath(cameFrom, current, waypoints) {
+    const path = [waypoints[current].clone()];
     while (cameFrom.has(current)) {
       current = cameFrom.get(current);
-      path.unshift(faces[current].center.clone());
+      path.unshift(waypoints[current].clone());
     }
     return path;
+  }
+
+  // Optional: Visualization helper
+  createDebugScene(zone = this.defaultZone) {
+    const zoneData = this.zones[zone];
+    if (!zoneData) return null;
+
+    const { waypoints, adjacencyList } = zoneData;
+    const group = new THREE.Group();
+    
+    // Add spheres for waypoints
+    waypoints.forEach((pos, index) => {
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.1),
+        new THREE.MeshBasicMaterial({ color: 0xff0000 })
+      );
+      sphere.position.copy(pos);
+      group.add(sphere);
+    });
+    
+    // Add lines for connections
+    adjacencyList.forEach((neighbors, index) => {
+      const origin = waypoints[index];
+      neighbors.forEach(neighborIndex => {
+        const neighbor = waypoints[neighborIndex];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints([origin, neighbor]);
+        const line = new THREE.Line(
+          lineGeometry,
+          new THREE.LineBasicMaterial({ color: 0x00ff00 })
+        );
+        group.add(line);
+      });
+    });
+    
+    return group;
   }
 }

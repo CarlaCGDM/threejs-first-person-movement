@@ -15,7 +15,7 @@ export function NPCActor({
     onActionComplete: onPathComplete
   });
 
-  const { groupRef } = useNPCMovement({
+  const { groupRef, position } = useNPCMovement({
     path,
     speed,
     rotationSpeed,
@@ -24,6 +24,8 @@ export function NPCActor({
     onReachEnd: () => startActions(5000) // Start actions when path ends
   });
 
+  const speechContent = "I'm just taking a look around!";
+
   return (
     <group ref={groupRef}>
       <mesh castShadow position={[0, 0.8, 0]}>
@@ -31,7 +33,7 @@ export function NPCActor({
         <meshStandardMaterial color={isPerformingActions ? 'purple' : color} />
       </mesh>
 
-      {debug && <NPCDebug isPerformingActions={isPerformingActions} />}
+      {debug && <NPCDebug isPerformingActions={isPerformingActions} speechContent={speechContent} />}
     </group>
   );
 }

@@ -1,7 +1,7 @@
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 
-export function NPCDebug({ isPerformingActions }) {
+export function NPCDebug({ isPerformingActions, speechContent }) {
   return (
     <>
       <arrowHelper
@@ -27,7 +27,7 @@ export function NPCDebug({ isPerformingActions }) {
             fontSize: '14px',
           }}
         >
-          ACTING
+          {speechContent}
         </Html>
       )}
     </>
