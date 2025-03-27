@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
 import { NPCDebug } from './visuals/NPCDebug';
@@ -15,6 +16,8 @@ export function NPCActor({
   propsData = []
 }) {
   const [closestProp, setClosestProp] = useState(null);
+  const lookAtTarget = useRef(null);
+  const isRotating = useRef(false);
 
   const { isPerformingActions, startActions } = useNPCActions({
     onActionComplete: onPathComplete
@@ -27,19 +30,45 @@ export function NPCActor({
     smoothness,
     lookAheadPoints: 5,
     onReachEnd: () => {
-      startActions(5000); // Start 5-second action period
-      findClosestProp(); // Single check when stopping
+      startActions(5000);
+      findClosestProp();
+    }
+  });
+
+  // Smooth rotation towards target
+  useFrame((_, delta) => {
+    if (!groupRef.current || !lookAtTarget.current || !isPerformingActions) return;
+    
+    const targetPos = lookAtTarget.current;
+    const npcPos = groupRef.current.position;
+    
+    // Calculate direction FROM PROP TO NPC (inverse of before)
+    const direction = new THREE.Vector3()
+      .subVectors(
+        new THREE.Vector3(npcPos.x, 0, npcPos.z),
+        new THREE.Vector3(targetPos.x, 0, targetPos.z)
+      )
+      .normalize();
+    
+    if (direction.length() > 0) {
+      const targetQuat = new THREE.Quaternion().setFromUnitVectors(
+        new THREE.Vector3(0, 0, 1), // Default forward
+        direction
+      );
+      
+      groupRef.current.quaternion.slerp(targetQuat, 5 * delta);
     }
   });
 
   const findClosestProp = () => {
-    if (!groupRef.current) return;
+    if (!groupRef.current) {
+      setClosestProp(null);
+      return;
+    }
     
-    const npcPosition = new THREE.Vector3();
-    groupRef.current.getWorldPosition(npcPosition);
-    
+    const npcPosition = groupRef.current.position;
     let closest = null;
-    let minDistance = 3; // Max detection distance
+    let minDistance = 10;
     
     propsData.forEach(prop => {
       const propPosition = new THREE.Vector3(...prop.position);
@@ -52,12 +81,16 @@ export function NPCActor({
     });
     
     setClosestProp(closest);
+    lookAtTarget.current = closest 
+      ? new THREE.Vector3(...closest.position) 
+      : null;
   };
 
-  // Reset closest prop when starting to move again
   useEffect(() => {
     if (!isPerformingActions) {
       setClosestProp(null);
+      lookAtTarget.current = null;
+      isRotating.current = false;
     }
   }, [isPerformingActions]);
 
@@ -73,10 +106,13 @@ export function NPCActor({
       </mesh>
 
       {debug && (
+        <>
+          
           <NPCDebug 
             isPerformingActions={isPerformingActions} 
             speechContent={speechContent} 
           />
+        </>
       )}
     </group>
   );
