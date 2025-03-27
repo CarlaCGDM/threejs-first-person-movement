@@ -49,14 +49,14 @@ export default function Scene() {
                 <ambientLight intensity={0} />
                 {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
-                    <NPCNavigation color='lime' />
-                    <Physics gravity={[0, -9.81, 0]}>
-                        <EnvironmentColliders />
-                        <Ground />
-                        <Player ref={playerRef} keys={keys} />
-                        <PropsSetup props={propsData} />
-                        <PointsOfInterestSetup POIs={POIsData} />
-                    </Physics>
+                <Physics gravity={[0, -9.81, 0]}>
+                    <NPCNavigation color='lime' propsData={propsData}/>
+                    <EnvironmentColliders />
+                    <Ground />
+                    <Player ref={playerRef} keys={keys} />
+                    <PropsSetup props={propsData} />
+                    <PointsOfInterestSetup POIs={POIsData} />
+                </Physics>
                 <CustomOrbitControls ref={orbitControlsRef} />
                 <Effects />
             </Canvas>

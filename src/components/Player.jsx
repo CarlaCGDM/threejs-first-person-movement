@@ -37,6 +37,7 @@ export const Player = forwardRef(({ keys }, ref) => {
                 type="dynamic"
                 position={initialPlayerPosition}
                 enabledRotations={[false, false, false]}
+                name="player"
             >
                 <CapsuleCollider args={[0.75, 0.25]} />
 

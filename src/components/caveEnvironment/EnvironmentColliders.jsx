@@ -11,7 +11,7 @@ export function EnvironmentColliders() {
     const geometry = scene.children[0].geometry;
 
     return (
-        <RigidBody type="fixed" colliders={false} friction={0}>
+        <RigidBody type="fixed" name="ground collider" colliders={false} friction={0}>
             <TrimeshCollider args={[geometry.attributes.position.array, geometry.index.array]} />
             {/* Debug wireframe */}
             {/* <mesh geometry={geometry}>

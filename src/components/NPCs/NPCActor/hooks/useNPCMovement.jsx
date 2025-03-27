@@ -18,7 +18,7 @@ export function useNPCMovement({ path, speed, rotationSpeed, smoothness, lookAhe
     if (!path || path.length < 2) return;
 
     const curve = new THREE.CatmullRomCurve3(path, false, 'centripetal', smoothness);
-    smoothPathRef.current = curve.getPoints(path.length * 5);
+    smoothPathRef.current = curve.getPoints(path.length * 10);
     currentIndexRef.current = 0;
     progressRef.current = 0;
     isMovingRef.current = true;

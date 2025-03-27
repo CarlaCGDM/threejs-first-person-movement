@@ -57,8 +57,8 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
             <group
                 rotation={radRotation || [0, 0, 0]}
                 {...hoverEventHandlers} // Spread hover event handlers
-                onClick={handleClick}
-            >
+                onClick={handleClick}>
+
                 {/* Load the model with suspense */}
                 <Suspense fallback={lowResModelScene ? <Clone object={lowResModelScene} /> : <Html center><span>Loading...</span></Html>}>
                     <Detailed distances={[0, 10, 20]}>
