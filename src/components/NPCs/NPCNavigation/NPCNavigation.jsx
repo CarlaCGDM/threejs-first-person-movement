@@ -11,7 +11,13 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
     const pathfindingRef = useRef();
     
     const generateNewPath = (startPosition = null) => {
-        if (!pathfindingRef.current || !waypointsLoaded) return null;
+        if (!pathfindingRef.current || !waypointsLoaded) {
+            console.warn('Path generation prevented', {
+                pathfindingRef: !!pathfindingRef.current,
+                waypointsLoaded
+            });
+            return null;
+        }
 
         let startPos = startPosition || new THREE.Vector3(
             Math.random() * 20 - 10,
@@ -25,19 +31,27 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
             Math.random() * 20 - 10
         );
 
+        console.log('Attempting path generation', {
+            startPos: startPos.toArray(),
+            endPos: endPos.toArray()
+        });
+
         const newPath = pathfindingRef.current.findPath(startPos, endPos);
 
         if (newPath) {
             console.log('New path generated', {
-                from: startPos,
-                to: endPos,
+                from: startPos.toArray(),
+                to: endPos.toArray(),
                 length: newPath.length
             });
             setPath(newPath);
             return newPath;
         } else {
-            console.warn('Failed to generate path');
-            return generateNewPath(startPosition);
+            console.error('Path generation completely failed', {
+                startPos: startPos.toArray(),
+                endPos: endPos.toArray()
+            });
+            return null;
         }
     };
 
@@ -57,16 +71,25 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
         
         const loadWaypoints = async () => {
             try {
+                console.log('Starting waypoint loading');
                 const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
                 
                 if (isMounted) {
+                    console.log('Waypoint loading result:', success);
                     setWaypointsLoaded(success);
                     
                     if (success) {
+                        // Debugging: log zone information
+                        const zoneInfo = pathfindingRef.current.zones[pathfindingRef.current.defaultZone];
+                        console.log('Zone Information', {
+                            waypointsCount: zoneInfo.waypoints.length,
+                            connectionsCount: Array.from(zoneInfo.adjacencyList.values())
+                                .reduce((sum, connections) => sum + connections.size, 0)
+                        });
+
                         // Use requestAnimationFrame for more reliable timing
                         requestAnimationFrame(() => {
                             const generatedPath = generateNewPath();
-                            console.log(generatedPath)
                             if (!generatedPath) {
                                 console.error('Failed to generate initial path');
                             }
@@ -74,7 +97,7 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
                     }
                 }
             } catch (error) {
-                console.error('Error loading waypoints:', error);
+                console.error('Comprehensive waypoint loading error:', error);
                 if (isMounted) {
                     setWaypointsLoaded(false);
                 }
