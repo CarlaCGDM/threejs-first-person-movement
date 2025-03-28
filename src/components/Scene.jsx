@@ -7,7 +7,7 @@ import { Ground } from "./caveEnvironment/CaveEnvironment";
 import { EnvironmentColliders } from "./caveEnvironment/EnvironmentColliders";
 import { Player } from "./Player";
 import { PropsSetup } from "./props/PropsSetup";
-import { PointsOfInterestSetup } from "./POIs/PointsOfInterestSetup";
+import { PointsOfInterestSetup } from "./pois/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "../hooks/useCustomKeyboardControls";
 import { Overlay } from "./UI/Overlay";
