@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { PathfindingLogic } from '../utils/pathfindingLogic';
 import { NPCActor } from '../NPCActor/NPCActor';
 import { PathVisualizer } from './visuals/PathVisualizer';
-import { WaypointVisualizer } from './visuals/WaypointVisualizer'; // New visualizer for waypoints
+import { WaypointVisualizer } from './visuals/WaypointVisualizer';
 import * as THREE from "three";
 
 export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [], playerRef }) {
@@ -10,9 +10,8 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
     const pathfindingRef = useRef();
     
-    // Generate a new random path from a starting position
     const generateNewPath = (startPosition = null) => {
-        if (!pathfindingRef.current || !waypointsLoaded) return;
+        if (!pathfindingRef.current || !waypointsLoaded) return null;
 
         let startPos = startPosition || new THREE.Vector3(
             Math.random() * 20 - 10,
@@ -35,9 +34,10 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
                 length: newPath.length
             });
             setPath(newPath);
+            return newPath;
         } else {
             console.warn('Failed to generate path');
-            generateNewPath(startPosition);
+            return generateNewPath(startPosition);
         }
     };
 
@@ -52,29 +52,44 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
 
     // Initialize pathfinding with JSON data
     useEffect(() => {
+        let isMounted = true;
         pathfindingRef.current = new PathfindingLogic();
         
         const loadWaypoints = async () => {
-            const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
-            setWaypointsLoaded(success);
-            
-            if (success) {
-                setTimeout(() => {
-                    generateNewPath();
-                }, 500);
+            try {
+                const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
+                
+                if (isMounted) {
+                    setWaypointsLoaded(success);
+                    
+                    if (success) {
+                        // Use requestAnimationFrame for more reliable timing
+                        requestAnimationFrame(() => {
+                            const generatedPath = generateNewPath();
+                            console.log(generatedPath)
+                            if (!generatedPath) {
+                                console.error('Failed to generate initial path');
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading waypoints:', error);
+                if (isMounted) {
+                    setWaypointsLoaded(false);
+                }
             }
         };
 
         loadWaypoints();
 
         return () => {
-            // Cleanup if needed
+            isMounted = false;
         };
     }, []);
 
     return (
         <group>
-            {/* Replace NavMeshVisualizer with WaypointVisualizer */}
             {waypointsLoaded && (
                 <WaypointVisualizer
                     pathfinding={pathfindingRef.current}

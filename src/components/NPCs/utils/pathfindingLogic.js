@@ -5,6 +5,7 @@ export class PathfindingLogic {
     this.epsilon = 0.0001;
     this.zones = {};
     this.defaultZone = 'default';
+    this.maxPathGenerationAttempts = 5; // New parameter for retry attempts
   }
 
   // New method to load and process the Blender JSON
@@ -45,65 +46,87 @@ export class PathfindingLogic {
   }
 
   // Modified pathfinding to work with waypoints
-  findPath(startPos, endPos, zone = this.defaultZone) {
-    const zoneData = this.zones[zone];
-    if (!zoneData) {
-      console.error(`Zone ${zone} not found`);
-      return null;
-    }
-
-    const { waypoints, adjacencyList } = zoneData;
-
-    // Find nearest waypoints (instead of faces)
-    const startWaypoint = this.findNearestWaypoint(startPos, waypoints);
-    const endWaypoint = this.findNearestWaypoint(endPos, waypoints);
-
-    if (startWaypoint === null || endWaypoint === null) {
-      console.error('Could not find start/end waypoints');
-      return null;
-    }
-
-    // A* implementation adapted for waypoints
-    const openSet = new Set([startWaypoint.index]);
-    const cameFrom = new Map();
-    const gScore = new Map();
-    const fScore = new Map();
-
-    waypoints.forEach((_, index) => {
-      gScore.set(index, Infinity);
-      fScore.set(index, Infinity);
-    });
-
-    gScore.set(startWaypoint.index, 0);
-    fScore.set(startWaypoint.index, this.heuristic(startWaypoint.position, waypoints[endWaypoint.index]));
-
-    while (openSet.size > 0) {
-      const current = this.getLowestFScore(openSet, fScore);
-
-      if (current === endWaypoint.index) {
-        return this.reconstructPath(cameFrom, current, waypoints);
+   // Modified findPath method with path validation
+   findPath(startPos, endPos, zone = this.defaultZone) {
+    for (let attempt = 0; attempt < this.maxPathGenerationAttempts; attempt++) {
+      const zoneData = this.zones[zone];
+      if (!zoneData) {
+        console.error(`Zone ${zone} not found`);
+        return null;
       }
 
-      openSet.delete(current);
+      const { waypoints, adjacencyList } = zoneData;
 
-      for (const neighbor of adjacencyList.get(current)) {
-        const tentativeGScore = gScore.get(current) +
-          waypoints[current].distanceTo(waypoints[neighbor]);
+      // Find nearest waypoints (instead of faces)
+      const startWaypoint = this.findNearestWaypoint(startPos, waypoints);
+      const endWaypoint = this.findNearestWaypoint(endPos, waypoints);
 
-        if (tentativeGScore < gScore.get(neighbor)) {
-          cameFrom.set(neighbor, current);
-          gScore.set(neighbor, tentativeGScore);
-          fScore.set(neighbor, tentativeGScore +
-            this.heuristic(waypoints[neighbor], waypoints[endWaypoint.index]));
+      if (startWaypoint === null || endWaypoint === null) {
+        console.error('Could not find start/end waypoints');
+        continue;
+      }
 
-          if (!openSet.has(neighbor)) {
-            openSet.add(neighbor);
+      // A* implementation adapted for waypoints
+      const openSet = new Set([startWaypoint.index]);
+      const cameFrom = new Map();
+      const gScore = new Map();
+      const fScore = new Map();
+
+      waypoints.forEach((_, index) => {
+        gScore.set(index, Infinity);
+        fScore.set(index, Infinity);
+      });
+
+      gScore.set(startWaypoint.index, 0);
+      fScore.set(startWaypoint.index, this.heuristic(startWaypoint.position, waypoints[endWaypoint.index]));
+
+      while (openSet.size > 0) {
+        const current = this.getLowestFScore(openSet, fScore);
+
+        if (current === endWaypoint.index) {
+          const path = this.reconstructPath(cameFrom, current, waypoints);
+          
+          // Validate path length
+          if (path.length > 1) {
+            console.log('Path generated successfully', {
+              from: startPos,
+              to: endPos,
+              length: path.length,
+              attempt: attempt + 1
+            });
+            return path;
+          } else {
+            console.warn('Generated path is too short, retrying...');
+            break; // Break inner while loop to retry path generation
+          }
+        }
+
+        openSet.delete(current);
+
+        for (const neighbor of adjacencyList.get(current)) {
+          const tentativeGScore = gScore.get(current) +
+            waypoints[current].distanceTo(waypoints[neighbor]);
+
+          if (tentativeGScore < gScore.get(neighbor)) {
+            cameFrom.set(neighbor, current);
+            gScore.set(neighbor, tentativeGScore);
+            fScore.set(neighbor, tentativeGScore +
+              this.heuristic(waypoints[neighbor], waypoints[endWaypoint.index]));
+
+            if (!openSet.has(neighbor)) {
+              openSet.add(neighbor);
+            }
           }
         }
       }
+
+      // If we've exhausted attempts or can't find a valid path
+      if (attempt === this.maxPathGenerationAttempts - 1) {
+        console.error('Failed to generate a valid path after multiple attempts');
+        return null;
+      }
     }
 
-    console.error('No path found');
     return null;
   }
 

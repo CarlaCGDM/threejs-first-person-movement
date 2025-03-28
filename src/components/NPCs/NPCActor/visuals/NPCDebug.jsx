@@ -14,7 +14,6 @@ export function NPCDebug({
   const npcPosition = useRef(new THREE.Vector3());
 
   useFrame(() => {
-    console.log(settings.playerPosition)
     if (!groupRef.current || !settings.playerPosition) return;
     
     // Get NPC world position
