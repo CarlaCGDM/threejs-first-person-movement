@@ -5,7 +5,7 @@ import { PathVisualizer } from './visuals/PathVisualizer';
 import { WaypointVisualizer } from './visuals/WaypointVisualizer'; // New visualizer for waypoints
 import * as THREE from "three";
 
-export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [] }) {
+export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [], playerRef }) {
     const [path, setPath] = useState(null);
     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
     const pathfindingRef = useRef();
@@ -93,6 +93,7 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
                         color={color}
                         propsData={propsData}
                         poisData={poisData}
+                        playerRef={playerRef}
                     />
                 </>
             )}

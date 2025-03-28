@@ -14,7 +14,8 @@ export function NPCActor({
   color = 'hotpink',
   debug = true,
   propsData = [],
-  poisData = []
+  poisData = [],
+  playerRef
 }) {
   // 1. First get movement control (this provides groupRef)
   const { isPerformingActions, startActions } = useNPCActions({
@@ -28,7 +29,7 @@ export function NPCActor({
     smoothness,
     lookAheadPoints: 5,
     onReachEnd: () => {
-      startActions(5000);
+      startActions(15000);
       findClosestTarget();
     }
   });
@@ -49,21 +50,28 @@ export function NPCActor({
   useEffect(() => {
     if (!actions) return;
 
-    if (isPerformingActions) {
-      actions['Walk']?.fadeOut(0.3);
-      actions['Idle']?.reset().fadeIn(0.3).play();
-      
-      if (closestTarget) {
-        actions['LookAt']?.reset().fadeIn(0.5).play();
-      } else {
-        actions['LookAt']?.fadeOut(0.3);
-      }
-    } else {
-      actions['Idle']?.fadeOut(0.3);
-      actions['LookAt']?.fadeOut(0.1);
+    // Always stop all animations first for clean transitions
+    Object.values(actions).forEach(action => action?.fadeOut(0.2));
+
+    if (!isPerformingActions) {
+      // Walking state (priority 1)
       actions['Walk']?.reset().fadeIn(0.3).play();
+    } else {
+      // Stopped state
+      if (closestTarget) {
+        // Looking at specific target (priority 2)
+        actions['Idle']?.reset().fadeIn(0.3).play();
+      } else {
+        // Generic idle/looking around (priority 3)
+        actions['LookAround']?.reset().fadeIn(0.3).play();
+      }
     }
-  }, [isPerformingActions, closestTarget]);
+
+    return () => {
+      // Cleanup on unmount
+      Object.values(actions).forEach(action => action?.fadeOut(0.1));
+    };
+  }, [isPerformingActions, closestTarget, actions]);
 
   const speechContent = closestTarget
     ? closestTarget.type === 'prop'
@@ -74,11 +82,13 @@ export function NPCActor({
   return (
     <group ref={groupRef}>
       {/* Animated model */}
-      <primitive object={scene} position={[0, 0, 0]} rotation={[0,Math.PI,0]} />
-        <NPCDebug 
-          isPerformingActions={isPerformingActions} 
-          speechContent={speechContent} 
-        />
+      <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
+      <NPCDebug
+        isPerformingActions={isPerformingActions}
+        speechContent={speechContent}
+        playerRef={playerRef}  // Your player's THREE object ref
+        groupRef={groupRef}    // From useNPCMovement
+      />
     </group>
   );
 }
