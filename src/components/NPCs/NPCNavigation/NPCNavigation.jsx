@@ -1,80 +1,102 @@
-import { useEffect, useState } from 'react';
-import { useThree } from '@react-three/fiber';
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Pathfinding } from 'three-pathfinding';
-import * as THREE from 'three';
-import { weldVertices } from '../../../utils/vertexWelder';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { PathfindingLogic } from '../utils/pathfindingLogic';
+import { NPCActor } from '../NPCActor/NPCActor';
+import { PathVisualizer } from './visuals/PathVisualizer';
+import { WaypointVisualizer } from './visuals/WaypointVisualizer'; // New visualizer for waypoints
+import * as THREE from "three";
 
-export default function NPCNavigation({ navmeshUrl, children }) {
-  const { scene } = useThree();
-  const [pathfinding, setPathfinding] = useState(null);
-  const [zone] = useState('level1');
-  const gltf = useLoader(GLTFLoader, navmeshUrl); 
-
-  useEffect(() => {
-    if (!gltf) return;
-
-    let navmesh;
-    gltf.scene.traverse((node) => {
-      if (node.isMesh) navmesh = node;
-    });
-
-    if (!navmesh) {
-      console.error('No mesh found in navmesh GLTF');
-      return;
-    }
-
-    console.log("Initializing pathfinding with navmesh:", navmesh);
-    const weldedGeometry = weldVertices(navmesh.geometry, 0.0001);
-
-    const pf = new Pathfinding();
-    const zoneData = Pathfinding.createZone(weldedGeometry);
+export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [], playerRef }) {
+    const [path, setPath] = useState(null);
+    const [waypointsLoaded, setWaypointsLoaded] = useState(false);
+    const pathfindingRef = useRef();
     
-    // Verify zone data before setting
-    if (!zoneData || !zoneData.groups) {
-      console.error('Invalid zone data created', zoneData);
-      return;
-    }
+    // Generate a new random path from a starting position
+    const generateNewPath = (startPosition = null) => {
+        if (!pathfindingRef.current || !waypointsLoaded) return;
 
-    console.log("Zone data nodes:", zoneData.groups.length);
-    pf.setZoneData(zone, zoneData);
-    setPathfinding(pf);
-
-    // Debug visualization - navmesh
-    const debugNavmesh = navmesh.clone();
-    debugNavmesh.material = new THREE.MeshBasicMaterial({ 
-      color: 'red', 
-      wireframe: true,
-      transparent: true,
-      opacity: 1
-    });
-    scene.add(debugNavmesh);
-
-    // Debug visualization - nodes
-    const nodes = [];
-    zoneData.groups.forEach((group, groupID) => {
-      group.forEach(node => {
-        const sphere = new THREE.Mesh(
-          new THREE.SphereGeometry(0.05),
-          new THREE.MeshBasicMaterial({ color: 'blue', transparent: "true", opacity: 0.5 })
+        let startPos = startPosition || new THREE.Vector3(
+            Math.random() * 20 - 10,
+            0,
+            Math.random() * 20 - 10
         );
-        sphere.position.copy(node.centroid);
-        scene.add(sphere);
-        nodes.push(sphere);
-      });
-    });
 
-    return () => {
-      scene.remove(debugNavmesh);
-      nodes.forEach(node => scene.remove(node));
+        const endPos = new THREE.Vector3(
+            Math.random() * 20 - 10,
+            0,
+            Math.random() * 20 - 10
+        );
+
+        const newPath = pathfindingRef.current.findPath(startPos, endPos);
+
+        if (newPath) {
+            console.log('New path generated', {
+                from: startPos,
+                to: endPos,
+                length: newPath.length
+            });
+            setPath(newPath);
+        } else {
+            console.warn('Failed to generate path');
+            generateNewPath(startPosition);
+        }
     };
-  }, [gltf, scene]);
 
-  //Only render children when pathfinding is fully initialized
-  if (!pathfinding || !zone) {
-    return null;
-  }
+    const handlePathComplete = useCallback(() => {
+        console.log("Generating new path from last position");
+        if (path && path.length > 0) {
+            generateNewPath(path[path.length - 1]);
+        } else {
+            generateNewPath();
+        }
+    }, [path]);
 
-  return children({ pathfinding, zone });
+    // Initialize pathfinding with JSON data
+    useEffect(() => {
+        pathfindingRef.current = new PathfindingLogic();
+        
+        const loadWaypoints = async () => {
+            const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
+            setWaypointsLoaded(success);
+            
+            if (success) {
+                setTimeout(() => {
+                    generateNewPath();
+                }, 500);
+            }
+        };
+
+        loadWaypoints();
+
+        return () => {
+            // Cleanup if needed
+        };
+    }, []);
+
+    return (
+        <group>
+            {/* Replace NavMeshVisualizer with WaypointVisualizer */}
+            {waypointsLoaded && (
+                <WaypointVisualizer
+                    pathfinding={pathfindingRef.current}
+                    showWaypoints={true}
+                    showConnections={true}
+                />
+            )}
+
+            {path && path.length > 1 && (
+                <>
+                    <PathVisualizer path={path} color="yellow" />
+                    <NPCActor
+                        path={path}
+                        speed={1}
+                        onPathComplete={handlePathComplete}
+                        color={color}
+                        propsData={propsData}
+                        poisData={poisData}
+                        playerRef={playerRef}
+                    />
+                </>
+            )}
+        </group>
+    );
 }

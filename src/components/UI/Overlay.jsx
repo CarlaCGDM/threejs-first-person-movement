@@ -35,7 +35,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
 
   return (
     <div style={{ ...styles.overlay, pointerEvents: selectedProp || selectedPOI ? "auto" : "none" }}>
-      <SettingsPanel />
+      {/* <SettingsPanel /> */}
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       <InstructionsPanel />
 

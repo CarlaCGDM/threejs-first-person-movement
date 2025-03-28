@@ -16,9 +16,7 @@ import propsData from "../data/propsData.json";
 import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
 import { Effects } from "./caveEnvironment/Effects";
-import { NPCManager } from './NPCs/NPCManager/NPCManager';
-import CustomPathfindingTest from './CustomPathfindingTest';
-
+import NPCNavigation from './NPCs/NPCNavigation/NPCNavigation';
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -48,15 +46,10 @@ export default function Scene() {
                 <Stats /> {/* Add this to monitor performance */}
 
                 < SceneWithRoomEnvironment />
-
-                {/* {<NPCManager />} */}
-                {/* <CustomPathfindingTest color='lime' /> */}
-                {/* <CustomPathfindingTest color='yellow' /> */}
-
                 <ambientLight intensity={0} />
-                {/* <pointLight intensity={100} position={[0,0,0]} /> */}
 
                 <Physics gravity={[0, -9.81, 0]}>
+                    <NPCNavigation color='lime' propsData={propsData} poisData={POIsData} playerRef={playerRef}/>
                     <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />
