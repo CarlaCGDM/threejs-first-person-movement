@@ -8,13 +8,15 @@ import * as THREE from "three";
 export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [], playerRef }) {
     const [path, setPath] = useState(null);
     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
-    const pathfindingRef = useRef();
+    const pathfindingRef = useRef(null);
+    const waypointsLoadedRef = useRef(false);
     
     const generateNewPath = (startPosition = null) => {
-        if (!pathfindingRef.current || !waypointsLoaded) {
+        // Use refs for more reliable checking
+        if (!pathfindingRef.current || !waypointsLoadedRef.current) {
             console.warn('Path generation prevented', {
                 pathfindingRef: !!pathfindingRef.current,
-                waypointsLoaded
+                waypointsLoaded: waypointsLoadedRef.current
             });
             return null;
         }
@@ -76,7 +78,10 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
                 
                 if (isMounted) {
                     console.log('Waypoint loading result:', success);
+                    
+                    // Update both state and ref
                     setWaypointsLoaded(success);
+                    waypointsLoadedRef.current = success;
                     
                     if (success) {
                         // Debugging: log zone information
@@ -100,6 +105,7 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
                 console.error('Comprehensive waypoint loading error:', error);
                 if (isMounted) {
                     setWaypointsLoaded(false);
+                    waypointsLoadedRef.current = false;
                 }
             }
         };
