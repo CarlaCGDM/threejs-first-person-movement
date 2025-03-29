@@ -9,6 +9,7 @@ import { useTeleportPosition } from "../../hooks/useTeleportPosition";
 import { DebugCube } from "../DebugCube";
 import { TeleportMarker } from "../TeleportMarker";
 import { FloatingName } from "../FloatingName";
+import { useFrame } from "@react-three/fiber";
 
 const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0, occlusionMeshRef }, ref) => {
     const [validUrl, setValidUrl] = useState("assets/models/Hapleidoceros_LODs"); // Fallback model
@@ -18,6 +19,17 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     const { devMode } = settings;
     const { selectedProp } = settings;
     const { selectedPOI } = settings;
+
+    const [playerDistance, setPlayerDistance] = useState(Infinity);
+
+    // Calculate distance to player
+    useFrame(() => {
+        if (!settings.playerRef?.current) return;
+
+        const playerPos = settings.playerRef.current.position;
+        const propPos = new THREE.Vector3(...position);
+        setPlayerDistance(propPos.distanceTo(playerPos));
+    });
 
     // Use the model loader hook
     const lowResModelScene = useModelLoader(validUrl + "/LOD_00.glb", setSize, setMaterials);
@@ -79,9 +91,10 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
             {!selectedPOI && !selectedProp && (
                 <FloatingName
                     name={artifactName}
+                    playerDistance={playerDistance}
                     position={[0, size.y + 0.3, 0]}
                     occlusionMeshRef={occlusionMeshRef}
-                    distanceFactor={3}
+                    distanceFactor={5}
                 />
             )}
         </group>

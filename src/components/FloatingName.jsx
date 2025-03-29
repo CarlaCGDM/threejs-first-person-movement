@@ -8,25 +8,44 @@ import { Html } from "@react-three/drei";
  * @param {number} distanceFactor - The scaling factor for the HTML overlay.
  * @returns {JSX.Element} - The floating name overlay.
  */
-export const FloatingName = ({ name, position, occlusionMeshRef, distanceFactor }) => {
+export const FloatingName = ({ 
+    name, 
+    playerDistance = Infinity, 
+    position, 
+    occlusionMeshRef, 
+    distanceFactor 
+  }) => {
+    const isNearby = playerDistance <= 5;
+    const showFullText = isNearby || playerDistance === undefined;
+  
     return (
-        <Html
-            as="div"
-            center
-            occlude={[occlusionMeshRef]}
-            position={position}
-            distanceFactor={distanceFactor}
-        >
-            <p style={{
-                display: "inline-block",  // Ensures it fits the text width
-                whiteSpace: "nowrap",  // Prevents word wrapping
-                color: "white",
-                backgroundColor: "rgba(0, 0, 0, 0.8)",
-                padding: "5px",
-                borderRadius: "5px"
-            }}>
-                {name}
-            </p>
-        </Html>
+      <Html
+        as="div"
+        center
+        occlude={[occlusionMeshRef]}
+        position={position}
+        distanceFactor={distanceFactor}
+        style={{
+          transition: 'all 0.3s ease',
+          pointerEvents: 'none'
+        }}
+      >
+        <div style={{
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: 'white',
+          padding: '8px 12px',
+          borderRadius: '8px',
+          fontSize: '14px',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          minWidth: '24px', // Ensures consistent size for "?"
+          textAlign: 'center',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+          opacity: isNearby ? 1 : 0.8,
+          transform: `scale(${isNearby ? 1 : 0.9})`,
+          transition: 'all 0.3s ease'
+        }}>
+          {showFullText ? name : "?"}
+        </div>
+      </Html>
     );
-};
+  };
