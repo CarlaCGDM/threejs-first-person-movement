@@ -1,11 +1,12 @@
 import { Html, Clone, useGLTF, useCursor } from "@react-three/drei";
-import { forwardRef, Suspense, useState, useEffect, useMemo, useCallback } from "react";
+import { forwardRef, Suspense, useState, useEffect, useCallback } from "react";
 import * as THREE from "three";
 import { useSettings } from "../../context/SettingsContext";
 import PulsatingIndicator from "./PulsatingIndicator";
 import { FloatingName } from "../FloatingName";
 import { DebugCube } from "../DebugCube";
 import { useHighlightMaterial } from "../../hooks/useHighlightMaterial";
+import { useFrame } from "@react-three/fiber";
 
 const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded, highlightedMaterial }) => {
     const gltf = useGLTF(modelUrl);
@@ -15,18 +16,16 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded, highlightedMateria
             const bbox = new THREE.Box3().setFromObject(gltf.scene);
             const size = new THREE.Vector3();
             bbox.getSize(size);
-            onComputedSize(size); // Pass the computed size to the parent
+            onComputedSize(size);
 
-            // Collect materials for highlighting (use highlightedMaterial when needed)
             const materials = [];
             gltf.scene.traverse((child) => {
                 if (child.isMesh && child.material) {
-                    // Apply highlighted material or the original material
                     child.material = highlightedMaterial || child.material;
                     materials.push(child.material);
                 }
             });
-            onMaterialsLoaded(materials); // Pass materials to the parent
+            onMaterialsLoaded(materials);
         }
     }, [gltf.scene, onComputedSize, onMaterialsLoaded, highlightedMaterial]);
 
@@ -34,17 +33,23 @@ const Model = ({ modelUrl, onComputedSize, onMaterialsLoaded, highlightedMateria
 };
 
 const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, imageFile, occlusionMeshRef }, ref) => {
-    const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb"); // Fallback model
-    const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
-    const [isHovered, setIsHovered] = useState(false); // Track hover state
-    const [materials, setMaterials] = useState([]); // Store materials for highlighting
+    const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb");
+    const [size, setSize] = useState(new THREE.Vector3(1, 1, 1));
+    const [isHovered, setIsHovered] = useState(false);
+    const [materials, setMaterials] = useState([]);
+    const [playerDistance, setPlayerDistance] = useState(1);
     const { dispatch, settings } = useSettings();
     const { devMode, selectedProp, selectedPOI } = settings;
-
-    // Use the highlight material hook
     const { highlightedMaterial, transparentMaterial } = useHighlightMaterial();
 
-    // Memoize callbacks to prevent unnecessary re-renders
+    // Distance calculation
+    // useFrame(() => {
+    //     if (!settings.playerRef?.current) return;
+    //     const playerPos = settings.playerRef.current.position;
+    //     const poiPos = new THREE.Vector3(...position);
+    //     setPlayerDistance(poiPos.distanceTo(playerPos));
+    // });
+
     const handleComputedSize = useCallback((newSize) => {
         if (!newSize.equals(size)) {
             setSize(newSize);
@@ -55,18 +60,10 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
         setMaterials(newMaterials);
     }, []);
 
-    // Handle hover events
-    const handlePointerOver = () => {
-        setIsHovered(true);
-    };
+    const handlePointerOver = () => setIsHovered(true);
+    const handlePointerOut = () => setIsHovered(false);
 
-    const handlePointerOut = () => {
-        setIsHovered(false);
-    };
-
-    // Handle click events
     const handleClick = () => {
-        // Notify the SettingsContext that this POI was clicked
         setIsHovered(false);
         dispatch({
             type: "SELECT_POI",
@@ -74,7 +71,6 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
         });
     };
 
-    // Use cursor hook for visual feedback
     useCursor(isHovered);
 
     useEffect(() => {
@@ -84,11 +80,7 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
     }, [modelFile]);
 
     return (
-        <group
-            ref={ref}
-            position={position}
-        >
-            {/* Load the model with suspense */}
+        <group ref={ref} position={position}>
             <Suspense fallback={<Html center><span>Loading...</span></Html>}>
                 <Model
                     modelUrl={validUrl}
@@ -98,7 +90,6 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
                 />
             </Suspense>
 
-            {/* Debug meshes (only visible in devMode) */}
             {devMode && (
                 <DebugCube
                     position={[0, 0, 0]}
@@ -107,16 +98,28 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
                 />
             )}
 
-            {/* Floating name */}
             {isHovered && !selectedPOI && !selectedProp && (
                 <FloatingName
-                    name={poiName}
-                    position={[0, 0.5, 0]}
+                    name={playerDistance <= 5 ? poiName : "?"}
+                    position={[0, size.y + 0.3, 0]}
+                    playerDistance={playerDistance}
                     occlusionMeshRef={occlusionMeshRef}
+                    distanceFactor={5}
+                    style={{
+                        background: 'rgba(30, 30, 40, 0.9)',
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                        minWidth: '24px',
+                        padding: '6px 10px',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        textAlign: 'center',
+                        transition: 'all 0.3s ease',
+                        opacity: playerDistance <= 5 ? 1 : 0.7
+                    }}
                 />
             )}
 
-            {/* Pulsating Indicator */}
             {!selectedPOI && !selectedProp && (
                 <PulsatingIndicator
                     onPointerOver={handlePointerOver}
