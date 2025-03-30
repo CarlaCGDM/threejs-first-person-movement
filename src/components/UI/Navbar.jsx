@@ -76,7 +76,7 @@ const styles = {
     },
     buttonsContainer: {
         display: 'flex',
-        gap: '12px',
+        gap: '10px',
         alignItems: 'center'
     }
 };

@@ -9,8 +9,9 @@ export function IconButton({
   color = "#E2E2E2",
   hoverColor = "#E5B688",
   highlightColor = "#FFE88D",
+  backgroundColor = "transparent",
   isHighlighted = false,
-  size = 24,
+  size = 30,
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const iconPath = isActive ? iconOn : (iconOff || iconOn);
@@ -32,14 +33,14 @@ export function IconButton({
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
       {/* Tooltip */}
-      {isHovered && (
+      {/* {isHovered && (
         <div style={{
           position: 'absolute',
           bottom: '100%',
           left: '50%',
           transform: 'translateX(-50%)',
-          backgroundColor: '#272626',
-          color: '#E5B688',
+          backgroundColor: '#E5B688',
+          color: '#272626',
           padding: '4px 8px',
           borderRadius: '4px',
           fontSize: '12px',
@@ -51,7 +52,7 @@ export function IconButton({
         }}>
           {title}
         </div>
-      )}
+      )} */}
 
       {/* Glow Effect */}
       {isHighlighted && (
@@ -100,10 +101,11 @@ export function IconButton({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "transparent",
+          background: backgroundColor,
           border: "none",
           cursor: "pointer",
-          padding: 0,
+          padding: "4px",
+          borderRadius: "5px",
           position: 'relative',
         }}
       >

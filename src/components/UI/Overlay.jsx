@@ -62,7 +62,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         <PointOfInterestInfo
           poiName={selectedPOI.poiName}
           metadata={selectedPOI.metadata}
-          imageFile={selectedPOI.imageFile}
+          imageFiles={[selectedPOI.imageFile, "/assets/images/POIs/POI1.PNG"]}
           onClose={handleClosePointOfInterestInfo}
         />
       )}

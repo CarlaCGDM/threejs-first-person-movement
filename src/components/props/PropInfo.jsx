@@ -36,7 +36,7 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                         {/* 3D Canvas Section */}
                         <div style={{
                             ...styles.modelSection,
-                            width: showMetadata ? "70%" : "100%"
+                            width: showMetadata ? "50%" : "100%"
                         }}>
                             <Canvas
                                 camera={{
@@ -103,7 +103,16 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                             isActive={showHighestRes}
                             onClick={() => setShowHighestRes(!showHighestRes)}
                             title="Toggle HD"
-                            size={24}
+                            backgroundColor="#272626"
+                        />
+
+                        <IconButton
+                            iconOn="icon_measure.svg"
+                            iconOff="icon_measure.svg"
+                            isActive={false}
+                            onClick={() => console.log("Measure tool")}
+                            title="Try quiz"
+                            backgroundColor="#272626"
                         />
                         <IconButton
                             iconOn="toggle_info_on.svg"
@@ -111,15 +120,7 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                             isActive={showMetadata}
                             onClick={() => setShowMetadata(!showMetadata)}
                             title="Toggle Info Panel"
-                            size={24}
-                        />
-                        <IconButton
-                            iconOn="icon_measure.svg"
-                            iconOff="icon_measure.svg"
-                            isActive={false}
-                            onClick={() => console.log("Measure tool")}
-                            title="Quiz"
-                            size={24}
+                            backgroundColor="#272626"
                         />
                     </div>
                 </div>
@@ -144,15 +145,14 @@ const styles = {
         pointerEvents: "auto",
     },
     popup: {
-        width: "70vw",
+        width: "75vw",
         height: "85vh",
         marginTop: "5vh",
-        backgroundColor: "#272626",
+        backgroundColor: "#E2E2E2",
         borderRadius: "0.5vw",
         display: "flex",
         flexDirection: "column",
         position: "relative",
-        border: "1px solid #3a3a3a",
     },
     contentWrapper: {
         display: "flex",
@@ -170,7 +170,7 @@ const styles = {
     },
     modelSection: {
         position: "relative",
-        backgroundColor: "#1a1a1a",
+        backgroundColor: "#E2E2E2",
         height: "100%",
     },
     modelViewer: {
@@ -180,16 +180,21 @@ const styles = {
     metadataContainer: {
         flex: 1,
         minWidth: "300px",
+        marginTop: "20px",
+        marginLeft: "20px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 2000,
+        zIndex: 1000,
+
     },
     metadataPanel: {
-        width: "90%",
-        height: "90%",
-        padding: "20px",
         overflowY: "auto",
+        backgroundColor: "#F3EEEB",
+        padding: "0.5vw 1vw",
+        border: "2px solid #272626",
+        borderRadius: "0.25vw",
+        paddingBottom: "20px",
         /* Scrollbar styling */
         scrollbarWidth: "thin", // For Firefox
         scrollbarColor: "gray transparent", // For Firefox
@@ -208,7 +213,7 @@ const styles = {
     metadataList: {
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
+        gap: "10px",
     },
     metadataItem: {
         display: "flex",
@@ -216,20 +221,19 @@ const styles = {
         gap: "4px",
     },
     name: {
-        color: "#E5B688",
-        marginBottom: "20px",
+        color: "#272626",
         fontFamily: "Mulish, sans-serif",
         fontSize: "1.5rem",
     },
     label: {
-        color: "#E5B688",
+        color: "#272626",
         margin: 0,
         fontFamily: "Mulish, sans-serif",
         fontSize: "0.9rem",
         letterSpacing: "0.5px",
     },
     value: {
-        color: "#E2E2E2",
+        color: "#272626",
         margin: 0,
         fontFamily: "Mulish, sans-serif",
         fontSize: "0.9rem",
@@ -248,10 +252,10 @@ const styles = {
         right: "10px",
         background: "none",
         border: "none",
-        color: "#E5B688",
+        color: "#272626",
         fontSize: "24px",
         cursor: "pointer",
-        zIndex: 100,
+        zIndex: 30000,
     },
 };
 
