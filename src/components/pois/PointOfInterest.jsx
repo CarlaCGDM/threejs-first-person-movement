@@ -101,10 +101,10 @@ const PointOfInterest = forwardRef(({ position, poiName, metadata, modelFile, im
             {isHovered && !selectedPOI && !selectedProp && (
                 <FloatingName
                     name={playerDistance <= 5 ? poiName : "?"}
-                    position={[0, size.y + 0.3, 0]}
+                    position={[0, 0.7, 0]}
                     playerDistance={playerDistance}
                     occlusionMeshRef={occlusionMeshRef}
-                    distanceFactor={5}
+                    distanceFactor={6}
                     style={{
                         background: 'rgba(30, 30, 40, 0.9)',
                         border: '1px solid rgba(255, 255, 255, 0.2)',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export function IconButton({
   iconOn,
@@ -27,34 +27,71 @@ export function IconButton({
   };
 
   const { r, g, b } = hexToRgb(currentColor);
-
-  // Filter ID to prevent multiple identical filter ids
   const filterId = `colorFilter-${iconPath.replace(/[^a-zA-Z0-9]/g, '')}`;
 
   return (
-    <>
-      {/* SVG filter dynamically updated based on currentColor */}
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      {/* Tooltip */}
+      {isHovered && (
+        <div style={{
+          position: 'absolute',
+          bottom: '100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#272626',
+          color: '#E5B688',
+          padding: '4px 8px',
+          borderRadius: '4px',
+          fontSize: '12px',
+          fontFamily: 'Mulish, sans-serif',
+          whiteSpace: 'nowrap',
+          zIndex: 100,
+          marginBottom: '8px',
+          pointerEvents: 'none',
+        }}>
+          {title}
+        </div>
+      )}
+
+      {/* Glow Effect */}
+      {isHighlighted && (
+        <div style={{
+          position: 'absolute',
+          top: '-4px',
+          left: '-4px',
+          right: '-4px',
+          bottom: '-4px',
+          backgroundColor: highlightColor,
+          borderRadius: '50%',
+          filter: 'blur(4px)',
+          opacity: 0,
+          animation: 'pulse 2s infinite',
+          pointerEvents: 'none',
+        }}/>
+      )}
+
+      {/* SVG filter */}
       <svg width="0" height="0" style={{ position: "absolute" }}>
         <defs>
-          <filter id={filterId}  colorInterpolationFilters="sRGB">
+          <filter id={filterId} colorInterpolationFilters="sRGB">
             <feColorMatrix
               type="matrix"
               values={`
-    ${r} 0 0 0 0
-    0 ${g} 0 0 0
-    0 0 ${b} 0 0
-    0 0 0 1 0
-  `}
+                ${r} 0 0 0 0
+                0 ${g} 0 0 0
+                0 0 ${b} 0 0
+                0 0 0 1 0
+              `}
             />
           </filter>
         </defs>
       </svg>
 
+      {/* Button */}
       <button
         onClick={onClick}
-        title={title}
+        title={title} // Fallback for mobile
         aria-pressed={isActive}
-        className="icon-button"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
@@ -67,6 +104,7 @@ export function IconButton({
           border: "none",
           cursor: "pointer",
           padding: 0,
+          position: 'relative',
         }}
       >
         <div style={{
@@ -75,22 +113,29 @@ export function IconButton({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative',
         }}>
           <img
             src={`/assets/icons/ui/${iconPath}`}
-            alt=""
+            alt={title}
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'contain',
               filter: `url(#${filterId})`,
               transition: "filter 0.2s ease",
-              opacity: 1,
             }}
           />
         </div>
       </button>
-    </>
+
+      {/* Animation styles */}
+      <style jsx>{`
+        @keyframes pulse {
+          0% { opacity: 0.3; transform: scale(0.95); }
+          50% { opacity: 0.7; transform: scale(1.05); }
+          100% { opacity: 0.3; transform: scale(0.95); }
+        }
+      `}</style>
+    </div>
   );
 }

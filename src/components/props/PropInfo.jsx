@@ -2,85 +2,133 @@ import { Suspense, useState } from "react";
 import { OrbitControls, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { QualityToggle } from "./QualityToggle";
 import { LazyLoadModel } from "./LazyLoadModel";
-
+import { IconButton } from "../UI/IconButton";
 
 function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
     const [showHighestRes, setShowHighestRes] = useState(false);
-
-    // Default size if not provided
-    const defaultSize = new THREE.Vector3(1, 1, 1);
-    const modelSize = size || defaultSize;
-
-    // Calculate camera distance based on the model's size
+    const [showMetadata, setShowMetadata] = useState(true);
+    const modelSize = size || new THREE.Vector3(1, 1, 1);
     const maxDimension = Math.max(modelSize.x, modelSize.y, modelSize.z);
     const cameraDistance = maxDimension * 1;
 
-    // Determine which model to show
     const getModelToShow = () => {
-
-        if (showHighestRes) {
-            return <Suspense fallback={<Html center><span>Loading...</span></Html>}>
-                <LazyLoadModel url={detailedModelFile + "/LOD_04.glb"} size={size} />
+        const modelPath = showHighestRes ? "/LOD_04.glb" : "/LOD_02.glb";
+        return (
+            <Suspense fallback={<Html center><span>Loading...</span></Html>}>
+                <LazyLoadModel url={`${detailedModelFile}${modelPath}`} size={size} />
             </Suspense>
-        } else {
-            return <Suspense fallback={ <Html center><span>Loading...</span></Html> }>
-                <LazyLoadModel url={detailedModelFile + "/LOD_02.glb"} size={size} />
-            </Suspense>
-        }
+        );
     };
 
     return (
-        <div style={{ ...styles.overlay, pointerEvents: "auto" }}>
+        <div style={styles.overlay}>
             <div style={styles.popup}>
-                {/* Close Button */}
+                {/* Close Button (top-right corner) */}
                 <button onClick={onClose} style={styles.closeButton}>
                     &times;
                 </button>
 
-                {/* 3D Model Viewer */}
-                <div style={styles.modelViewerContainer}>
-        
-                    <QualityToggle 
-                        isHighRes={showHighestRes} 
-                        onToggle={setShowHighestRes}
-                    />
+                {/* Main Content Area */}
+                <div style={styles.contentWrapper}>
+                    {/* Info Viewer (3D Canvas + Metadata) */}
+                    <div style={styles.infoViewer}>
+                        {/* 3D Canvas Section */}
+                        <div style={{
+                            ...styles.modelSection,
+                            width: showMetadata ? "70%" : "100%"
+                        }}>
+                            <Canvas
+                                camera={{
+                                    position: [cameraDistance, cameraDistance, cameraDistance],
+                                    fov: 45,
+                                    near: 0.01,
+                                    far: 1000,
+                                }}
+                                style={styles.modelViewer}
+                            >
+                                <ambientLight intensity={4.5} />
+                                <pointLight position={[10, 10, 10]} intensity={0.5} />
+                                {getModelToShow()}
+                                <OrbitControls enablePan={true} enableZoom={true} />
+                            </Canvas>
+                        </div>
 
-                    <Canvas
-                        camera={{
-                            position: [cameraDistance, cameraDistance, cameraDistance],
-                            fov: 45,
-                            near: 0.01,
-                            far: 1000,
-                        }}
-                        style={styles.modelViewer}
-                    >
-                        <ambientLight intensity={4.5} />
-                        <pointLight position={[10, 10, 10]} intensity={0.5} />
+                        {/* Metadata Section */}
+                        {showMetadata && (
+                            <div style={styles.metadataContainer}>
+                                <div style={styles.metadataPanel}>
+                                    <h2 style={styles.name}>{artifactName}</h2>
+                                    <div style={styles.metadataList}>
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Periodo histórico</h3>
+                                            <p style={styles.value}>{metadata.historicalPeriod}</p>
+                                        </div>
 
-                        {getModelToShow()}
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Procedencia</h3>
+                                            <p style={styles.value}>{metadata.excavationSite}</p>
+                                        </div>
 
-                        <OrbitControls enablePan={true} enableZoom={true} />
-                    </Canvas>
-                </div>
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Localización actual</h3>
+                                            <p style={styles.value}>{metadata.currentLocation}</p>
+                                        </div>
 
-                {/* Model Metadata - shows immediately */}
-                <div style={styles.info}>
-                    <h2 style={styles.name}>{artifactName}</h2>
-                    <p style={styles.description}><strong>Periodo histórico</strong></p><p style={styles.description}> {metadata.historicalPeriod}</p>
-                    <p style={styles.description}><strong>Procedencia</strong></p><p style={styles.description}> {metadata.excavationSite}</p>
-                    <p style={styles.description}><strong>Localización actual</strong></p><p style={styles.description}> {metadata.currentLocation}</p>
-                    <p style={styles.description}><strong>Descripción</strong></p><p style={styles.description}> {metadata.description}</p>
-                    <p style={styles.description}><strong>Dimensiones</strong></p><p style={styles.description}> {metadata.size}</p>
-                    <p style={styles.description}><strong>Digitalización</strong></p><p style={styles.description}> {metadata.digitizedBy}</p>
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Descripción</h3>
+                                            <p style={styles.value}>{metadata.description}</p>
+                                        </div>
+
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Dimensiones</h3>
+                                            <p style={styles.value}>{metadata.size}</p>
+                                        </div>
+
+                                        <div style={styles.metadataItem}>
+                                            <h3 style={styles.label}>Digitalización</h3>
+                                            <p style={styles.value}>{metadata.digitizedBy}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Buttons Row */}
+                    <div style={styles.buttonsRow}>
+                        <IconButton
+                            iconOn="toggle_hd_on.svg"
+                            iconOff="toggle_hd_off.svg"
+                            isActive={showHighestRes}
+                            onClick={() => setShowHighestRes(!showHighestRes)}
+                            title="Toggle HD"
+                            size={24}
+                        />
+                        <IconButton
+                            iconOn="toggle_info_on.svg"
+                            iconOff="toggle_info_off.svg"
+                            isActive={showMetadata}
+                            onClick={() => setShowMetadata(!showMetadata)}
+                            title="Toggle Info Panel"
+                            size={24}
+                        />
+                        <IconButton
+                            iconOn="icon_measure.svg"
+                            iconOff="icon_measure.svg"
+                            isActive={false}
+                            onClick={() => console.log("Measure tool")}
+                            title="Quiz"
+                            size={24}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
 
-// Updated styles
+// Updated Styles
 const styles = {
     overlay: {
         position: "fixed",
@@ -92,53 +140,107 @@ const styles = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        zIndex: 1000,
+        zIndex: 2000,
+        pointerEvents: "auto",
     },
     popup: {
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
-        borderRadius: "10px",
-        padding: "20px",
+        width: "70vw",
+        height: "85vh",
+        marginTop: "5vh",
+        backgroundColor: "#272626",
+        borderRadius: "0.5vw",
         display: "flex",
-        alignItems: "center",
-        gap: "20px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+        flexDirection: "column",
         position: "relative",
+        border: "1px solid #3a3a3a",
     },
-    modelViewerContainer: {
-        position: "relative", // Needed for absolute positioning of toggle
+    contentWrapper: {
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        padding: "20px",
+        boxSizing: "border-box",
+        gap: "20px",
     },
-    qualityToggleContainer: {
-        position: "absolute",
-        top: "10px",
-        right: "10px",
-        zIndex: 10, // Ensure it's above the canvas
+    infoViewer: {
+        display: "flex",
+        flex: 1,
+        overflow: "hidden",
+        alignItems: "stretch",
     },
-    qualityToggle: {
-        background: "rgba(255, 255, 255, 0.8)",
-        border: "1px solid #333",
-        borderRadius: "4px",
-        padding: "5px 10px",
-        cursor: "pointer",
-        fontSize: "14px",
+    modelSection: {
+        position: "relative",
+        backgroundColor: "#1a1a1a",
+        height: "100%",
     },
     modelViewer: {
-        width: "300px",
-        height: "300px",
-        borderRadius: "10px",
-        overflow: "hidden",
+        width: "100%",
+        height: "100%",
     },
-    info: {
-        maxWidth: "300px",
+    metadataContainer: {
+        flex: 1,
+        minWidth: "300px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 2000,
+    },
+    metadataPanel: {
+        width: "90%",
+        height: "90%",
+        padding: "20px",
+        overflowY: "auto",
+        /* Scrollbar styling */
+        scrollbarWidth: "thin", // For Firefox
+        scrollbarColor: "gray transparent", // For Firefox
+        /* WebKit browsers (Chrome, Safari) */
+        "&::-webkit-scrollbar": {
+            width: "6px",
+        },
+        "&::-webkit-scrollbar-track": {
+            background: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "gray",
+            borderRadius: "3px",
+        },
+    },
+    metadataList: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+    },
+    metadataItem: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px",
     },
     name: {
-        margin: "0 0 10px 0",
-        fontSize: "24px",
-        color: "#333",
+        color: "#E5B688",
+        marginBottom: "20px",
+        fontFamily: "Mulish, sans-serif",
+        fontSize: "1.5rem",
     },
-    description: {
+    label: {
+        color: "#E5B688",
         margin: 0,
-        fontSize: "16px",
-        color: "#555",
+        fontFamily: "Mulish, sans-serif",
+        fontSize: "0.9rem",
+        letterSpacing: "0.5px",
+    },
+    value: {
+        color: "#E2E2E2",
+        margin: 0,
+        fontFamily: "Mulish, sans-serif",
+        fontSize: "0.9rem",
+        lineHeight: "1.4",
+    },
+    buttonsRow: {
+        display: "flex",
+        gap: "15px",
+        justifyContent: "center",
+        paddingTop: "20px",
+        borderTop: "1px solid #3a3a3a",
     },
     closeButton: {
         position: "absolute",
@@ -146,9 +248,10 @@ const styles = {
         right: "10px",
         background: "none",
         border: "none",
+        color: "#E5B688",
         fontSize: "24px",
         cursor: "pointer",
-        color: "#333",
+        zIndex: 100,
     },
 };
 

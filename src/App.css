@@ -63,3 +63,23 @@ body {
   70% { box-shadow: 0 0 0 10px rgba(255, 64, 129, 0); }
   100% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); }
 }
+
+/* For WebKit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #E5B688;
+  border-radius: 3px;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E5B688 transparent;
+}

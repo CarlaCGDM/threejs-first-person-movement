@@ -29,7 +29,8 @@ export function NPCDebug({
   if (!isPerformingActions) return null;
 
   return (
-    <Html
+    <>
+    {!settings.selectedProp && !settings.selectedPOI && <Html
       position={[0, 2, 0]}
       center
       style={{
@@ -46,6 +47,8 @@ export function NPCDebug({
       }}
     >
       {isPlayerNearby ? speechContent : "..."}
-    </Html>
+    </Html>}
+    </>
   );
+  
 }

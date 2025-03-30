@@ -66,6 +66,7 @@ const styles = {
         boxSizing: 'border-box',
         zIndex: 1000,
         pointerEvents: 'auto',
+        border: "1px solid #3a3a3a", // Matches navbar border
     },
     title: {
         fontFamily: "'Mulish', sans-serif", // Fallback to sans-serif

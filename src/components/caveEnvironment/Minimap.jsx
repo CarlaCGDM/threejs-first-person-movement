@@ -85,7 +85,7 @@ function MinimapScene({ playerRef }) {
             )}
 
             {/* Grid Helper */}
-            <gridHelper args={[10, 10]} />
+            <gridHelper args={[10, 5]} />
 
             {/* Controls */}
             <OrbitControls enableZoom={false} enablePan={false} />
@@ -109,18 +109,20 @@ export function Minimap({ playerRef }) {
 // Styles
 const styles = {
     minimapContainer: {
-        position: "absolute",
-        bottom: "20px",
-        right: "20px",
-        width: "200px",
-        height: "200px",
-        border: "2px solid white",
-        borderRadius: "8px",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        overflow: "hidden",
+      position: "fixed", // Changed from absolute to fixed
+      bottom: "5px",
+      right: "5px",
+      width: "200px",
+      height: "200px",
+      border: "1px solid #3a3a3a", // Matches navbar border
+      borderRadius: "0.5vw",
+      backgroundColor: "#272626CC", // Same as navbar
+      zIndex: 1000,
+      overflow: "hidden",
+      // Remove borderRadius for sharp corners
     },
     minimapCanvas: {
-        width: "100%",
-        height: "100%",
+      width: "100%",
+      height: "100%",
     },
-};
+  };
