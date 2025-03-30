@@ -13,7 +13,7 @@
       },
       "modelFile": "/assets/models/ElefanteSinCaja_LODs",
       "detailedModelFile": "/assets/models/Elefante_LODs",
-      "iconFolder": "/assets/icons/Elefante/",
+      "iconFolder": "/assets/icons/props/Elefante/",
       "teleportRotationAngle": 0
     },
     {
@@ -30,7 +30,7 @@
       },
       "modelFile": "/assets/models/Hapleidoceros_LODs",
       "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
-      "iconFolder": "/assets/icons/Hapleidoceros/",
+      "iconFolder": "/assets/icons/props/Hapleidoceros/",
       "teleportRotationAngle": 290
     },
     {
@@ -47,7 +47,7 @@
       },
       "modelFile": "/assets/models/MaxilarLeon_LODs",
       "detailedModelFile": "/assets/models/MaxilarLeon_LODs",
-      "iconFolder": "/assets/icons/MaxilarLeon/",
+      "iconFolder": "/assets/icons/props/MaxilarLeon/",
       "teleportRotationAngle": 0
     },
     {
@@ -64,7 +64,7 @@
       },
       "modelFile": "/assets/models/Rino_LODs",
       "detailedModelFile": "/assets/models/Rino_LODs",
-      "iconFolder": "/assets/icons/Rino/",
+      "iconFolder": "/assets/icons/props/Rino/",
       "teleportRotationAngle": 0
     }
   ]

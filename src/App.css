@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+* {
+  font-family: 'Mulish';
+}
+
 html,
 body,
 #root {
@@ -23,8 +27,6 @@ body {
   position: fixed;
   overflow: hidden;
   overscroll-behavior-y: none;
-  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial,
-    sans-serif;
   color: black;
 }
 
@@ -37,4 +39,27 @@ body {
   border-radius: 50%;
   transform: translate3d(-50%, -50%, 0);
   border: 2px solid white;
+}
+
+/* In your global CSS */
+.icon-button {
+  --icon-filter: ${createColorFilter(color)};
+}
+
+.icon-button:hover {
+  --icon-filter: ${createColorFilter(hoverColor)};
+}
+
+.icon-button[aria-pressed="true"] {
+  --icon-filter: ${createColorFilter(activeColor)};
+}
+
+.tutorial-highlight .icon-button {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 64, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); }
 }

@@ -17,11 +17,13 @@ import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnvironment";
 import { Effects } from "./caveEnvironment/Effects";
 import NPCNavigation from './NPCs/NPCNavigation/NPCNavigation';
+import { useSettings } from "../context/SettingsContext";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
     const playerRef = useRef(); // Create a ref for the player's RigidBody
     const orbitControlsRef = useRef();
+    const { settings } = useSettings();
 
     return (
         <>
@@ -43,13 +45,13 @@ export default function Scene() {
                 tabIndex={0} // Make the canvas focusable
                 style={{ outline: "none" }} // Remove outline when focused
             >
-                <Stats /> {/* Add this to monitor performance */}
+                <Stats />
 
                 < SceneWithRoomEnvironment />
                 <ambientLight intensity={0} />
 
                 <Physics gravity={[0, -9.81, 0]}>
-                    <NPCNavigation color='lime' propsData={propsData} poisData={POIsData} playerRef={playerRef}/>
+                   {settings.ui.showNPCs && <NPCNavigation color='lime' propsData={propsData} poisData={POIsData} playerRef={playerRef}/>}
                     <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />

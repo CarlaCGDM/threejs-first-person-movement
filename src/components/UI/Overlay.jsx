@@ -6,6 +6,7 @@ import PointOfInterestInfo from "../pois/PointOfInterestInfo"; // Import the Poi
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
 import { Minimap } from "../caveEnvironment/Minimap";
+import { Navbar } from "./Navbar";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -34,10 +35,16 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
   }, []);
 
   return (
-    <div style={{ ...styles.overlay, pointerEvents: selectedProp || selectedPOI ? "auto" : "none" }}>
+    <div
+      style={{
+        ...styles.overlay,
+        pointerEvents: selectedProp || selectedPOI ? "auto" : "none", // Allow interaction based on selection
+      }}
+    >
       {/* <SettingsPanel /> */}
-      <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
-      <InstructionsPanel />
+      <Navbar />
+      {/* <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> */}
+      {/* <InstructionsPanel /> */}
 
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (
@@ -60,7 +67,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         />
       )}
 
-      <Minimap playerRef={playerRef} />
+      {settings.ui.showMinimap && <Minimap playerRef={playerRef} />}
     </div>
   );
 }
@@ -75,5 +82,6 @@ const styles = {
     height: "100%",
     fontFamily: "Arial, sans-serif",
     color: "white",
+    zIndex: 1000, // Ensure overlay is on top
   },
 };

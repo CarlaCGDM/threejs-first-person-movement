@@ -20,6 +20,7 @@ export const FloatingName = ({
   
     return (
       <Html
+        zIndex="0"
         as="div"
         center
         occlude={[occlusionMeshRef]}
@@ -31,8 +32,8 @@ export const FloatingName = ({
         }}
       >
         <div style={{
-          background: 'rgba(0, 0, 0, 0.8)',
-          color: 'white',
+          background: '#272626CC',
+          color: '#E2E2E2',
           padding: '8px 12px',
           borderRadius: '8px',
           fontSize: '14px',

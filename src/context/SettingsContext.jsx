@@ -11,6 +11,14 @@ const initialSettings = {
   selectedProp: null, // State for the selected prop
   selectedPOI: null, // New state for the selected POI
   devMode: false,
+
+  ui: {
+    showMinimap: true,
+    showInstructions: true,
+    showCredits: false,
+    showNPCs: true,
+    isFullscreen: false
+  },
 };
 
 const SettingsContext = createContext();
@@ -39,6 +47,16 @@ function settingsReducer(state, action) {
       return { ...state, playerPosition: action.payload };
     case "SET_PLAYER_REF":
       return { ...state, playerRef: action.payload };
+    case "TOGGLE_MINIMAP":
+      return { ...state, ui: { ...state.ui, showMinimap: !state.ui.showMinimap } };
+    case "TOGGLE_INSTRUCTIONS":
+      return { ...state, ui: { ...state.ui, showInstructions: !state.ui.showInstructions } };
+    case "TOGGLE_CREDITS":
+      return { ...state, ui: { ...state.ui, showCredits: !state.ui.showCredits } };
+    case "TOGGLE_NPCS":
+      return { ...state, ui: { ...state.ui, showNPCs: !state.ui.showNPCs } };
+    case "TOGGLE_FULLSCREEN":
+      return { ...state, ui: { ...state.ui, isFullscreen: !state.ui.isFullscreen } };
     default:
       return state;
   }
@@ -46,6 +64,8 @@ function settingsReducer(state, action) {
 
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
+
+  const toggleUI = (element) => dispatch({ type: `TOGGLE_${element.toUpperCase()}` }); // Usage: toggleUI('minimap'), toggleUI('instructions')
 
   return (
     <SettingsContext.Provider value={{ settings, dispatch }}>
