@@ -5,11 +5,11 @@ const initialSettings = {
   playerWalkSpeed: 1.5,
   playerJumpForce: 4,
   initialPlayerPosition: [0.91, -2.0, 8.8],
-  playerPosition: [0.91, -2.0, 8.8], // Add this line
-  playerRef: null, // And this line
+  playerPosition: [0.91, -2.0, 8.8],
+  playerRef: null,
   showHDEnvironment: false,
-  selectedProp: null, // State for the selected prop
-  selectedPOI: null, // New state for the selected POI
+  selectedProp: null,
+  selectedPOI: null,
   devMode: false,
 
   ui: {
@@ -19,6 +19,10 @@ const initialSettings = {
     showNPCs: true,
     isFullscreen: false
   },
+
+  npc: {
+    occupiedWaypoints: [] // Array of currently occupied waypoint positions
+  }
 };
 
 const SettingsContext = createContext();
@@ -34,15 +38,15 @@ function settingsReducer(state, action) {
     case "TOGGLE_HD_ENVIRONMENT":
       return { ...state, showHDEnvironment: !state.showHDEnvironment };
     case "SELECT_PROP":
-      return { ...state, selectedProp: action.payload }; // Update selected prop
+      return { ...state, selectedProp: action.payload };
     case "CLEAR_SELECTED_PROP":
-      return { ...state, selectedProp: null }; // Clear selected prop
+      return { ...state, selectedProp: null };
     case "SELECT_POI":
-      return { ...state, selectedPOI: action.payload }; // Update selected POI
+      return { ...state, selectedPOI: action.payload };
     case "CLEAR_SELECTED_POI":
-      return { ...state, selectedPOI: null }; // Clear selected POI
+      return { ...state, selectedPOI: null };
     case "TOGGLE_DEV_MODE":
-      return { ...state, devMode: !state.devMode }; // Toggle devMode
+      return { ...state, devMode: !state.devMode };
     case "UPDATE_PLAYER_POSITION":
       return { ...state, playerPosition: action.payload };
     case "SET_PLAYER_REF":
@@ -57,21 +61,124 @@ function settingsReducer(state, action) {
       return { ...state, ui: { ...state.ui, showNPCs: !state.ui.showNPCs } };
     case "TOGGLE_FULLSCREEN":
       return { ...state, ui: { ...state.ui, isFullscreen: !state.ui.isFullscreen } };
+
+    // NPC waypoint management cases
+    case "ADD_OCCUPIED_WAYPOINT":
+      // Only add if not already occupied
+      if (state.npc.occupiedWaypoints.some(
+        pos => JSON.stringify(pos) === JSON.stringify(action.payload)
+      )) {
+        return state;
+      }
+      return {
+        ...state,
+        npc: {
+          ...state.npc,
+          occupiedWaypoints: [...state.npc.occupiedWaypoints, action.payload]
+        }
+      };
+
+    case "REMOVE_OCCUPIED_WAYPOINT":
+      return {
+        ...state,
+        npc: {
+          ...state.npc,
+          occupiedWaypoints: state.npc.occupiedWaypoints.filter(
+            pos => !action.payload.some(
+              removePos => JSON.stringify(removePos) === JSON.stringify(pos)
+            )
+          )
+        }
+      };
+
+    case "CLEAR_OCCUPIED_WAYPOINTS":
+      return {
+        ...state,
+        npc: {
+          ...state.npc,
+          occupiedWaypoints: []
+        }
+      };
+
     default:
       return state;
   }
 }
 
+const roundVector = (vector, decimals = 2) => {
+  if (!vector || typeof vector !== 'object') return vector;
+  
+  return {
+    x: Number(vector.x.toFixed(decimals)),
+    y: Number(vector.y.toFixed(decimals)),
+    z: Number(vector.z.toFixed(decimals))
+  };
+};
+
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
+  const toggleUI = (element) => dispatch({ type: `TOGGLE_${element.toUpperCase()}` });
+
+  // NPC waypoint management functions
+  const addOccupiedWaypoint = (position) => {
+    console.log("Adding waypoint:", position);
+    const roundedPosition = roundVector(position);
+    dispatch({
+      type: "ADD_OCCUPIED_WAYPOINT",
+      payload: roundedPosition
+    });
+  };
+
+  const removeOccupiedWaypoint = (position) => {
+    console.log("Removing waypoint:", position);
+    const roundedPosition = roundVector(position);
+    dispatch({
+      type: "REMOVE_OCCUPIED_WAYPOINT",
+      payload: [roundedPosition]
+    });
+  };
+
+  const removeMultipleOccupiedWaypoints = (positions) => {
+    dispatch({
+      type: "REMOVE_OCCUPIED_WAYPOINT",
+      payload: positions
+    });
+  };
+
+  const clearAllOccupiedWaypoints = () => {
+    dispatch({ type: "CLEAR_OCCUPIED_WAYPOINTS" });
+  };
+
+  const isWaypointOccupied = (position) => {
+    const roundedPosition = roundVector(position);
+    return settings.npc.occupiedWaypoints.some(
+      occupiedPos => JSON.stringify(occupiedPos) === JSON.stringify(roundedPosition)
+    );
+  };
+
+
   return (
-    <SettingsContext.Provider value={{ settings, dispatch }}>
+    <SettingsContext.Provider value={{
+      settings,
+      dispatch,
+      toggleUI,
+      // NPC functions
+      addOccupiedWaypoint,
+      removeOccupiedWaypoint,
+      removeMultipleOccupiedWaypoints,
+      clearAllOccupiedWaypoints,
+      isWaypointOccupied
+    }}>
       {children}
     </SettingsContext.Provider>
   );
 }
 
 export function useSettings() {
-  return useContext(SettingsContext);
+  const context = useContext(SettingsContext);
+  if (!context) {
+    throw new Error('useSettings must be used within a SettingsProvider');
+  }
+  return context;
 }

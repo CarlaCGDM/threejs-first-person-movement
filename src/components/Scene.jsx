@@ -18,6 +18,7 @@ import { SceneWithRoomEnvironment } from "./caveEnvironment/SceneWithRoomEnviron
 import { Effects } from "./caveEnvironment/Effects";
 import NPCNavigation from './NPCs/NPCNavigation/NPCNavigation';
 import { useSettings } from "../context/SettingsContext";
+import NPCManager from "./NPCs/NPCManager/NPCManager";
 
 export default function Scene() {
     const keys = useCustomKeyboardControls(); // Use custom keyboard controls
@@ -50,14 +51,37 @@ export default function Scene() {
                 < SceneWithRoomEnvironment />
                 <ambientLight intensity={0} />
 
+                {settings.ui.showNPCs && (
+                        <NPCManager>
+                            {/* Directly render NPCs - no function child */}
+                            <NPCNavigation
+                                key="leonard"
+                                color='lime'
+                                model="/assets/models/characters/leonard.glb"
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                            <NPCNavigation
+                                key="sophie"
+                                color='lime'
+                                model="/assets/models/characters/sophie.glb"
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                            <NPCNavigation
+                                key="lewis"
+                                color='lime'
+                                model="/assets/models/characters/lewis.glb"
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                        </NPCManager>
+                    )}
+
                 <Physics gravity={[0, -9.81, 0]}>
-                    {settings.ui.showNPCs &&
-                        <>
-                            <NPCNavigation color='lime' model="/assets/models/characters/leonard.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
-                            <NPCNavigation color='lime' model="/assets/models/characters/sophie.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
-                            <NPCNavigation color='lime' model="/assets/models/characters/lewis.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
-                        </>
-                    }
                     <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />

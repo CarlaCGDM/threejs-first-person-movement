@@ -69,5 +69,6 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     gap: "10px",
+    alignItems: "center",
   },
 };

@@ -145,7 +145,7 @@ const styles = {
         pointerEvents: "auto",
     },
     popup: {
-        width: "75vw",
+        width: "80vw",
         height: "85vh",
         marginTop: "5vh",
         backgroundColor: "#E2E2E2",
@@ -158,7 +158,7 @@ const styles = {
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        padding: "20px",
+        padding: "2vh 3vw",
         boxSizing: "border-box",
         gap: "20px",
     },

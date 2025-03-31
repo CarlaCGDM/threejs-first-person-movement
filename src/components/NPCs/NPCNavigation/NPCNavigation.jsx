@@ -1,146 +1,152 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { PathfindingLogic } from '../utils/pathfindingLogic';
-import { NPCActor } from '../NPCActor/NPCActor';
-import { PathVisualizer } from './visuals/PathVisualizer';
-import { WaypointVisualizer } from './visuals/WaypointVisualizer';
+import { useEffect, useState, useRef, useCallback } from "react";
+import { PathfindingLogic } from "../utils/pathfindingLogic";
+import { NPCActor } from "../NPCActor/NPCActor";
 import * as THREE from "three";
+import { useSettings } from "../../../context/SettingsContext"; // Import settings
 
-export default function NPCNavigation({ color = 'hotpink', model = "/assets/models/characters/leonard.glb", propsData = [], poisData = [], playerRef }) {
-    const [path, setPath] = useState(null);
-    const [waypointsLoaded, setWaypointsLoaded] = useState(false);
-    const pathfindingRef = useRef(null);
-    const waypointsLoadedRef = useRef(false);
-    
-    const generateNewPath = (startPosition = null) => {
-        // Use refs for more reliable checking
-        if (!pathfindingRef.current || !waypointsLoadedRef.current) {
-            console.warn('Path generation prevented', {
-                pathfindingRef: !!pathfindingRef.current,
-                waypointsLoaded: waypointsLoadedRef.current
-            });
-            return null;
-        }
+export default function NPCNavigation({
+  color = "hotpink",
+  model = "/assets/models/characters/leonard.glb",
+  propsData = [],
+  poisData = [],
+  playerRef,
+}) {
+  const [path, setPath] = useState(null);
+  const [waypointsLoaded, setWaypointsLoaded] = useState(false);
+  const pathfindingRef = useRef(null);
+  const waypointsLoadedRef = useRef(false);
+  const lastOccupiedWaypointRef = useRef(null); // Store the NPC's specific waypoint
 
-        let startPos = startPosition || new THREE.Vector3(
-            Math.random() * 20 - 10,
-            0,
-            Math.random() * 20 - 10
+  const { addOccupiedWaypoint, removeOccupiedWaypoint, isWaypointOccupied } = useSettings(); // Get waypoint functions
+
+  const generateNewPath = (startPosition = null) => {
+    if (!pathfindingRef.current || !waypointsLoadedRef.current) {
+      console.warn("Path generation prevented");
+      return null;
+    }
+
+    let startPos =
+      startPosition ||
+      new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
+
+    const endPos = new THREE.Vector3(
+      Math.random() * 20 - 10,
+      0,
+      Math.random() * 20 - 10
+    );
+
+    console.log("Attempting path generation", startPos.toArray(), endPos.toArray());
+
+    const newPath = pathfindingRef.current.findPath(startPos, endPos);
+
+    if (newPath && newPath.length > 0) {
+      console.log("New path generated", newPath);
+      setPath(newPath);
+
+      // Remove previously occupied waypoint (if any)
+      if (lastOccupiedWaypointRef.current) {
+        removeOccupiedWaypoint(lastOccupiedWaypointRef.current);
+      }
+
+      // Add new last waypoint and store it internally
+      const lastWaypoint = newPath[newPath.length - 1];
+
+      // Make sure new waypoint found is not already occupied
+      if (isWaypointOccupied(lastWaypoint)) {
+        console.warn("Waypoint is already occupied, finding a new one...");
+        return generateNewPath(startPosition); // Try finding a different path
+      }
+
+      addOccupiedWaypoint(lastWaypoint);
+      lastOccupiedWaypointRef.current = lastWaypoint;
+
+      return newPath;
+    } else {
+      console.error("Path generation failed");
+      return null;
+    }
+  };
+
+  const handlePathComplete = useCallback(() => {
+    console.log("Path complete, removing own waypoint and generating new path");
+
+    if (lastOccupiedWaypointRef.current) {
+      removeOccupiedWaypoint(lastOccupiedWaypointRef.current); // Remove the NPC's specific waypoint
+      lastOccupiedWaypointRef.current = null; // Clear reference after removal
+    }
+
+    if (path && path.length > 0) {
+      generateNewPath(path[path.length - 1]);
+    } else {
+      generateNewPath();
+    }
+  }, [path, removeOccupiedWaypoint]);
+
+  useEffect(() => {
+    let isMounted = true;
+    pathfindingRef.current = new PathfindingLogic();
+
+    const loadWaypoints = async () => {
+      try {
+        console.log("Loading waypoints...");
+        const success = await pathfindingRef.current.loadFromJSON(
+          "/assets/models/CovaBonica_LODs/waypoints.json"
         );
 
-        const endPos = new THREE.Vector3(
-            Math.random() * 20 - 10,
-            0,
-            Math.random() * 20 - 10
-        );
+        if (isMounted) {
+          console.log("Waypoint loading success:", success);
+          setWaypointsLoaded(success);
+          waypointsLoadedRef.current = success;
 
-        console.log('Attempting path generation', {
-            startPos: startPos.toArray(),
-            endPos: endPos.toArray()
-        });
-
-        const newPath = pathfindingRef.current.findPath(startPos, endPos);
-
-        if (newPath) {
-            console.log('New path generated', {
-                from: startPos.toArray(),
-                to: endPos.toArray(),
-                length: newPath.length
+          if (success) {
+            requestAnimationFrame(() => {
+              const generatedPath = generateNewPath();
+              if (!generatedPath) console.error("Failed to generate initial path");
             });
-            setPath(newPath);
-            return newPath;
-        } else {
-            console.error('Path generation completely failed', {
-                startPos: startPos.toArray(),
-                endPos: endPos.toArray()
-            });
-            return null;
+          }
         }
+      } catch (error) {
+        console.error("Waypoint loading error:", error);
+        if (isMounted) {
+          setWaypointsLoaded(false);
+          waypointsLoadedRef.current = false;
+        }
+      }
     };
 
-    const handlePathComplete = useCallback(() => {
-        console.log("Generating new path from last position");
-        if (path && path.length > 0) {
-            generateNewPath(path[path.length - 1]);
-        } else {
-            generateNewPath();
-        }
-    }, [path]);
+    loadWaypoints();
 
-    // Initialize pathfinding with JSON data
-    useEffect(() => {
-        let isMounted = true;
-        pathfindingRef.current = new PathfindingLogic();
-        
-        const loadWaypoints = async () => {
-            try {
-                console.log('Starting waypoint loading');
-                const success = await pathfindingRef.current.loadFromJSON('/assets/models/CovaBonica_LODs/waypoints.json');
-                
-                if (isMounted) {
-                    console.log('Waypoint loading result:', success);
-                    
-                    // Update both state and ref
-                    setWaypointsLoaded(success);
-                    waypointsLoadedRef.current = success;
-                    
-                    if (success) {
-                        // Debugging: log zone information
-                        const zoneInfo = pathfindingRef.current.zones[pathfindingRef.current.defaultZone];
-                        console.log('Zone Information', {
-                            waypointsCount: zoneInfo.waypoints.length,
-                            connectionsCount: Array.from(zoneInfo.adjacencyList.values())
-                                .reduce((sum, connections) => sum + connections.size, 0)
-                        });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-                        // Use requestAnimationFrame for more reliable timing
-                        requestAnimationFrame(() => {
-                            const generatedPath = generateNewPath();
-                            if (!generatedPath) {
-                                console.error('Failed to generate initial path');
-                            }
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Comprehensive waypoint loading error:', error);
-                if (isMounted) {
-                    setWaypointsLoaded(false);
-                    waypointsLoadedRef.current = false;
-                }
-            }
-        };
+  return (
+    <group>
+        {/* {waypointsLoaded && (
+            <WaypointVisualizer
+                pathfinding={pathfindingRef.current}
+                showWaypoints={true}
+                showConnections={true}
+            />
+        )} */}
 
-        loadWaypoints();
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    return (
-        <group>
-            {/* {waypointsLoaded && (
-                <WaypointVisualizer
-                    pathfinding={pathfindingRef.current}
-                    showWaypoints={true}
-                    showConnections={true}
+        {path && path.length > 1 && (
+            <>
+                {/* <PathVisualizer path={path} color="yellow" /> */}
+                <NPCActor
+                    path={path}
+                    speed={1}
+                    onPathComplete={handlePathComplete}
+                    model={model}
+                    propsData={propsData}
+                    poisData={poisData}
+                    playerRef={playerRef}
                 />
-            )} */}
-
-            {path && path.length > 1 && (
-                <>
-                    {/* <PathVisualizer path={path} color="yellow" /> */}
-                    <NPCActor
-                        path={path}
-                        speed={1}
-                        onPathComplete={handlePathComplete}
-                        model={model}
-                        propsData={propsData}
-                        poisData={poisData}
-                        playerRef={playerRef}
-                    />
-                </>
-            )}
-        </group>
-    );
+            </>
+        )}
+    </group>
+);
 }
+
+    
