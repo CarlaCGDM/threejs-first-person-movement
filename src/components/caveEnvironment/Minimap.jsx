@@ -4,7 +4,7 @@ import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
 
 function MinimapScene({ playerRef }) {
-    const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb"); 
+    const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_01.glb"); 
     const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb"); 
 
     const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
