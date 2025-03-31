@@ -11,6 +11,10 @@ import { TeleportMarker } from "../TeleportMarker";
 import { FloatingName } from "../FloatingName";
 import { useFrame } from "@react-three/fiber";
 
+const propPos = new THREE.Vector3();
+const frameSkip = 5; // Only calculate every 5 frames
+let frameCount = 0;
+
 const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile, detailedModelFile, teleportRotationAngle = 0, occlusionMeshRef }, ref) => {
     const [validUrl, setValidUrl] = useState("assets/models/Hapleidoceros_LODs"); // Fallback model
     const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Default size
@@ -23,12 +27,26 @@ const Prop = forwardRef(({ position, rotation, artifactName, metadata, modelFile
     const [playerDistance, setPlayerDistance] = useState(Infinity);
 
     // Calculate distance to player
+    // Inside component
     useFrame(() => {
         if (!settings.playerRef?.current) return;
 
+        // Skip frames to reduce calculation frequency
+        frameCount++;
+        if (frameCount % frameSkip !== 0) return;
+
         const playerPos = settings.playerRef.current.position;
-        const propPos = new THREE.Vector3(...position);
-        setPlayerDistance(propPos.distanceTo(playerPos));
+        propPos.set(position[0], position[1], position[2]); // Reuse vector
+
+        const distance = propPos.distanceTo(playerPos);
+
+        // Only update state if the distance crosses the threshold
+        const isNearbyNow = distance <= 5;
+        const wasNearby = playerDistance <= 5;
+
+        if (isNearbyNow !== wasNearby) {
+            setPlayerDistance(distance);
+        }
     });
 
     // Use the model loader hook

@@ -11,8 +11,7 @@ export function NPCActor({
   rotationSpeed = 2,
   smoothness = 0.5,
   onPathComplete,
-  color = 'hotpink',
-  debug = true,
+  model = "/assets/models/characters/leonard.glb",
   propsData = [],
   poisData = [],
   playerRef
@@ -29,13 +28,14 @@ export function NPCActor({
     smoothness,
     lookAheadPoints: 5,
     onReachEnd: () => {
-      startActions(15000);
+      const randomDelay = Math.floor(Math.random() * (100000 - 15000 + 1)) + 15000;
+      startActions(randomDelay);
       findClosestTarget();
     }
   });
 
   // 2. Now load animations using the existing groupRef
-  const { scene, animations } = useGLTF('/assets/models/characters/leonard.glb');
+  const { scene, animations } = useGLTF(model);
   const { actions } = useAnimations(animations, groupRef);
 
   // 3. Then add prop interaction

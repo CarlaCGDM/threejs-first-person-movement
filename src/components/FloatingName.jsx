@@ -23,7 +23,7 @@ export const FloatingName = ({
         zIndex="0"
         as="div"
         center
-        occlude={[occlusionMeshRef]}
+        // occlude={[occlusionMeshRef]}
         position={position}
         distanceFactor={distanceFactor}
         style={{

@@ -43,7 +43,7 @@ export default function Scene() {
                     e.preventDefault();
                 }}
                 tabIndex={0} // Make the canvas focusable
-                style={{ outline: "none" }} // Remove outline when focused
+                style={{ outline: "none", height: "95vh", position: "fixed", bottom: "0px" }} // Remove outline when focused
             >
                 <Stats />
 
@@ -51,7 +51,13 @@ export default function Scene() {
                 <ambientLight intensity={0} />
 
                 <Physics gravity={[0, -9.81, 0]}>
-                   {settings.ui.showNPCs && <NPCNavigation color='lime' propsData={propsData} poisData={POIsData} playerRef={playerRef}/>}
+                    {settings.ui.showNPCs &&
+                        <>
+                            <NPCNavigation color='lime' model="/assets/models/characters/leonard.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
+                            <NPCNavigation color='lime' model="/assets/models/characters/sophie.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
+                            <NPCNavigation color='lime' model="/assets/models/characters/lewis.glb" propsData={propsData} poisData={POIsData} playerRef={playerRef} />
+                        </>
+                    }
                     <EnvironmentColliders />
                     <Ground />
                     <Player ref={playerRef} keys={keys} />

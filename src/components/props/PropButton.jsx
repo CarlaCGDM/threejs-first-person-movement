@@ -1,99 +1,101 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export function PropButton({ prop, onClick, isVisited }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isIconHovered, setIsIconHovered] = useState(false); // New state for icon hover
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  const handleIconMouseEnter = () => {
-    setIsIconHovered(true); // Set icon hover state to true
-  };
-
-  const handleIconMouseLeave = () => {
-    setIsIconHovered(false); // Set icon hover state to false
-  };
-
-  // Construct the image URL using the prop.iconFolder and appending "512.png"
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const iconUrl = `${prop.iconFolder}512.png`;
 
+  useEffect(() => {
+    const tooltipContainer = document.getElementById("tooltip-root");
+    if (!tooltipContainer) {
+      const div = document.createElement("div");
+      div.id = "tooltip-root";
+      document.body.appendChild(div);
+    }
+  }, []);
+
+  const handleMouseEnter = (event) => {
+    setIsHovered(true);
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      top: rect.top - 35, // Position above button
+      left: rect.left + rect.width / 2, // Center it
+    });
+  };
+
   return (
-    <div style={styles.container}>
-      <button
-        onClick={() => onClick(prop)}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          ...styles.button,
-          backgroundColor: isVisited ? "green" : isHovered ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.2)",
-          transform: isHovered ? "scale(1.05)" : "scale(1)",
-          transition: "all 0.2s ease",
-        }}
-      >
-        <div style={styles.buttonContent}>
-          <img
-            src={iconUrl}
-            alt={`${prop.artifactName} icon`}
-            style={styles.icon}
-            onMouseEnter={handleIconMouseEnter} // Add hover handlers for the icon
-            onMouseLeave={handleIconMouseLeave}
-          />
-        </div>
-      </button>
-      {/* Tooltip-like label */}
-      {isIconHovered && (
-        <div style={styles.tooltip}>
-          {prop.artifactName}
-        </div>
-      )}
-    </div>
+    <>
+      <div style={styles.container}>
+        <button
+          onClick={() => onClick(prop)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={() => setIsHovered(false)}
+          style={{
+            ...styles.button,
+            border: isHovered ? "1px solid #3a3a3a" : isVisited ? "1px solid green" : "1px solid transparent",
+          }}
+        >
+          <img src={iconUrl} alt={prop.artifactName} style={styles.icon} />
+        </button>
+      </div>
+
+      {/* Render tooltip using a portal */}
+      {isHovered &&
+        createPortal(
+          <div
+            style={{
+              ...styles.tooltip,
+              top: `${tooltipPosition.top}px`,
+              left: `${tooltipPosition.left}px`,
+            }}
+          >
+            {prop.artifactName}
+          </div>,
+          document.getElementById("tooltip-root")
+        )}
+    </>
   );
 }
 
-// Styles
 const styles = {
   container: {
-    position: "relative", // Needed for absolute positioning of the tooltip
+    position: "relative",
   },
   button: {
-    display: "block",
-    width: "100%",
-    padding: "10px",
-    margin: "5px 0",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
+    width: "8vh",
+    height: "8vh",
+    padding: "0",
+    border: "1px solid transparent", // Ensures no layout shift
+    borderRadius: "0.25vw",
+    backgroundColor: "#1a1a1a",
     cursor: "pointer",
-    textAlign: "left",
-  },
-  buttonContent: {
+    transition: "all 0.2s ease",
     display: "flex",
+    justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
+    outline: "none", // Prevents focus outline
   },
   icon: {
-    width: "64px", // Adjust the size as needed
-    height: "64px", // Adjust the size as needed
-    backgroundColor: "black", // Set the background color to black
-    borderRadius: "4px", // Optional: add some border radius
-    cursor: "pointer", // Ensure the icon has a pointer cursor
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
   },
   tooltip: {
     position: "absolute",
-    top: "-30px", // Adjust positioning as needed
-    left: "50%", // Center the tooltip relative to the icon
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    color: "white",
+    backgroundColor: "#272626",
+    color: "#E2E2E2",
+    border: "1px solid #3a3a3a", // Tooltip border
     padding: "5px 10px",
+    fontSize: "0.8rem",
+    fontFamily: "'Mulish', sans-serif",
+    whiteSpace: "nowrap",
     borderRadius: "4px",
-    fontSize: "14px",
-    whiteSpace: "nowrap", // Prevent text from wrapping
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-    zIndex: 10, // Ensure the tooltip appears above other elements
+    transform: "translateX(-50%)",
+    zIndex: 1000,
+    pointerEvents: "none",
   },
 };
+
+export default PropButton;

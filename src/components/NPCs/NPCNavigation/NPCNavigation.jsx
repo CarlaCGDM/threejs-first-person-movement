@@ -5,7 +5,7 @@ import { PathVisualizer } from './visuals/PathVisualizer';
 import { WaypointVisualizer } from './visuals/WaypointVisualizer';
 import * as THREE from "three";
 
-export default function NPCNavigation({ color = 'hotpink', propsData = [], poisData = [], playerRef }) {
+export default function NPCNavigation({ color = 'hotpink', model = "/assets/models/characters/leonard.glb", propsData = [], poisData = [], playerRef }) {
     const [path, setPath] = useState(null);
     const [waypointsLoaded, setWaypointsLoaded] = useState(false);
     const pathfindingRef = useRef(null);
@@ -119,22 +119,22 @@ export default function NPCNavigation({ color = 'hotpink', propsData = [], poisD
 
     return (
         <group>
-            {waypointsLoaded && (
+            {/* {waypointsLoaded && (
                 <WaypointVisualizer
                     pathfinding={pathfindingRef.current}
                     showWaypoints={true}
                     showConnections={true}
                 />
-            )}
+            )} */}
 
             {path && path.length > 1 && (
                 <>
-                    <PathVisualizer path={path} color="yellow" />
+                    {/* <PathVisualizer path={path} color="yellow" /> */}
                     <NPCActor
                         path={path}
                         speed={1}
                         onPathComplete={handlePathComplete}
-                        color={color}
+                        model={model}
                         propsData={propsData}
                         poisData={poisData}
                         playerRef={playerRef}

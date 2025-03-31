@@ -43,7 +43,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
     >
       {/* <SettingsPanel /> */}
       <Navbar />
-      {/* <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> */}
+      <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       {/* <InstructionsPanel /> */}
 
       {/* Render PropInfo if a prop is selected */}
@@ -62,7 +62,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         <PointOfInterestInfo
           poiName={selectedPOI.poiName}
           metadata={selectedPOI.metadata}
-          imageFiles={[selectedPOI.imageFile, "/assets/images/POIs/POI1.PNG"]}
+          imageFiles={[selectedPOI.imageFile]}
           onClose={handleClosePointOfInterestInfo}
         />
       )}
