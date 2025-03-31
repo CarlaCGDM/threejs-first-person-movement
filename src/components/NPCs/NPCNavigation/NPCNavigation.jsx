@@ -17,7 +17,7 @@ export default function NPCNavigation({
     const waypointsLoadedRef = useRef(false);
     const lastOccupiedWaypointRef = useRef(null); // Store the NPC's specific waypoint
 
-    const { addOccupiedWaypoint, removeOccupiedWaypoint, isWaypointOccupied } = useSettings(); // Get waypoint functions
+    const { addOccupiedWaypoint, removeOccupiedWaypoint, isWaypointOccupied, settings } = useSettings(); // Get waypoint functions
 
     const generateNewPath = (startPosition = null) => {
         if (!pathfindingRef.current || !waypointsLoadedRef.current) {
@@ -45,8 +45,10 @@ export default function NPCNavigation({
 
             // Remove previously occupied waypoint (if any)
             if (lastOccupiedWaypointRef.current) {
+                console.log("Removing waypoint from occupied set:", lastOccupiedWaypointRef.current);
                 removeOccupiedWaypoint(lastOccupiedWaypointRef.current);
             }
+            console.log("Updated occupied waypoints:", settings.npc.occupiedWaypoints);
 
             // Add new last waypoint and store it internally
             const lastWaypoint = newPath[newPath.length - 1];
@@ -74,10 +76,12 @@ export default function NPCNavigation({
     const handlePathComplete = useCallback(() => {
         console.log("Path complete, removing own waypoint and generating new path");
 
+        console.log("Removing occupied waypoint:", lastOccupiedWaypointRef.current);
         if (lastOccupiedWaypointRef.current) {
             removeOccupiedWaypoint(lastOccupiedWaypointRef.current); // Remove the NPC's specific waypoint
             lastOccupiedWaypointRef.current = null; // Clear reference after removal
         }
+        console.log("Updated occupied waypoints:", settings.npc.occupiedWaypoints);
 
         if (path && path.length > 0) {
             generateNewPath(path[path.length - 1]);

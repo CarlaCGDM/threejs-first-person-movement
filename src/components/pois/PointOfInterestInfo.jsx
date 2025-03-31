@@ -124,7 +124,7 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                                 <h2 style={styles.name}>{poiName}</h2>
                                 <div style={styles.metadataList}>
                                     <div style={styles.metadataItem}>
-                                        <h3 style={styles.label}>Description</h3>
+                                        <h3 style={styles.label}>Descripción</h3>
                                         <p style={styles.value}>{metadata.description}</p>
                                     </div>
 

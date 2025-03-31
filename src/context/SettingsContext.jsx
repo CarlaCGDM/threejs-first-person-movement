@@ -23,7 +23,7 @@ const initialSettings = {
   npc: {
     occupiedWaypoints: new Set() // Store waypoint indices instead of positions
   }
-  
+
 };
 
 const SettingsContext = createContext();
@@ -65,24 +65,24 @@ function settingsReducer(state, action) {
 
     // NPC waypoint management cases
     case "ADD_OCCUPIED_WAYPOINT":
-  return {
-    ...state,
-    npc: {
-      ...state.npc,
-      occupiedWaypoints: new Set([...state.npc.occupiedWaypoints, action.payload])
-    }
-  };
+      return {
+        ...state,
+        npc: {
+          ...state.npc,
+          occupiedWaypoints: new Set([...state.npc.occupiedWaypoints, action.payload])
+        }
+      };
 
-case "REMOVE_OCCUPIED_WAYPOINT":
-  const updatedWaypoints = new Set(state.npc.occupiedWaypoints);
-  updatedWaypoints.delete(action.payload);
-  return {
-    ...state,
-    npc: {
-      ...state.npc,
-      occupiedWaypoints: updatedWaypoints
-    }
-  };
+    case "REMOVE_OCCUPIED_WAYPOINT":
+      const updatedWaypoints = new Set(state.npc.occupiedWaypoints);
+      updatedWaypoints.delete(action.payload);
+      return {
+        ...state,
+        npc: {
+          ...state.npc,
+          occupiedWaypoints: updatedWaypoints
+        }
+      };
 
 
     case "CLEAR_OCCUPIED_WAYPOINTS":
@@ -111,15 +111,17 @@ export function SettingsProvider({ children }) {
       payload: waypointIndex
     });
   };
-  
+
   const removeOccupiedWaypoint = (waypointIndex) => {
     dispatch({
       type: "REMOVE_OCCUPIED_WAYPOINT",
       payload: waypointIndex
     });
   };
-  
+
   const isWaypointOccupied = (waypointIndex) => {
+    console.log("Checking occupied waypoints:", settings.npc.occupiedWaypoints);
+    console.log("Trying to assign:", waypointIndex);
     return settings.npc.occupiedWaypoints.has(waypointIndex);
   };
 

@@ -1,38 +1,38 @@
 [
-    {
-      "poiName": "Sala lateral 1",
-      "position": [4.97213, -2.49965, 2.24257],
-      "metadata": {
-        "description": "This is the description for POI 1. It provides interesting information about this location."
-      },
-      "modelFile": "/assets/models/POIs/POI1.glb",
-      "imageFile": "/assets/images/POIs/POI1.PNG"
+  {
+    "poiName": "Sala lateral 1",
+    "position": [4.97213, -2.49965, 2.24257],
+    "metadata": {
+      "description": "Esta zona corresponde a la primera de las salas laterales que conforman la cueva, la más cercana a la entrada."
     },
-    {
-      "poiName": "Restos neolíticos",
-      "position": [2.47955, -2.73506, -2.72549],
-      "metadata": {
-        "description": "This is the description for POI 2. It provides interesting information about this location."
-      },
-      "modelFile": "/assets/models/POIs/POI2.glb",
-      "imageFile": "/assets/images/POIs/POI2.PNG"
+    "modelFile": "/assets/models/POIs/POI1.glb",
+    "imageFile": "/assets/images/POIs/POI1.PNG"
+  },
+  {
+    "poiName": "Restos neolíticos",
+    "position": [2.47955, -2.73506, -2.72549],
+    "metadata": {
+      "description": "En esta zona de la cueva fue donde se encontraron los restos que, a través de su estudio, ha permitido conocer a las poblaciones que la habitaron durante el neolítico. Se han conservado por un lado, materiales orgánicos (huesos humanos y de pequeños mamíferos o restos carbonizados de árboles y de arbustos), y por otro, herramientas y objetos diversos (utensilios de piedra, adornos, cerámica, etc.)."
     },
-    {
-      "poiName": "Sala lateral 2",
-      "position": [9.47179, -0.489526, -2.33263],
-      "metadata": {
-        "description": "This is the description for POI 3. It provides interesting information about this location."
-      },
-      "modelFile": "/assets/models/POIs/POI3.glb",
-      "imageFile": "/assets/images/POIs/POI3.PNG"
+    "modelFile": "/assets/models/POIs/POI2.glb",
+    "imageFile": "/assets/images/POIs/POI2.PNG"
+  },
+  {
+    "poiName": "Sala lateral 2",
+    "position": [9.47179, -0.489526, -2.33263],
+    "metadata": {
+      "description": "Esta zona corresponde a la segunda de las salas laterales que conforman la cueva, la que se encuentra más al interior."
     },
-    {
-      "poiName": "Escombrera mina",
-      "position": [-4.38825, -3.46406, 3.71715],
-      "metadata": {
-        "description": "This is the description for POI 4. It provides interesting information about this location."
-      },
-      "modelFile": "/assets/models/POIs/POI4.glb",
-      "imageFile": "/assets/images/POIs/POI4.PNG"
-    }
-  ]
+    "modelFile": "/assets/models/POIs/POI3.glb",
+    "imageFile": "/assets/images/POIs/POI3.PNG"
+  },
+  {
+    "poiName": "Escombrera mina",
+    "position": [-4.38825, -3.46406, 3.71715],
+    "metadata": {
+      "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
+    },
+    "modelFile": "/assets/models/POIs/POI4.glb",
+    "imageFile": "/assets/images/POIs/POI4.PNG"
+  }
+]
