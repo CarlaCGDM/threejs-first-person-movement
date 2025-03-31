@@ -65,8 +65,6 @@ function settingsReducer(state, action) {
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
-  const toggleUI = (element) => dispatch({ type: `TOGGLE_${element.toUpperCase()}` }); // Usage: toggleUI('minimap'), toggleUI('instructions')
-
   return (
     <SettingsContext.Provider value={{ settings, dispatch }}>
       {children}

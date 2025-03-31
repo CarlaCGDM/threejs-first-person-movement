@@ -33,10 +33,18 @@ export function PropButton({ prop, onClick, isVisited }) {
           onMouseLeave={() => setIsHovered(false)}
           style={{
             ...styles.button,
-            border: isHovered ? "1px solid #3a3a3a" : isVisited ? "1px solid green" : "1px solid transparent",
+            border: isHovered ? "1px solid #3a3a3a" :  "1px solid transparent",
           }}
         >
-          <img src={iconUrl} alt={prop.artifactName} style={styles.icon} />
+          <img 
+            src={iconUrl} 
+            alt={prop.artifactName} 
+            style={{
+              ...styles.icon,
+              filter: isVisited ? "saturate(0.2)" : "none",
+              opacity: isVisited ? 0.7 : 1,
+            }} 
+          />
         </button>
       </div>
 
@@ -66,7 +74,7 @@ const styles = {
     width: "8vh",
     height: "8vh",
     padding: "0",
-    border: "1px solid transparent", // Ensures no layout shift
+    border: "1px solid transparent",
     borderRadius: "0.25vw",
     backgroundColor: "#1a1a1a",
     cursor: "pointer",
@@ -75,18 +83,19 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    outline: "none", // Prevents focus outline
+    outline: "none",
   },
   icon: {
     width: "100%",
     height: "100%",
     objectFit: "cover",
+    transition: "filter 0.2s ease, opacity 0.2s ease", // Add smooth transition
   },
   tooltip: {
     position: "absolute",
     backgroundColor: "#272626",
     color: "#E2E2E2",
-    border: "1px solid #3a3a3a", // Tooltip border
+    border: "1px solid #3a3a3a",
     padding: "5px 10px",
     fontSize: "0.8rem",
     fontFamily: "'Mulish', sans-serif",
