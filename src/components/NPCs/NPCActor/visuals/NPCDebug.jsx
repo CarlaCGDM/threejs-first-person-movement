@@ -31,23 +31,30 @@ export function NPCDebug({
   return (
     <>
     {!settings.selectedProp && !settings.selectedPOI && <Html
-      position={[0, 2, 0]}
-      center
-      style={{
-        background: 'white',
-        color: 'black',
-        padding: '8px 12px',
-        borderRadius: '8px',
-        fontSize: '14px',
-        border: '1px solid black',
-        minWidth: '20px',
-        textAlign: 'center',
-        pointerEvents: 'none',
-        opacity: isPlayerNearby ? 1 : 0.7
-      }}
-    >
-      {isPlayerNearby ? speechContent : "..."}
-    </Html>}
+  position={[0, 2, 0]}
+  center
+  style={{
+    background: "white",
+    color: "black",
+    padding: "8px 12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+    border: "1px solid black",
+    minWidth: isPlayerNearby ? "250px" : "40px",  // Ensures some horizontal space
+    maxWidth: "300px",   // Prevents excessive stretching
+    textAlign: "center",
+    pointerEvents: "none",
+    opacity: isPlayerNearby ? 1 : 0.7,
+    display: "inline-block",  // Ensures the element wraps naturally
+    whiteSpace: "normal",     // Enables line breaks
+    wordBreak: "break-word",  // Ensures long words wrap
+  }}
+>
+  <div style={{ display: "inline-block", maxWidth: "100%" }}>
+    {isPlayerNearby ? speechContent : "..."}
+  </div>
+</Html>
+}
     </>
   );
   

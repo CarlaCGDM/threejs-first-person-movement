@@ -21,8 +21,9 @@ const initialSettings = {
   },
 
   npc: {
-    occupiedWaypoints: [] // Array of currently occupied waypoint positions
+    occupiedWaypoints: new Set() // Store waypoint indices instead of positions
   }
+  
 };
 
 const SettingsContext = createContext();
@@ -64,39 +65,32 @@ function settingsReducer(state, action) {
 
     // NPC waypoint management cases
     case "ADD_OCCUPIED_WAYPOINT":
-      // Only add if not already occupied
-      if (state.npc.occupiedWaypoints.some(
-        pos => JSON.stringify(pos) === JSON.stringify(action.payload)
-      )) {
-        return state;
-      }
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: [...state.npc.occupiedWaypoints, action.payload]
-        }
-      };
+  return {
+    ...state,
+    npc: {
+      ...state.npc,
+      occupiedWaypoints: new Set([...state.npc.occupiedWaypoints, action.payload])
+    }
+  };
 
-    case "REMOVE_OCCUPIED_WAYPOINT":
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: state.npc.occupiedWaypoints.filter(
-            pos => !action.payload.some(
-              removePos => JSON.stringify(removePos) === JSON.stringify(pos)
-            )
-          )
-        }
-      };
+case "REMOVE_OCCUPIED_WAYPOINT":
+  const updatedWaypoints = new Set(state.npc.occupiedWaypoints);
+  updatedWaypoints.delete(action.payload);
+  return {
+    ...state,
+    npc: {
+      ...state.npc,
+      occupiedWaypoints: updatedWaypoints
+    }
+  };
+
 
     case "CLEAR_OCCUPIED_WAYPOINTS":
       return {
         ...state,
         npc: {
           ...state.npc,
-          occupiedWaypoints: []
+          occupiedWaypoints: new Set()
         }
       };
 
@@ -105,56 +99,32 @@ function settingsReducer(state, action) {
   }
 }
 
-const roundVector = (vector, decimals = 2) => {
-  if (!vector || typeof vector !== 'object') return vector;
-  
-  return {
-    x: Number(vector.x.toFixed(decimals)),
-    y: Number(vector.y.toFixed(decimals)),
-    z: Number(vector.z.toFixed(decimals))
-  };
-};
-
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
   const toggleUI = (element) => dispatch({ type: `TOGGLE_${element.toUpperCase()}` });
 
   // NPC waypoint management functions
-  const addOccupiedWaypoint = (position) => {
-    console.log("Adding waypoint:", position);
-    const roundedPosition = roundVector(position);
+  const addOccupiedWaypoint = (waypointIndex) => {
     dispatch({
       type: "ADD_OCCUPIED_WAYPOINT",
-      payload: roundedPosition
+      payload: waypointIndex
     });
   };
-
-  const removeOccupiedWaypoint = (position) => {
-    console.log("Removing waypoint:", position);
-    const roundedPosition = roundVector(position);
+  
+  const removeOccupiedWaypoint = (waypointIndex) => {
     dispatch({
       type: "REMOVE_OCCUPIED_WAYPOINT",
-      payload: [roundedPosition]
+      payload: waypointIndex
     });
   };
-
-  const removeMultipleOccupiedWaypoints = (positions) => {
-    dispatch({
-      type: "REMOVE_OCCUPIED_WAYPOINT",
-      payload: positions
-    });
+  
+  const isWaypointOccupied = (waypointIndex) => {
+    return settings.npc.occupiedWaypoints.has(waypointIndex);
   };
 
   const clearAllOccupiedWaypoints = () => {
     dispatch({ type: "CLEAR_OCCUPIED_WAYPOINTS" });
-  };
-
-  const isWaypointOccupied = (position) => {
-    const roundedPosition = roundVector(position);
-    return settings.npc.occupiedWaypoints.some(
-      occupiedPos => JSON.stringify(occupiedPos) === JSON.stringify(roundedPosition)
-    );
   };
 
 
@@ -166,7 +136,6 @@ export function SettingsProvider({ children }) {
       // NPC functions
       addOccupiedWaypoint,
       removeOccupiedWaypoint,
-      removeMultipleOccupiedWaypoints,
       clearAllOccupiedWaypoints,
       isWaypointOccupied
     }}>

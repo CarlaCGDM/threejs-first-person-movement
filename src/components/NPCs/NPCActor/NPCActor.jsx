@@ -4,6 +4,7 @@ import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
 import { useNPCPropInteraction } from './hooks/useNPCPropInteraction';
 import { NPCDebug } from './visuals/NPCDebug';
+import phrases from '../data/quotesData.json'; // Import your JSON file
 
 export function NPCActor({
   path,
@@ -16,7 +17,7 @@ export function NPCActor({
   poisData = [],
   playerRef
 }) {
-  // 1. First get movement control (this provides groupRef)
+  const [currentPhrase, setCurrentPhrase] = useState("");
   const { isPerformingActions, startActions } = useNPCActions({
     onActionComplete: onPathComplete
   });
@@ -34,11 +35,8 @@ export function NPCActor({
     }
   });
 
-  // 2. Now load animations using the existing groupRef
   const { scene, animations } = useGLTF(model);
   const { actions } = useAnimations(animations, groupRef);
-
-  // 3. Then add prop interaction
   const { closestTarget, findClosestTarget } = useNPCPropInteraction({
     groupRef,
     propsData,
@@ -46,52 +44,62 @@ export function NPCActor({
     isPerformingActions
   });
 
+  // Function to get random phrase
+  const getRandomPhrase = (key) => {
+    const category = phrases[0][key];
+    if (category && category.length > 0) {
+      return category[Math.floor(Math.random() * category.length)];
+    }
+    return "I'm observing this interesting artifact";
+  };
+
+  // Update phrase when target changes
+  useEffect(() => {
+    if (closestTarget) {
+      if (closestTarget.type === 'prop') {
+        setCurrentPhrase(getRandomPhrase(closestTarget.artifactName));
+      } else {
+        // For POIs, use general "Cova bonica" phrases
+        setCurrentPhrase(getRandomPhrase("Cova bonica"));
+      }
+    } else {
+      // When no target, use general "Cova bonica" phrases
+      setCurrentPhrase(getRandomPhrase("Cova bonica"));
+    }
+  }, [closestTarget]);
+
   // Animation control
   useEffect(() => {
     if (!actions) return;
 
-    // Always stop all animations first for clean transitions
     Object.values(actions).forEach(action => action?.fadeOut(0.2));
 
     if (!isPerformingActions) {
-      // Walking state (priority 1)
       actions['Walk']?.reset().fadeIn(0.3).play();
     } else {
-      // Stopped state
       if (closestTarget) {
-        // Looking at specific target (priority 2)
         actions['Idle']?.reset().fadeIn(0.3).play();
       } else {
-        // Generic idle/looking around (priority 3)
         actions['LookAround']?.reset().fadeIn(0.3).play();
       }
     }
 
     return () => {
-      // Cleanup on unmount
       Object.values(actions).forEach(action => action?.fadeOut(0.1));
     };
   }, [isPerformingActions, closestTarget, actions]);
 
-  const speechContent = closestTarget
-    ? closestTarget.type === 'prop'
-      ? `I'm looking at the ${closestTarget.artifactName}`
-      : `I'm observing ${closestTarget.poiName}`
-    : "I'm just taking a look around!";
-
   return (
     <group ref={groupRef}>
-      {/* Animated model */}
       <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
       <NPCDebug
         isPerformingActions={isPerformingActions}
-        speechContent={speechContent}
-        playerRef={playerRef}  // Your player's THREE object ref
-        groupRef={groupRef}    // From useNPCMovement
+        speechContent={currentPhrase}
+        playerRef={playerRef}
+        groupRef={groupRef}
       />
     </group>
   );
 }
 
-// Preload the model
 useGLTF.preload('/assets/models/characters/leonard.glb');
