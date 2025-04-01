@@ -66,14 +66,14 @@ export default function Content({ playerRef, orbitControlsRef }) {
                             poisData={POIsData}
                             playerRef={playerRef}
                         />
-                        <NPCNavigation
+                        {/* <NPCNavigation
                             key="lewis"
                             color="lime"
                             model="/assets/models/characters/sophie3"
                             propsData={propsData}
                             poisData={POIsData}
                             playerRef={playerRef}
-                        />
+                        /> */}
                     </NPCManager>
                 )}
 

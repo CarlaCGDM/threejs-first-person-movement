@@ -4,18 +4,15 @@ import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
 import { useNPCPropInteraction } from './hooks/useNPCPropInteraction';
 import { SpeechBubble } from './visuals/SpeechBubble';
-import phrases from '../data/quotesData.json';
+import { useNPCSpeech } from './hooks/useNPCSpeech';
 import * as THREE from 'three';
 
-// Modified to accept and apply animations
 const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation }) => {
   const { scene } = useGLTF(modelUrl);
   const { actions } = useAnimations(animations, scene);
 
-  // Apply animations immediately when loaded
   useEffect(() => {
     if (actions && initialAnimation) {
-      // Start with the correct animation immediately
       actions[initialAnimation]?.reset().fadeIn(0).play();
       onLoad(actions);
     }
@@ -36,7 +33,6 @@ export function NPCActor({
   playerRef,
   color = "lime"
 }) {
-  const [currentPhrase, setCurrentPhrase] = useState("");
   const [highResLoaded, setHighResLoaded] = useState(false);
   const [animationsReady, setAnimationsReady] = useState(false);
   const highResActionsRef = useRef(null);
@@ -44,9 +40,8 @@ export function NPCActor({
   const lastHighResActionRef = useRef(null);
   const [currentAnimation, setCurrentAnimation] = useState('Walk');
 
-
   // Load animations from low-res model
-  const { scene, animations } = useGLTF(model + '/LOD_00.glb');
+  const { scene, animations } = useGLTF(model + '/LOD_01.glb');
 
   useEffect(() => {
     if (animations && animations.length > 0) {
@@ -81,32 +76,14 @@ export function NPCActor({
     isPerformingActions
   });
 
-  const getRandomPhrase = (key) => {
-    const category = phrases[0][key];
-    if (category && category.length > 0) {
-      return category[Math.floor(Math.random() * category.length)];
-    }
-    return "I'm observing this interesting artifact";
-  };
-
-  useEffect(() => {
-    if (closestTarget) {
-      if (closestTarget.type === 'prop') {
-        setCurrentPhrase(getRandomPhrase(closestTarget.artifactName));
-      } else {
-        setCurrentPhrase(getRandomPhrase("Cova bonica"));
-      }
-    } else {
-      setCurrentPhrase(getRandomPhrase("Cova bonica"));
-    }
-  }, [closestTarget]);
+  // Use the speech hook
+  const currentPhrase = useNPCSpeech(closestTarget);
 
   // Handle high-res model load completion
   const handleHighResLoaded = (highResActions) => {
     highResActionsRef.current = highResActions;
     setHighResLoaded(true);
 
-    // Immediately play the appropriate animation for high-res
     if (animationsReady) {
       updateAnimation(highResActionsRef.current, true);
     }
@@ -115,7 +92,6 @@ export function NPCActor({
   const updateAnimation = (actionsObj, isHighRes) => {
     if (!actionsObj) return;
   
-    // Determine next action based on state
     let nextActionName;
     if (!isPerformingActions) {
       nextActionName = 'Walk';
@@ -125,8 +101,7 @@ export function NPCActor({
       nextActionName = 'LookAround';
     }
   
-    setCurrentAnimation(nextActionName); // Update current animation state
-  
+    setCurrentAnimation(nextActionName);
     const nextAction = actionsObj[nextActionName];
     if (!nextAction) return;
   
@@ -137,19 +112,16 @@ export function NPCActor({
       currentAction.crossFadeTo(nextAction, 0.3, true);
       nextAction.reset().play();
     } else if (!currentAction) {
-      nextAction.reset().fadeIn(0).play(); // Immediate start for new models
+      nextAction.reset().fadeIn(0).play();
     }
   
     lastActionRef.current = nextAction;
   };
 
-
-  // Apply animations to currently visible model
   useEffect(() => {
     if (!animationsReady) return;
 
     if (highResLoaded && highResActionsRef.current) {
-      // Ensure we are triggering an animation update
       updateAnimation(highResActionsRef.current, true);
     } else {
       updateAnimation(lowResActions, false);
@@ -181,23 +153,20 @@ export function NPCActor({
     });
   }, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
 
-
   return (
     <group ref={groupRef}>
-      {/* High-res model with animations passed in */}
       <Suspense fallback={null}>
         {animationsReady && (
           <HighResModel
-            modelUrl={model + '/LOD_04.glb'}
+            modelUrl={model + '/LOD_03.glb'}
             animations={animations}
             groupRef={groupRef}
             onLoad={handleHighResLoaded}
-            initialAnimation={currentAnimation} // Pass current animation
+            initialAnimation={currentAnimation}
           />
         )}
       </Suspense>
 
-      {/* Low-res model until high-res is loaded */}
       {!highResLoaded && <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />}
 
       <SpeechBubble
