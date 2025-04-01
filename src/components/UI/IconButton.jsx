@@ -68,6 +68,7 @@ export function IconButton({
           opacity: 0,
           animation: 'pulse 2s infinite',
           pointerEvents: 'none',
+          zIndex: '2000',
         }}/>
       )}
 
@@ -107,6 +108,7 @@ export function IconButton({
           padding: "4px",
           borderRadius: "5px",
           position: 'relative',
+          zIndex: '1000',
         }}
       >
         <div style={{
@@ -133,9 +135,9 @@ export function IconButton({
       {/* Animation styles */}
       <style jsx>{`
         @keyframes pulse {
-          0% { opacity: 0.3; transform: scale(0.95); }
-          50% { opacity: 0.7; transform: scale(1.05); }
-          100% { opacity: 0.3; transform: scale(0.95); }
+          0% { opacity: 0.3; transform: scale(0.75); }
+          50% { opacity: 0.7; transform: scale(0.80); }
+          100% { opacity: 0.3; transform: scale(0.75); }
         }
       `}</style>
     </div>

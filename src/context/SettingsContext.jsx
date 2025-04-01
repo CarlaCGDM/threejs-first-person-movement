@@ -17,6 +17,7 @@ const initialSettings = {
     showInstructions: true,
     showCredits: false,
     showNPCs: true,
+    showTutorial: true,
     isFullscreen: false
   },
 
@@ -60,6 +61,8 @@ function settingsReducer(state, action) {
       return { ...state, ui: { ...state.ui, showCredits: !state.ui.showCredits } };
     case "TOGGLE_NPCS":
       return { ...state, ui: { ...state.ui, showNPCs: !state.ui.showNPCs } };
+    case 'TOGGLE_TUTORIAL': 
+      return { ...state, ui: { ...state.ui, showTutorial: !state.ui.showTutorial } };
     case "TOGGLE_FULLSCREEN":
       return { ...state, ui: { ...state.ui, isFullscreen: !state.ui.isFullscreen } };
 
@@ -102,8 +105,6 @@ function settingsReducer(state, action) {
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
-  const toggleUI = (element) => dispatch({ type: `TOGGLE_${element.toUpperCase()}` });
-
   // NPC waypoint management functions
   const addOccupiedWaypoint = (waypointIndex) => {
     dispatch({
@@ -134,7 +135,6 @@ export function SettingsProvider({ children }) {
     <SettingsContext.Provider value={{
       settings,
       dispatch,
-      toggleUI,
       // NPC functions
       addOccupiedWaypoint,
       removeOccupiedWaypoint,

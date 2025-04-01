@@ -7,6 +7,7 @@ import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
 import { Minimap } from "../caveEnvironment/Minimap";
 import { Navbar } from "./Navbar";
+import { Tutorial } from "./Tutorial"; // Import the Tutorial component
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -18,6 +19,10 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
 
   const handleClosePointOfInterestInfo = () => {
     dispatch({ type: "CLEAR_SELECTED_POI" });
+  };
+
+  const handleToggleTutorial = () => {
+    dispatch({ type: "TOGGLE_TUTORIAL" });
   };
 
   useEffect(() => {
@@ -41,10 +46,12 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         pointerEvents: selectedProp || selectedPOI ? "auto" : "none", // Allow interaction based on selection
       }}
     >
-      {/* <SettingsPanel /> */}
+      {/* Add the tutorial here, only when showTutorial is true */}
+      {settings.ui.showTutorial && <Tutorial onClose={handleToggleTutorial} />}
+
+      {/* Other components */}
       <Navbar />
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
-      {/* <InstructionsPanel /> */}
 
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (
@@ -72,7 +79,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
   );
 }
 
-// Styles
+// Styles for Overlay component
 const styles = {
   overlay: {
     position: "fixed",
