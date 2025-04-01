@@ -4,26 +4,79 @@ import { Html, useProgress } from "@react-three/drei";
 export function LoadingScreen() {
   const { progress } = useProgress();
 
+  const styles = {
+    wrapper: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(39, 38, 38, 0.9)', // Navbar color with opacity
+      pointerEvents: 'none',
+      zIndex: 999, // Just below navbar
+    },
+    container: {
+      width: '300px',
+      padding: '25px',
+      backgroundColor: '#272626', // Exact navbar background
+      borderRadius: '8px',
+      color: '#E2E2E2', // Navbar text color
+      fontFamily: "'Mulish', sans-serif",
+      textAlign: 'center',
+      border: '1px solid #3a3a3a', // Navbar border
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    },
+    title: {
+      fontSize: '1.2rem',
+      marginBottom: '20px',
+      letterSpacing: '0%',
+    },
+    spinner: {
+      width: '40px',
+      height: '40px',
+      border: '3px solid #3a3a3a', // Dark border like navbar
+      borderTop: '3px solid #E2E2E2', // Light color like navbar text
+      borderRadius: '50%',
+      margin: '0 auto 20px',
+      animation: 'spin 1s linear infinite',
+    },
+    progressBar: {
+      width: '100%',
+      height: '6px',
+      backgroundColor: '#3a3a3a', // Navbar border color
+      borderRadius: '3px',
+      overflow: 'hidden',
+      marginBottom: '15px',
+    },
+    progressFill: {
+      height: '100%',
+      backgroundColor: '#E2E2E2', // Navbar text color
+      transition: 'width 0.2s ease-out',
+    },
+    progressText: {
+      fontSize: '0.9rem',
+      letterSpacing: '0.5px',
+    },
+    spinKeyframes: `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `,
+  };
+
   return (
     <Html
-      as="div" // Render as regular div
-      wrapperClass="html-wrapper" // Class for the wrapper
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        pointerEvents: 'none',
-      }}
+      as="div"
+      style={styles.wrapper}
     >
-      {/* Inject the keyframes */}
       <style>{styles.spinKeyframes}</style>
       
       <div style={styles.container}>
+        <div style={styles.title}>Loading Cova Bonica</div>
         <div style={styles.spinner}></div>
         <div style={styles.progressBar}>
           <div 
@@ -34,65 +87,9 @@ export function LoadingScreen() {
           ></div>
         </div>
         <div style={styles.progressText}>
-          Loading... {Math.round(progress)}%
+          {Math.round(progress)}% complete
         </div>
       </div>
     </Html>
   );
 }
-
-// Define all styles as constants
-const styles = {
-    wrapper: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      pointerEvents: 'none', // Allows clicks to pass through
-    },
-    container: {
-      width: '300px',
-      padding: '20px',
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      borderRadius: '10px',
-      color: 'white',
-      fontFamily: 'Arial, sans-serif',
-      textAlign: 'center',
-    },
-    spinner: {
-      width: '50px',
-      height: '50px',
-      border: '5px solid rgba(255, 255, 255, 0.3)',
-      borderTop: '5px solid #4CAF50',
-      borderRadius: '50%',
-      margin: '0 auto 20px',
-      animation: 'spin 1s linear infinite',
-    },
-    progressBar: {
-      width: '100%',
-      height: '10px',
-      backgroundColor: '#333',
-      borderRadius: '5px',
-      overflow: 'hidden',
-      marginBottom: '10px',
-    },
-    progressFill: {
-      height: '100%',
-      backgroundColor: '#4CAF50',
-      transition: 'width 0.1s ease-out',
-    },
-    progressText: {
-      fontSize: '16px',
-    },
-    // Keyframes as an inline style tag
-    spinKeyframes: `
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-    `,
-  };
