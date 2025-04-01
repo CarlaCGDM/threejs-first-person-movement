@@ -1,10 +1,26 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
 import { useNPCPropInteraction } from './hooks/useNPCPropInteraction';
 import { SpeechBubble } from './visuals/SpeechBubble';
-import phrases from '../data/quotesData.json'; // Import your JSON file
+import phrases from '../data/quotesData.json';
+import * as THREE from 'three';
+
+// Modified to accept and apply animations
+const HighResModel = ({ modelUrl, animations, groupRef, onLoad }) => {
+  const { scene } = useGLTF(modelUrl);
+  const { actions } = useAnimations(animations, scene);
+  
+  // Apply animations to this model when it loads
+  useEffect(() => {
+    if (scene && animations && animations.length > 0) {
+      onLoad(actions);
+    }
+  }, [scene, animations, onLoad]);
+  
+  return <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
+};
 
 export function NPCActor({
   path,
@@ -15,12 +31,22 @@ export function NPCActor({
   model = "/assets/models/characters/sophie",
   propsData = [],
   poisData = [],
-  playerRef
+  playerRef,
+  color = "lime"
 }) {
   const [currentPhrase, setCurrentPhrase] = useState("");
-  const { isPerformingActions, startActions } = useNPCActions({
-    onActionComplete: onPathComplete
-  });
+  const [highResLoaded, setHighResLoaded] = useState(false);
+  const [animationsReady, setAnimationsReady] = useState(false);
+  const highResActionsRef = useRef(null);
+  
+  // Load animations from low-res model
+  const { scene, animations } = useGLTF(model + '/LOD_00.glb');
+  
+  useEffect(() => {
+    if (animations && animations.length > 0) {
+      setAnimationsReady(true);
+    }
+  }, [animations]);
 
   const { groupRef } = useNPCMovement({
     path,
@@ -35,10 +61,13 @@ export function NPCActor({
     }
   });
 
-  const lowResModel = useGLTF(model + '/LOD_01.glb');
-  const highResModel = useGLTF(model + '/LOD_04.glb');
-  const { animations } = useGLTF(model + '/LOD_00.glb');
-  const { actions } = useAnimations(animations, groupRef);
+  const { isPerformingActions, startActions } = useNPCActions({
+    onActionComplete: onPathComplete
+  });
+
+  // Get animation actions for low-res model
+  const { actions: lowResActions } = useAnimations(animations, scene);
+  
   const { closestTarget, findClosestTarget } = useNPCPropInteraction({
     groupRef,
     propsData,
@@ -46,7 +75,6 @@ export function NPCActor({
     isPerformingActions
   });
 
-  // Function to get random phrase
   const getRandomPhrase = (key) => {
     const category = phrases[0][key];
     if (category && category.length > 0) {
@@ -55,52 +83,96 @@ export function NPCActor({
     return "I'm observing this interesting artifact";
   };
 
-  // Update phrase when target changes
   useEffect(() => {
     if (closestTarget) {
       if (closestTarget.type === 'prop') {
         setCurrentPhrase(getRandomPhrase(closestTarget.artifactName));
       } else {
-        // For POIs, use general "Cova bonica" phrases
         setCurrentPhrase(getRandomPhrase("Cova bonica"));
       }
     } else {
-      // When no target, use general "Cova bonica" phrases
       setCurrentPhrase(getRandomPhrase("Cova bonica"));
     }
   }, [closestTarget]);
 
-  // Animation control
-  useEffect(() => {
-    if (!actions) return;
+  // Handle high-res model load completion
+  const handleHighResLoaded = (highResActions) => {
+    highResActionsRef.current = highResActions;
+    setHighResLoaded(true);
+  };
 
-    Object.values(actions).forEach(action => action?.fadeOut(0.2));
+  // Animation control function
+  const updateAnimation = (actionsObj) => {
+    if (!actionsObj) return;
+    
+    // Stop all current animations
+    Object.values(actionsObj).forEach(action => {
+      if (action) {
+        action.stop();
+        action.fadeOut(0.2);
+      }
+    });
 
+    // Play appropriate animation
     if (!isPerformingActions) {
-      actions['Walk']?.reset().fadeIn(0.3).play();
+      actionsObj['Walk']?.reset().fadeIn(0.3).play();
     } else {
       if (closestTarget) {
-        actions['Idle']?.reset().fadeIn(0.3).play();
+        actionsObj['Idle']?.reset().fadeIn(0.3).play();
       } else {
-        actions['LookAround']?.reset().fadeIn(0.3).play();
+        actionsObj['LookAround']?.reset().fadeIn(0.3).play();
       }
     }
+  };
 
+  // Apply animations to currently visible model
+  useEffect(() => {
+    if (!animationsReady) return;
+    
+    if (highResLoaded && highResActionsRef.current) {
+      // Apply animations to high-res model
+      updateAnimation(highResActionsRef.current);
+    } else {
+      // Apply animations to low-res model
+      updateAnimation(lowResActions);
+    }
+    
     return () => {
-      Object.values(actions).forEach(action => action?.fadeOut(0.1));
+      const actionsObj = highResLoaded ? highResActionsRef.current : lowResActions;
+      if (actionsObj) {
+        Object.values(actionsObj).forEach(action => {
+          if (action) {
+            action.fadeOut(0.1);
+            action.stop();
+          }
+        });
+      }
     };
-  }, [isPerformingActions, closestTarget, actions]);
+  }, [isPerformingActions, closestTarget, lowResActions, highResLoaded, animationsReady]);
 
   return (
     <group ref={groupRef}>
-      <Suspense fallback={<primitive object={lowResModel.scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />}>
-        <primitive object={highResModel.scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
+      {/* High-res model with animations passed in */}
+      <Suspense fallback={null}>
+        {animationsReady && (
+          <HighResModel 
+            modelUrl={model + '/LOD_04.glb'} 
+            animations={animations}
+            groupRef={groupRef}
+            onLoad={handleHighResLoaded}
+          />
+        )}
       </Suspense>
+
+      {/* Low-res model until high-res is loaded */}
+      {!highResLoaded && <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />}
+      
       <SpeechBubble
         isPerformingActions={isPerformingActions}
         speechContent={currentPhrase}
         playerRef={playerRef}
         groupRef={groupRef}
+        color={color}
       />
     </group>
   );
