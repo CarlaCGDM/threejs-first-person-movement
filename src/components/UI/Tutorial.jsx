@@ -12,20 +12,18 @@ function TutorialScreen({ title, content }) {
 }
 
 export function Tutorial({ onClose }) {
-    const { dispatch } = useSettings();
     const tutorialScreens = [
         {
             title: "Tutorial",
             content: (
                 <>
-                    <p>
-                        Te damos la bienvenida al tour virtual de Cova Bonica.
-                    </p>
+                    <p>Te damos la bienvenida al tour virtual de Cova Bonica.</p>
                     <p>
                         Aquí podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
                     <p>
-                        En el menú superior encontrarás la <strong>guía</strong> <img src={`/assets/icons/ui/toggle_instructions.svg`} alt={"guía"} />  con los controles para poder moverte por la cueva, podrás consultarla en cualqiuer momento..
+                        En el menú superior encontrarás la <strong>guía</strong> <img src={`/assets/icons/ui/toggle_instructions.svg`} alt={"guía"} />  
+                        con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
                     </p>
                 </>
             ),
@@ -54,7 +52,7 @@ export function Tutorial({ onClose }) {
         if (currentScreen < tutorialScreens.length - 1) {
             setCurrentScreen(currentScreen + 1);
         } else {
-            onClose();  // Notify the parent component when the tutorial is finished
+            onClose(); // Notify the parent component when the tutorial is finished
         }
     };
 
@@ -65,21 +63,36 @@ export function Tutorial({ onClose }) {
     };
 
     return (
-        <div style={styles.container}>
-            <TutorialScreen {...tutorialScreens[currentScreen]} />
-            <div style={styles.controls}>
-                {currentScreen > 0 && (
-                    <button onClick={handlePrevious} style={styles.button}>Previous</button>
-                )}
-                <button onClick={handleNext} style={styles.button}>
-                    {currentScreen === tutorialScreens.length - 1 ? "Start" : "Next"}
-                </button>
+        <>
+            {/* Full-screen gray background */}
+            <div style={styles.background}></div>
+
+            <div style={styles.container}>
+                <TutorialScreen {...tutorialScreens[currentScreen]} />
+                <div style={styles.controls}>
+                    {currentScreen > 0 && (
+                        <button onClick={handlePrevious} style={styles.button}>Previous</button>
+                    )}
+                    <button onClick={handleNext} style={styles.button}>
+                        {currentScreen === tutorialScreens.length - 1 ? "Start" : "Next"}
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
 const styles = {
+    background: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "#5a5a5a", // Solid gray background
+        zIndex: 999, // Ensure it's behind the tutorial
+        pointerEvents: "none", // Prevent it from blocking interactions
+    },
     container: {
         position: "absolute",
         top: "50%",
