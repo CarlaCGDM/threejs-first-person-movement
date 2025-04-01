@@ -111,36 +111,37 @@ export function NPCActor({
   };
 
   const updateAnimation = (actionsObj, isHighRes) => {
-  if (!actionsObj) return;
-
-  let nextAction;
-  if (!isPerformingActions) {
-    nextAction = actionsObj['Walk'];
-  } else if (closestTarget) {
-    nextAction = actionsObj['Idle'];
-  } else {
-    nextAction = actionsObj['LookAround'];
-  }
-
-  if (!nextAction) return;
-
-  // Choose the correct last action ref
-  const lastActionRef = isHighRes ? lastHighResActionRef : lastLowResActionRef;
-  const currentAction = lastActionRef.current;
-
-  if (currentAction && currentAction !== nextAction) {
-    console.log(`Crossfading from ${currentAction.getClip().name} to ${nextAction.getClip().name}`);
-    
-    currentAction.crossFadeTo(nextAction, 0.3, true);
-    nextAction.reset().play();  // 🔥 Explicitly call play()
-  } else {
-    console.log(`Playing ${nextAction.getClip().name}`);
-    nextAction.reset().fadeIn(0.3).play();
-  }
-
-  // Store the newly played action
-  lastActionRef.current = nextAction;
-};
+    if (!actionsObj) return;
+  
+    let nextAction;
+    if (!isPerformingActions) {
+      nextAction = actionsObj['Walk'];
+    } else if (closestTarget) {
+      nextAction = actionsObj['Idle'];
+    } else {
+      nextAction = actionsObj['LookAround'];
+    }
+  
+    if (!nextAction) return;
+  
+    // Choose the correct last action ref
+    const lastActionRef = isHighRes ? lastHighResActionRef : lastLowResActionRef;
+    const currentAction = lastActionRef.current;
+  
+    if (currentAction && currentAction !== nextAction) {
+      console.log(`Crossfading from ${currentAction.getClip().name} to ${nextAction.getClip().name}`);
+      
+      currentAction.crossFadeTo(nextAction, 0.3, true);
+      nextAction.reset().play();  // 🔥 Explicitly call play()
+    } else {
+      console.log(`Playing ${nextAction.getClip().name}`);
+      nextAction.reset().fadeIn(0.3).play();
+    }
+  
+    // Store the newly played action
+    lastActionRef.current = nextAction;
+  };
+  
 
 
 
