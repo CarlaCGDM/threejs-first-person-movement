@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useSettings } from '../../../../context/SettingsContext';
 
-export function NPCDebug({ 
+export function SpeechBubble({ 
   isPerformingActions, 
   speechContent,
   groupRef

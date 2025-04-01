@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconButton } from "../UI/IconButton";
+import { IconButton } from "../../UI/IconButton";
 
 function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
 

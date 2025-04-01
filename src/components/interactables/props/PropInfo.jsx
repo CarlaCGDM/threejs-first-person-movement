@@ -3,7 +3,7 @@ import { OrbitControls, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { LazyLoadModel } from "./LazyLoadModel";
-import { IconButton } from "../UI/IconButton";
+import { IconButton } from "../../UI/IconButton";
 
 function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
     const [showHighestRes, setShowHighestRes] = useState(false);

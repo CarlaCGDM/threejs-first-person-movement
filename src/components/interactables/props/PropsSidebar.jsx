@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PropButton } from "./PropButton";
-import { usePlayerTeleport } from "../../hooks/usePlayerTeleport";
-import { useSettings } from "../../context/SettingsContext";
+import { usePlayerTeleport } from "../../player/hooks/usePlayerTeleport";
+import { useSettings } from "../../../context/SettingsContext";
 import * as THREE from "three";
 
 export function PropsSidebar({ props, playerRef, orbitControlsRef }) {

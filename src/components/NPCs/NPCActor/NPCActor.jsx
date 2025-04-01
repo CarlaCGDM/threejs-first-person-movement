@@ -3,7 +3,7 @@ import { useAnimations, useGLTF } from '@react-three/drei';
 import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
 import { useNPCPropInteraction } from './hooks/useNPCPropInteraction';
-import { NPCDebug } from './visuals/NPCDebug';
+import { SpeechBubble } from './visuals/SpeechBubble';
 import phrases from '../data/quotesData.json'; // Import your JSON file
 
 export function NPCActor({
@@ -92,7 +92,7 @@ export function NPCActor({
   return (
     <group ref={groupRef}>
       <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
-      <NPCDebug
+      <SpeechBubble
         isPerformingActions={isPerformingActions}
         speechContent={currentPhrase}
         playerRef={playerRef}

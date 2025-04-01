@@ -1,6 +1,6 @@
 // hooks/usePlayerPosition.js
 import { useFrame } from '@react-three/fiber';
-import { useSettings } from '../context//SettingsContext';
+import { useSettings } from '../../../context/SettingsContext';
 
 export function usePlayerPosition() {
   const { settings, dispatch } = useSettings();

@@ -1,11 +1,11 @@
 import { SettingsPanel } from "./SettingsPanel";
-import { PropsSidebar } from "../props/PropsSidebar";
+import { PropsSidebar } from "../interactables/props/PropsSidebar";
 import { InstructionsPanel } from "./InstructionsPanel";
-import PropInfo from "../props/PropInfo";
-import PointOfInterestInfo from "../pois/PointOfInterestInfo"; // Import the PointOfInterestInfo component
+import PropInfo from "../interactables/props/PropInfo";
+import PointOfInterestInfo from "../interactables/pointsofinterest/PointOfInterestInfo"; // Import the PointOfInterestInfo component
 import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
-import { Minimap } from "../caveEnvironment/Minimap";
+import { Minimap } from "../environment/Minimap";
 import { Navbar } from "./Navbar";
 import { Tutorial } from "./Tutorial"; // Import the Tutorial component
 
