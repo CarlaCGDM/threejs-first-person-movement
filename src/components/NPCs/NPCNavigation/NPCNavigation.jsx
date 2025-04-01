@@ -6,7 +6,7 @@ import { useSettings } from "../../../context/SettingsContext"; // Import settin
 
 export default function NPCNavigation({
     color = "hotpink",
-    model = "/assets/models/characters/leonard.glb",
+    model = "/assets/models/characters/sophie",
     propsData = [],
     poisData = [],
     playerRef,

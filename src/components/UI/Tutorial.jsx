@@ -22,7 +22,7 @@ export function Tutorial({ onClose }) {
                         Aquí podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
                     <p>
-                        En el menú superior encontrarás la <strong>guía</strong> <img src={`/assets/icons/ui/toggle_instructions.svg`} alt={"guía"} />  
+                        En el menú superior encontrarás la <strong>guía</strong> <img src={`/assets/icons/ui/toggle_instructions.svg`} alt={"guía"} />
                         con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
                     </p>
                 </>
@@ -64,9 +64,13 @@ export function Tutorial({ onClose }) {
 
     return (
         <>
-            {/* Full-screen gray background */}
+            {/* Solid Background */}
             <div style={styles.background}></div>
 
+            {/* Semi-transparent Image Overlay */}
+            <div style={styles.imageOverlay}></div>
+
+            {/* Tutorial Container */}
             <div style={styles.container}>
                 <TutorialScreen {...tutorialScreens[currentScreen]} />
                 <div style={styles.controls}>
@@ -90,8 +94,21 @@ const styles = {
         width: "100vw",
         height: "100vh",
         backgroundColor: "#5a5a5a", // Solid gray background
-        zIndex: 999, // Ensure it's behind the tutorial
-        pointerEvents: "none", // Prevent it from blocking interactions
+        zIndex: 998, // Ensure it's behind everything
+        pointerEvents: "none",
+    },
+    imageOverlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('/assets/images/cb_bg.jpg')", // Replace with your image path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        opacity: 0.1, // Set low opacity for faded effect
+        zIndex: 999, // Above the solid background but below the tutorial UI
+        pointerEvents: "none",
     },
     container: {
         position: "absolute",
@@ -105,9 +122,9 @@ const styles = {
         textAlign: "center",
         width: "60vw",
         height: "70vh",
-        zIndex: 2000, // Ensure it appears above everything else
-        fontFamily: "'Mulish', sans-serif", // Same font as navbar
-        boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)", // Similar to navbar
+        zIndex: 2000, // Ensure it's above everything
+        fontFamily: "'Mulish', sans-serif",
+        boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
         pointerEvents: "auto",
     },
     screen: {

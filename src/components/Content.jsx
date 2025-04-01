@@ -50,30 +50,30 @@ export default function Content({ playerRef, orbitControlsRef }) {
                 {/* NPC Management */}
                 {settings.ui.showNPCs && (
                     <NPCManager>
-                        <NPCNavigation
+                        {/* <NPCNavigation
                             key="leonard"
                             color="lime"
                             model="/assets/models/characters/leonard.glb"
                             propsData={propsData}
                             poisData={POIsData}
                             playerRef={playerRef}
-                        />
+                        /> */}
                         <NPCNavigation
                             key="sophie"
                             color="lime"
-                            model="/assets/models/characters/sophie.glb"
+                            model="/assets/models/characters/sophie"
                             propsData={propsData}
                             poisData={POIsData}
                             playerRef={playerRef}
                         />
-                        <NPCNavigation
+                        {/* <NPCNavigation
                             key="lewis"
                             color="lime"
                             model="/assets/models/characters/lewis.glb"
                             propsData={propsData}
                             poisData={POIsData}
                             playerRef={playerRef}
-                        />
+                        /> */}
                     </NPCManager>
                 )}
 

@@ -16,7 +16,7 @@ export function LoadingScreen() {
       alignItems: 'center',
       backgroundColor: 'rgba(39, 38, 38, 0.9)', // Navbar color with opacity
       pointerEvents: 'none',
-      zIndex: 999, // Just below navbar
+      zIndex: 998, // Just below navbar
     },
     container: {
       width: '300px',

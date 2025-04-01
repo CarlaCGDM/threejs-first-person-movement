@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useNPCMovement } from './hooks/useNPCMovement';
 import { useNPCActions } from './hooks/useNPCActions';
@@ -12,7 +12,7 @@ export function NPCActor({
   rotationSpeed = 2,
   smoothness = 0.5,
   onPathComplete,
-  model = "/assets/models/characters/leonard.glb",
+  model = "/assets/models/characters/sophie",
   propsData = [],
   poisData = [],
   playerRef
@@ -35,7 +35,9 @@ export function NPCActor({
     }
   });
 
-  const { scene, animations } = useGLTF(model);
+  const lowResModel = useGLTF(model + '/LOD_01.glb');
+  const highResModel = useGLTF(model + '/LOD_04.glb');
+  const { animations } = useGLTF(model + '/LOD_00.glb');
   const { actions } = useAnimations(animations, groupRef);
   const { closestTarget, findClosestTarget } = useNPCPropInteraction({
     groupRef,
@@ -91,7 +93,9 @@ export function NPCActor({
 
   return (
     <group ref={groupRef}>
-      <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
+      <Suspense fallback={<primitive object={lowResModel.scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />}>
+        <primitive object={highResModel.scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
+      </Suspense>
       <SpeechBubble
         isPerformingActions={isPerformingActions}
         speechContent={currentPhrase}
@@ -101,5 +105,3 @@ export function NPCActor({
     </group>
   );
 }
-
-useGLTF.preload('/assets/models/characters/leonard.glb');
