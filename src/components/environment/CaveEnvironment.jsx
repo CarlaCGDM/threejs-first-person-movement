@@ -71,7 +71,7 @@ export function Ground() {
      <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <Suspense fallback={
         <>
-          <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_00.glb'} />
+          <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_01.glb'} />
           <Loader />
         </>
       }>
