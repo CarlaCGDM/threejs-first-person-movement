@@ -8,17 +8,18 @@ import phrases from '../data/quotesData.json';
 import * as THREE from 'three';
 
 // Modified to accept and apply animations
-const HighResModel = ({ modelUrl, animations, groupRef, onLoad }) => {
+const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation }) => {
   const { scene } = useGLTF(modelUrl);
   const { actions } = useAnimations(animations, scene);
 
-  // Apply animations to this model when it loads
+  // Apply animations immediately when loaded
   useEffect(() => {
-    console.log("Im reloading the actions!")
-    if (scene && animations && animations.length > 0) {
+    if (actions && initialAnimation) {
+      // Start with the correct animation immediately
+      actions[initialAnimation]?.reset().fadeIn(0).play();
       onLoad(actions);
     }
-  }, []);
+  }, [actions, initialAnimation]);
 
   return <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
 };
@@ -41,6 +42,7 @@ export function NPCActor({
   const highResActionsRef = useRef(null);
   const lastLowResActionRef = useRef(null);
   const lastHighResActionRef = useRef(null);
+  const [currentAnimation, setCurrentAnimation] = useState('Walk');
 
 
   // Load animations from low-res model
@@ -113,76 +115,71 @@ export function NPCActor({
   const updateAnimation = (actionsObj, isHighRes) => {
     if (!actionsObj) return;
   
-    let nextAction;
+    // Determine next action based on state
+    let nextActionName;
     if (!isPerformingActions) {
-      nextAction = actionsObj['Walk'];
+      nextActionName = 'Walk';
     } else if (closestTarget) {
-      nextAction = actionsObj['Idle'];
+      nextActionName = 'Idle';
     } else {
-      nextAction = actionsObj['LookAround'];
+      nextActionName = 'LookAround';
     }
   
+    setCurrentAnimation(nextActionName); // Update current animation state
+  
+    const nextAction = actionsObj[nextActionName];
     if (!nextAction) return;
   
-    // Choose the correct last action ref
     const lastActionRef = isHighRes ? lastHighResActionRef : lastLowResActionRef;
     const currentAction = lastActionRef.current;
   
     if (currentAction && currentAction !== nextAction) {
-      console.log(`Crossfading from ${currentAction.getClip().name} to ${nextAction.getClip().name}`);
-      
       currentAction.crossFadeTo(nextAction, 0.3, true);
-      nextAction.reset().play();  // 🔥 Explicitly call play()
-    } else {
-      console.log(`Playing ${nextAction.getClip().name}`);
-      nextAction.reset().fadeIn(0.3).play();
+      nextAction.reset().play();
+    } else if (!currentAction) {
+      nextAction.reset().fadeIn(0).play(); // Immediate start for new models
     }
   
-    // Store the newly played action
     lastActionRef.current = nextAction;
   };
-  
-
-
-
 
 
   // Apply animations to currently visible model
- useEffect(() => {
-  if (!animationsReady) return;
+  useEffect(() => {
+    if (!animationsReady) return;
 
-  if (highResLoaded && highResActionsRef.current) {
-    // Ensure we are triggering an animation update
-    updateAnimation(highResActionsRef.current, true);
-  } else {
-    updateAnimation(lowResActions, false);
-  }
-
-  return () => {
-    const actionsObj = highResLoaded ? highResActionsRef.current : lowResActions;
-    if (actionsObj) {
-      Object.values(actionsObj).forEach(action => {
-        if (action) {
-          action.fadeOut(0.1);
-          action.stop();
-        }
-      });
+    if (highResLoaded && highResActionsRef.current) {
+      // Ensure we are triggering an animation update
+      updateAnimation(highResActionsRef.current, true);
+    } else {
+      updateAnimation(lowResActions, false);
     }
-  };
-}, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
 
-useEffect(() => {
-  console.log('Current animation state:', {
-    isPerformingActions,
-    closestTarget,
-    highResLoaded,
-    animationsReady,
-    lowResActions: Object.keys(lowResActions || {}),
-    highResActions: highResActionsRef.current ? Object.keys(highResActionsRef.current || {}) : "Not Loaded",
-    lastLowResAction: lastLowResActionRef.current ? lastLowResActionRef.current.getClip().name : "None",
-    lastHighResAction: lastHighResActionRef.current ? lastHighResActionRef.current.getClip().name : "None"
-  });
-}, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
+    return () => {
+      const actionsObj = highResLoaded ? highResActionsRef.current : lowResActions;
+      if (actionsObj) {
+        Object.values(actionsObj).forEach(action => {
+          if (action) {
+            action.fadeOut(0.1);
+            action.stop();
+          }
+        });
+      }
+    };
+  }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
+
+  useEffect(() => {
+    console.log('Current animation state:', {
+      isPerformingActions,
+      closestTarget,
+      highResLoaded,
+      animationsReady,
+      lowResActions: Object.keys(lowResActions || {}),
+      highResActions: highResActionsRef.current ? Object.keys(highResActionsRef.current || {}) : "Not Loaded",
+      lastLowResAction: lastLowResActionRef.current ? lastLowResActionRef.current.getClip().name : "None",
+      lastHighResAction: lastHighResActionRef.current ? lastHighResActionRef.current.getClip().name : "None"
+    });
+  }, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
 
 
   return (
@@ -195,6 +192,7 @@ useEffect(() => {
             animations={animations}
             groupRef={groupRef}
             onLoad={handleHighResLoaded}
+            initialAnimation={currentAnimation} // Pass current animation
           />
         )}
       </Suspense>
