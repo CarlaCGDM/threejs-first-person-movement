@@ -7,7 +7,7 @@ import { useSettings } from "../../context/SettingsContext";
 import { useEffect } from "react";
 import { Minimap } from "../environment/Minimap";
 import { Navbar } from "./Navbar";
-import { Tutorial } from "./Tutorial"; // Import the Tutorial component
+import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -52,6 +52,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {/* Other components */}
       <Navbar />
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
+      <InstructionsPanel />
 
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (

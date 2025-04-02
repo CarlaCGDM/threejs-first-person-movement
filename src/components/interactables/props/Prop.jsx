@@ -9,7 +9,6 @@ import { TeleportMarker } from "../TeleportMarker";
 import { FloatingName } from "../FloatingName";
 import { usePlayerDistance } from "../hooks/usePlayerDistance";
 import { useLODModels } from "../hooks/useLODModels";
-import { useLowResModel } from "../hooks/useLowResModel";
 import { usePropInteractions } from "../hooks/usePropInteractions";
 
 /**
@@ -62,9 +61,6 @@ const Prop = forwardRef((props, ref) => {
     // Track player proximity (optimized with frame skipping)
     const playerDistance = usePlayerDistance(position, playerRef);
 
-    // Load low res model
-    const lowres = useLowResModel(validUrl, useModelLoader);
-
     // Load LOD models and get their dimensions/materials
     const { models, size, materials } = useLODModels(validUrl, useModelLoader);
 
@@ -101,15 +97,13 @@ const Prop = forwardRef((props, ref) => {
         <group ref={ref} position={position}>
             {/* Rotated container for model and interactions */}
             <group rotation={radRotation} {...interactionHandlers}>
-                {/* Async model loading with suspense fallback */}
-                <Suspense fallback={<Clone object={lowres} />}>
-                    {/* LOD switching at 10m and 20m distances */}
-                    <Detailed distances={[0, 10, 20]}>
-                        {models.high && <Clone object={models.high} />}  {/* <10m */}
-                        {models.mid && <Clone object={models.mid} />}    {/* 10-20m */}
-                        {models.low && <Clone object={models.low} />}    {/* >20m */}
-                    </Detailed>
-                </Suspense>
+
+                {/* LOD switching at 10m and 20m distances */}
+                <Detailed distances={[0, 10, 20]}>
+                    {models.high && <Clone object={models.high} />}  {/* <10m */}
+                    {models.mid && <Clone object={models.mid} />}    {/* 10-20m */}
+                    {models.low && <Clone object={models.low} />}    {/* >20m */}
+                </Detailed>
 
                 {/* Debug bounding box in development mode */}
                 {devMode && <DebugCube size={size} />}

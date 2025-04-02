@@ -39,12 +39,11 @@ export default function Content({ playerRef, orbitControlsRef }) {
         >
             <Suspense fallback={<LoadingScreen />} >
                 {/* Performance monitoring overlay */}
-                <Stats />
+             
 
                 {/* Scene environment setup */}
                 <SceneWithRoomEnvironment />
                 <ambientLight intensity={0} />
-
 
 
                 {/* NPC Management */}
