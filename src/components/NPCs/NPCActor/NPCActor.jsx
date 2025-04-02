@@ -140,18 +140,18 @@ export function NPCActor({
     };
   }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
 
-  useEffect(() => {
-    console.log('Current animation state:', {
-      isPerformingActions,
-      closestTarget,
-      highResLoaded,
-      animationsReady,
-      lowResActions: Object.keys(lowResActions || {}),
-      highResActions: highResActionsRef.current ? Object.keys(highResActionsRef.current || {}) : "Not Loaded",
-      lastLowResAction: lastLowResActionRef.current ? lastLowResActionRef.current.getClip().name : "None",
-      lastHighResAction: lastHighResActionRef.current ? lastHighResActionRef.current.getClip().name : "None"
-    });
-  }, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
+  // useEffect(() => {
+  //   console.log('Current animation state:', {
+  //     isPerformingActions,
+  //     closestTarget,
+  //     highResLoaded,
+  //     animationsReady,
+  //     lowResActions: Object.keys(lowResActions || {}),
+  //     highResActions: highResActionsRef.current ? Object.keys(highResActionsRef.current || {}) : "Not Loaded",
+  //     lastLowResAction: lastLowResActionRef.current ? lastLowResActionRef.current.getClip().name : "None",
+  //     lastHighResAction: lastHighResActionRef.current ? lastHighResActionRef.current.getClip().name : "None"
+  //   });
+  // }, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
 
   return (
     <group ref={groupRef}>

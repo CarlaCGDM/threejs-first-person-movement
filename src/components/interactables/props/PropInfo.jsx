@@ -36,7 +36,7 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                         {/* 3D Canvas Section */}
                         <div style={{
                             ...styles.modelSection,
-                            width: showMetadata ? "50%" : "100%"
+                            width: showMetadata ? "65%" : "100%"
                         }}>
                             <Canvas
                                 camera={{
@@ -189,10 +189,11 @@ const styles = {
 
     },
     metadataPanel: {
-        overflowY: "auto",
-        backgroundColor: "#F3EEEB",
+        height: "90%",
+        overflowY: "scroll",
+        //backgroundColor: "#F3EEEB",
         padding: "0.5vw 1vw",
-        border: "2px solid #272626",
+        // border: "2px solid #272626",
         borderRadius: "0.25vw",
         paddingBottom: "20px",
         /* Scrollbar styling */
@@ -209,6 +210,7 @@ const styles = {
             backgroundColor: "gray",
             borderRadius: "3px",
         },
+        
     },
     metadataList: {
         display: "flex",

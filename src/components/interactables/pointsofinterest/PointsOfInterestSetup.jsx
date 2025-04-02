@@ -1,4 +1,4 @@
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Clone } from "@react-three/drei";
 import { useRef } from "react";
 import PointOfInterest from "./PointOfInterest";
 
@@ -25,7 +25,7 @@ export function PointsOfInterestSetup({ POIs }) {
             ))}
 
             {/* Occlusion mesh */}
-            <primitive ref={occlusionMeshRef} object={occlusionMesh.scene} visible={false} />
+            {/* <Clone ref={occlusionMeshRef} object={occlusionMesh.scene} visible={false} /> */}
         </>
     );
 }

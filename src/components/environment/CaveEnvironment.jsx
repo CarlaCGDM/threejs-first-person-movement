@@ -23,7 +23,7 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
       child.material.depthWrite = true
       child.material.transparent = false
     }
-});
+  });
 
   return <primitive object={scene} />;
 };
@@ -68,16 +68,19 @@ export function Ground() {
 
   return (
     <>
-     <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
+      {/* <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <Suspense fallback={
         <>
           <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_01.glb'} />
           <Loader />
         </>
       }>
-        <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
+        
 
-      </Suspense>
+      </Suspense> */}
+
+      <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
+      <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
     </>
   );
 }

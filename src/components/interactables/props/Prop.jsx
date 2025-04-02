@@ -100,7 +100,7 @@ const Prop = forwardRef((props, ref) => {
                 {/* Async model loading with suspense fallback */}
                 <Suspense fallback={models.low ?
                     <Clone object={models.low} /> :  // Show lowest LOD while loading
-                    <LoadingFallback />             // Generic loader if no models exist
+                    null             // Generic loader if no models exist
                 }>
                     {/* LOD switching at 10m and 20m distances */}
                     <Detailed distances={[0, 10, 20]}>

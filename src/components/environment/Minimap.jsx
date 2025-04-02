@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
 
 function MinimapScene({ playerRef }) {
-    const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_01.glb"); 
-    const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb"); 
+    const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb");
+    const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
 
     const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
     const [isPlayerReady, setIsPlayerReady] = useState(false); // 🔹 Track when playerRef is valid
@@ -73,8 +73,10 @@ function MinimapScene({ playerRef }) {
 
     return (
         <>
-            <Clone object={miniModel} />
-            <Clone object={miniPath} />
+            <Suspense fallback={null} >
+                <Clone object={miniModel} />
+                <Clone object={miniPath} />
+            </Suspense >
 
             {/* Player Indicator */}
             {isPlayerReady && (
@@ -109,20 +111,20 @@ export function Minimap({ playerRef }) {
 // Styles
 const styles = {
     minimapContainer: {
-      position: "fixed", // Changed from absolute to fixed
-      bottom: "5px",
-      right: "5px",
-      width: "200px",
-      height: "200px",
-      border: "1px solid #3a3a3a", // Matches navbar border
-      borderRadius: "0.5vw",
-      backgroundColor: "#272626CC", // Same as navbar
-      zIndex: 1000,
-      overflow: "hidden",
-      // Remove borderRadius for sharp corners
+        position: "fixed", // Changed from absolute to fixed
+        bottom: "5px",
+        right: "5px",
+        width: "200px",
+        height: "200px",
+        border: "1px solid #3a3a3a", // Matches navbar border
+        borderRadius: "0.5vw",
+        backgroundColor: "#272626CC", // Same as navbar
+        zIndex: 1000,
+        overflow: "hidden",
+        // Remove borderRadius for sharp corners
     },
     minimapCanvas: {
-      width: "100%",
-      height: "100%",
+        width: "100%",
+        height: "100%",
     },
-  };
+};

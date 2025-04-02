@@ -54,7 +54,7 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                         {/* Image Viewer - Left Side */}
                         <div style={{
                             ...styles.imageViewer,
-                            width: showMetadata ? "50%" : "100%"
+                            width: showMetadata ? "70%" : "100%"
                         }}>
                             {/* Main Image Container */}
                             <div style={styles.mainImageContainer}>
@@ -285,13 +285,27 @@ const styles = {
         alignItems: "center",
     },
     metadataPanel: {
-        backgroundColor: "#F3EEEB",
-        padding: "20px",
-        border: "2px solid #272626",
+        height: "90%",
+        overflowY: "scroll",
+        //backgroundColor: "#F3EEEB",
+        padding: "0.5vw 1vw",
+        // border: "2px solid #272626",
         borderRadius: "0.25vw",
-        overflowY: "auto",
-        scrollbarWidth: "thin",
-        scrollbarColor: "gray transparent",
+        paddingBottom: "20px",
+        /* Scrollbar styling */
+        scrollbarWidth: "thin", // For Firefox
+        scrollbarColor: "gray transparent", // For Firefox
+        /* WebKit browsers (Chrome, Safari) */
+        "&::-webkit-scrollbar": {
+            width: "6px",
+        },
+        "&::-webkit-scrollbar-track": {
+            background: "transparent",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "gray",
+            borderRadius: "3px",
+        },
     },
     metadataList: {
         display: "flex",

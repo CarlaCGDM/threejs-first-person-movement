@@ -1,4 +1,4 @@
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Clone } from "@react-three/drei";
 import { useRef } from "react";
 import Prop from "./Prop";
 
@@ -28,7 +28,7 @@ export function PropsSetup({ props }) {
       ))}
 
       {/* Occlusion mesh */}
-      <primitive ref={occlusionMeshRef} object={occlusionMesh.scene} visible={false} />
+      {/* <Clone ref={occlusionMeshRef} object={occlusionMesh.scene} visible={false} /> */}
     </>
   );
 }
