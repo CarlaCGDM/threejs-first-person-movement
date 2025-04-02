@@ -34,14 +34,14 @@
       "teleportRotationAngle": 290
     },
     {
-      "artifactName": "Maxilar león",
+      "artifactName": "Panthera leo",
       "position": [5.825, -2.129, 2.659],
       "rotation": [-12.074, -110.73, 0.099],
       "metadata": {
-        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "historicalPeriod":"Pleistoceno superior | Paleolítico superior",
         "excavationSite":"Cova del Rinoceront, Castelldefels",
         "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
-        "description":"Maxilar de un ejemplar de león que vivió hace más de 80.000 años.",
+        "description":"Maxilar de un ejemplar de león adulto que vivió hace 39.500 años.",
         "size": "12 cm de largo x 7,57 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },
@@ -58,7 +58,7 @@
         "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
         "excavationSite":"Cova del Rinoceront, Castelldefels",
         "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona).",
-        "description":"Cráneo de rinoceronte de Hundsheim, una familia considerada más rara y menos extendida que el resto de especies. Se trata de un individuo juvenil, que vivió hace 150.000 años.",
+        "description":"Cráneo de rinoceronte de Hundsheim, una familia considerada más rara y menos extendida que el resto de especies. Se trata de un individuo juvenil, que vivió hace 90.000 años.",
         "size": "66,8 cm de largo x 42,2 cm de ancho",
         "digitizedBy":"Laura Gómez Morgado"
       },

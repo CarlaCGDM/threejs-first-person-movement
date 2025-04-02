@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 export function PropButton({ prop, onClick, isVisited }) {
   const [isHovered, setIsHovered] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
-  const iconUrl = `${prop.iconFolder}512.png`;
+  const iconUrl = `${prop.iconFolder}128.png`;
 
   useEffect(() => {
     const tooltipContainer = document.getElementById("tooltip-root");
