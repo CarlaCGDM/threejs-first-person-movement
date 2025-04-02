@@ -54,10 +54,12 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                         {/* Image Viewer - Left Side */}
                         <div style={{
                             ...styles.imageViewer,
-                            width: showMetadata ? "70%" : "100%"
+                            width: showMetadata ? "60%" : "100%",
                         }}>
                             {/* Main Image Container */}
-                            <div style={styles.mainImageContainer}>
+                            <div style={{...styles.mainImageContainer,
+                                height: showMetadata ? "auto" : "80%"}
+                            }>
                                
                                 <div style={styles.imageContainer}>
                                     <img
@@ -148,14 +150,14 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
 
                     {/* Buttons Row */}
                     <div style={styles.buttonsRow}>
-                        <IconButton
+                        {/* <IconButton
                             iconOn="icon_measure.svg"
                             iconOff="icon_measure.svg"
                             isActive={false}
                             onClick={() => console.log("Measure tool")}
                             title="Try quiz"
                             backgroundColor="#272626"
-                        />
+                        /> */}
                         <IconButton
                             iconOn="toggle_info_on.svg"
                             iconOff="toggle_info_off.svg"
@@ -209,10 +211,11 @@ const styles = {
         flex: 1,
         gap: "20px",
         overflow: "hidden",
+        
     },
     imageViewer: {
-        width: "50%",
         display: "flex",
+        height: "100%",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
@@ -264,6 +267,7 @@ const styles = {
         gap: "10px",
         height: "80px",
         overflow: "hidden", 
+        width: "100%",
     },
     thumbnail: {
         width: "120px",

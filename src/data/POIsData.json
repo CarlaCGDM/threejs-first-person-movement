@@ -6,7 +6,7 @@
       "description": "Esta zona corresponde a la primera de las salas laterales que conforman la cueva, la más cercana a la entrada."
     },
     "modelFile": "/assets/models/POIs/POI1.glb",
-    "imageFile": "/assets/images/POIs/POI1.PNG"
+    "imageFile": "/assets/images/POIs/Sala1.jpg"
   },
   {
     "poiName": "Restos neolíticos",
@@ -15,7 +15,7 @@
       "description": "En esta zona de la cueva fue donde se encontraron los restos que, a través de su estudio, ha permitido conocer a las poblaciones que la habitaron durante el neolítico. Se han conservado por un lado, materiales orgánicos (huesos humanos y de pequeños mamíferos o restos carbonizados de árboles y de arbustos), y por otro, herramientas y objetos diversos (utensilios de piedra, adornos, cerámica, etc.)."
     },
     "modelFile": "/assets/models/POIs/POI2.glb",
-    "imageFile": "/assets/images/POIs/POI2.PNG"
+    "imageFile": "/assets/images/POIs/RestosNeoliticos.jpg"
   },
   {
     "poiName": "Sala lateral 2",
@@ -24,7 +24,7 @@
       "description": "Esta zona corresponde a la segunda de las salas laterales que conforman la cueva, la que se encuentra más al interior."
     },
     "modelFile": "/assets/models/POIs/POI3.glb",
-    "imageFile": "/assets/images/POIs/POI3.PNG"
+    "imageFile": "/assets/images/POIs/Sala2.jpg"
   },
   {
     "poiName": "Escombrera mina",
@@ -33,6 +33,6 @@
       "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
     },
     "modelFile": "/assets/models/POIs/POI4.glb",
-    "imageFile": "/assets/images/POIs/POI4.PNG"
+    "imageFile": "/assets/images/POIs/Escombrera.jpg"
   }
 ]

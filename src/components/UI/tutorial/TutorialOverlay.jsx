@@ -35,7 +35,7 @@ export function TutorialOverlay() {
       left: 0,
       width: "100vw",
       height: "100vh",
-      backgroundImage: "url('/assets/images/cb_bg.jpg')",
+      backgroundImage: "url('/assets/images/Portada.jpg')",
       backgroundSize: "cover",
       backgroundPosition: "center",
       opacity: 0.6,

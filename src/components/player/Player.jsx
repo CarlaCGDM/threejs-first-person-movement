@@ -21,8 +21,8 @@ export const Player = forwardRef(({ keys }, ref) => {
     }, [groupRef]);
 
     usePlayerPosition(); // Handle player positioning logic
-    usePlayerCamera(groupRef, camera); // Attach camera to the player
     usePlayerMovement(ref, keys, camera, playerWalkSpeed, playerJumpForce, isGrounded); // Handle movement
+    usePlayerCamera(groupRef, camera); // Attach camera to the player
     usePlayerPhysics(ref, groupRef); // Apply physics logic
 
     return (

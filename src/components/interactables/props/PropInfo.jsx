@@ -106,14 +106,14 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                             backgroundColor="#272626"
                         />
 
-                        <IconButton
+                        {/* <IconButton
                             iconOn="icon_measure.svg"
                             iconOff="icon_measure.svg"
                             isActive={false}
                             onClick={() => console.log("Measure tool")}
                             title="Try quiz"
                             backgroundColor="#272626"
-                        />
+                        /> */}
                         <IconButton
                             iconOn="toggle_info_on.svg"
                             iconOff="toggle_info_off.svg"
