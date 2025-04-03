@@ -1,0 +1,16 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    # netlify.toml
+    
+[build]
+  environment = { NODE_ENV = "production" }
+
+[build.processing]
+  skip_processing = true  # Disables fingerprinting
