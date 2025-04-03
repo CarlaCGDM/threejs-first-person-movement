@@ -42,7 +42,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />  con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
+                        />con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
                     </p>
                 </>
             ),
