@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ArrowLeft } from '../icons/ArrowLeft';
+import { ArrowRight } from '../icons/ArrowRight';
 
 export function TutorialButton({
   children,
@@ -6,7 +8,7 @@ export function TutorialButton({
   variant = 'primary', // 'primary' | 'secondary'
   isHighlighted = false,
   icon = null, // 'arrow_left' | 'arrow_right'
-  iconSize = 30, // New prop for icon size (default 20px)
+  iconSize = 30, // Size in pixels
   ...props
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -32,60 +34,13 @@ export function TutorialButton({
   const colors = colorConfig[variant];
   const currentIconColor = isHovered ? colors.hoverIconColor : colors.iconColor;
 
-  // Convert hex to RGB for SVG filter
-  const hexToRgb = (hex) => {
-    const r = parseInt(hex.slice(1, 3), 16) / 255;
-    const g = parseInt(hex.slice(3, 5), 16) / 255;
-    const b = parseInt(hex.slice(5, 7), 16) / 255;
-    return { r, g, b };
-  };
-
-  const { r, g, b } = hexToRgb(currentIconColor);
-  const filterId = `btn-filter-${icon || 'default'}`;
-
-  // Button content
-  const renderContent = () => {
-    if (icon) {
-      return (
-        <>
-          <svg width="0" height="0" style={{ position: "absolute" }}>
-            <defs>
-              <filter id={filterId} colorInterpolationFilters="sRGB">
-                <feColorMatrix
-                  type="matrix"
-                  values={`
-                    ${r} 0 0 0 0
-                    0 ${g} 0 0 0
-                    0 0 ${b} 0 0
-                    0 0 0 1 0
-                  `}
-                />
-              </filter>
-            </defs>
-          </svg>
-          <img
-            src={`/assets/icons/ui/${icon}.svg`}
-            alt=""
-            style={{
-              width: `${iconSize}px`,
-              height: `${iconSize}px`,
-              filter: `url(#${filterId})`,
-              transition: 'filter 0.2s ease',
-            }}
-          />
-        </>
-      );
-    }
-    return children;
-  };
-
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        padding: '0.5vw 1vw',
+        //padding: '0.5vw 1vw',
         borderRadius: '1vw',
         fontSize: '1rem',
         fontWeight: 600,
@@ -107,9 +62,19 @@ export function TutorialButton({
       }}
       {...props}
     >
-      {icon === 'arrow_left' && renderContent()}
+      {icon === 'arrow_left' && (
+        <ArrowLeft 
+          color={currentIconColor} 
+          size={iconSize}
+        />
+      )}
       {children || (variant === 'primary' && icon === null ? 'Iniciar' : null)}
-      {icon === 'arrow_right' && renderContent()}
+      {icon === 'arrow_right' && (
+        <ArrowRight 
+          color={currentIconColor} 
+          size={iconSize}
+        />
+      )}
     </button>
   );
 }

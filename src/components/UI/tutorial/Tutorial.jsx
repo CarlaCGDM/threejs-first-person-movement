@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { TutorialScreen } from "./TutorialScreen";
 import { TutorialContentWrapper } from "./TutorialContentWrapper";
 import { TutorialControls } from "./TutorialControls";
 import { TutorialOverlay } from "./TutorialOverlay";
+import { Fossil } from "../icons/Fossil";
+import { Guide } from "../icons/Guide";
+import { MinimapOn } from "../icons/MinimapOn";
+import { NpcsOn } from "../icons/NPCsOn";
 
 export function Tutorial({ onClose }) {
 
@@ -16,17 +20,18 @@ export function Tutorial({ onClose }) {
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
                     <p>
-                        En el menú superior encontrarás la <strong>guía</strong><img
-                            src={`/assets/icons/ui/toggle_instructions.svg`}
-                            alt={"guía"}
+                        En el menú superior encontrarás la <strong>guía</strong><Guide
+                            color="#E2E2E2"
+                            size={30}
                             style={{
+                                display: "inline-block",
                                 height: "1.4em",
                                 width: "auto",
                                 verticalAlign: "middle",
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
+                        />  con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
                     </p>
                 </>
             ),
@@ -36,27 +41,29 @@ export function Tutorial({ onClose }) {
             content: (
                 <>
                     <p>
-                        También el <strong>localizador</strong>,<img
-                            src={`/assets/icons/ui/toggle_minimap_on.svg`}
-                            alt={"localizador"}
+                        También el <strong>localizador</strong>, <MinimapOn
+                            color="#E2E2E2"
+                            size={30}
                             style={{
+                                display: "inline-block",
                                 height: "1.4em",
                                 width: "auto",
                                 verticalAlign: "middle",
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><img
-                            src={`/assets/icons/ui/fossil.svg`}
-                            alt={"fósil"}
+                        />  para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
+                            color="#E2E2E2"
+                            size={30}
                             style={{
+                                display: "inline-block",
                                 height: "1.4em",
                                 width: "auto",
                                 verticalAlign: "middle",
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> con el que acceder a información interesante sobre el yacimiento arqueológico.
+                        />  con el que acceder a información interesante sobre el yacimiento arqueológico.
                     </p>
                     <p>
                         Por último, en el menú inferior tendrás las <strong>miniaturas</strong><img
