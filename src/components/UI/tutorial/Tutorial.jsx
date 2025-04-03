@@ -8,6 +8,17 @@ import { Guide } from "../icons/Guide";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 
+const maxilarLeonImg = new Image();
+maxilarLeonImg.src = "/assets/icons/props/MaxilarLeon/64.png";
+const screenshot_npcs_01 = new Image();
+screenshot_npcs_01.src = "/assets/images/screenshots/screenshot_npcs_01.png";
+const screenshot_npcs_02 = new Image();
+screenshot_npcs_02.src = "/assets/images/screenshots/screenshot_npcs_02.png";
+const screenshot_props_03 = new Image();
+screenshot_props_03.src = "/assets/images/screenshots/screenshot_props_03.png";
+const screenshot_props_04 = new Image();
+screenshot_props_04.src = "/assets/images/screenshots/screenshot_props_04.png";
+
 export function Tutorial({ onClose }) {
 
     const [currentScreen, setCurrentScreen] = useState(0);
@@ -181,17 +192,18 @@ export function Tutorial({ onClose }) {
                         Otros <strong>visitantes virtuales</strong> te acompañarán en la visita. Prueba a acercarte a ellos, ¡tienen cosas muy interesantes que decir!
                     </p>
                     <p>
-                        Si prefieres realizar la visita en solitario, puedes ocultarlos pulsando sobre el <strong>visitante</strong><img
-                            src={`/assets/icons/ui/toggle_npcs_on.svg`}
-                            alt={"fósil"}
+                        Si prefieres realizar la visita en solitario, puedes ocultarlos pulsando sobre el <strong>visitante</strong><NpcsOn
+                            color="#E2E2E2"
+                            size={30}
                             style={{
+                                display: "inline-block",
                                 height: "1.4em",
                                 width: "auto",
                                 verticalAlign: "middle",
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />  en el menú superior.
+                        /> en el menú superior.
                     </p>
                 </>
             ),
