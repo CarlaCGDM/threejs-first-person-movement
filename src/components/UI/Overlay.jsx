@@ -23,6 +23,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
 
   const handleToggleTutorial = () => {
     dispatch({ type: "TOGGLE_TUTORIAL" });
+    dispatch({ type: "TOGGLE_MINIMAP" });
   };
 
   useEffect(() => {

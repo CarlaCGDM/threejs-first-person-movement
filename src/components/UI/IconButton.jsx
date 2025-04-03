@@ -14,10 +14,17 @@ export function IconButton({
   size = 30,
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [hasBeenClicked, setHasBeenClicked] = useState(false);
   const iconPath = isActive ? iconOn : (iconOff || iconOn);
 
+  const handleClick = () => {
+    setHasBeenClicked(true); // Stop the highlight effect after the first click
+    isHighlighted = false;
+    onClick();
+};
+
   // Determine the current color to be applied
-  const currentColor = isHovered ? hoverColor : (isHighlighted ? highlightColor : color);
+  const currentColor = isHovered ? hoverColor : (isHighlighted && !hasBeenClicked ? highlightColor : color);
 
   // Function to convert hex to RGB
   const hexToRgb = (hex) => {
@@ -32,30 +39,9 @@ export function IconButton({
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      {/* Tooltip */}
-      {/* {isHovered && (
-        <div style={{
-          position: 'absolute',
-          bottom: '100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: '#E5B688',
-          color: '#272626',
-          padding: '4px 8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          fontFamily: 'Mulish, sans-serif',
-          whiteSpace: 'nowrap',
-          zIndex: 100,
-          marginBottom: '8px',
-          pointerEvents: 'none',
-        }}>
-          {title}
-        </div>
-      )} */}
-
+      
       {/* Glow Effect */}
-      {isHighlighted && (
+      {isHighlighted && !hasBeenClicked && (
         <div style={{
           position: 'absolute',
           top: '-4px',
@@ -91,7 +77,7 @@ export function IconButton({
 
       {/* Button */}
       <button
-        onClick={onClick}
+        onClick={handleClick}
         title={title} // Fallback for mobile
         aria-pressed={isActive}
         onMouseEnter={() => setIsHovered(true)}

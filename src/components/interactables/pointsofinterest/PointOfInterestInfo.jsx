@@ -231,11 +231,13 @@ const styles = {
         alignItems: "center",
         justifyContent: "center",
         padding: "10px",
+        
     },
     mainImage: {
         width: "100%",
         height: "100%",
         objectFit: "cover",
+        borderRadius: "0.5vw",
     },
     imageCredits: {
         color: "#272626",

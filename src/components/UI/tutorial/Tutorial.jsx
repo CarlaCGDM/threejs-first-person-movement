@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { TutorialScreen } from "./TutorialScreen";
 import { TutorialContentWrapper } from "./TutorialContentWrapper";
 import { TutorialControls } from "./TutorialControls";
@@ -8,8 +8,6 @@ import { Guide } from "../icons/Guide";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 
-const maxilarLeonImg = new Image();
-maxilarLeonImg.src = "/assets/icons/props/MaxilarLeon/64.png";
 const screenshot_npcs_01 = new Image();
 screenshot_npcs_01.src = "/assets/images/screenshots/screenshot_npcs_01.png";
 const screenshot_npcs_02 = new Image();
@@ -19,7 +17,17 @@ screenshot_props_03.src = "/assets/images/screenshots/screenshot_props_03.png";
 const screenshot_props_04 = new Image();
 screenshot_props_04.src = "/assets/images/screenshots/screenshot_props_04.png";
 
+
 export function Tutorial({ onClose }) {
+
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const imageSrc = "/assets/icons/props/MaxilarLeon/64.png";
+
+    useEffect(() => {
+        const img = new Image();
+        img.src = imageSrc;
+        img.onload = () => setImageLoaded(true); // Mark as loaded when finished
+    }, []);
 
     const [currentScreen, setCurrentScreen] = useState(0);
     const tutorialScreens = [
@@ -63,7 +71,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
+                        />para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -78,8 +86,8 @@ export function Tutorial({ onClose }) {
                     </p>
                     <p>
                         Por último, en el menú inferior tendrás las <strong>miniaturas</strong><img
-                            src={`/assets/icons/props/MaxilarLeon/64.png`}
-                            alt={"miniatura"}
+                            src={imageSrc}
+                            alt="miniatura"
                             style={{
                                 height: "2em",
                                 width: "auto",
