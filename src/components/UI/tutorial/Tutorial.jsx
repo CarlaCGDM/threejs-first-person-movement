@@ -52,7 +52,7 @@ export function Tutorial({ onClose }) {
             content: (
                 <>
                     <p>
-                        También el <strong>localizador</strong>, <MinimapOn
+                        También el <strong>localizador</strong>,<MinimapOn
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -63,7 +63,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />  para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
+                        /> para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -74,7 +74,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />  con el que acceder a información interesante sobre el yacimiento arqueológico.
+                        />con el que acceder a información interesante sobre el yacimiento arqueológico.
                     </p>
                     <p>
                         Por último, en el menú inferior tendrás las <strong>miniaturas</strong><img
@@ -87,7 +87,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> de los diferentes hallazgos que puedes ver durante el recorrido. De esta manera, te podrás teletransportar directamente delante de ellos.
+                        />de los diferentes hallazgos que puedes ver durante el recorrido. De esta manera, te podrás teletransportar directamente delante de ellos.
                     </p>
                 </>
             ),
@@ -203,7 +203,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> en el menú superior.
+                        />en el menú superior.
                     </p>
                 </>
             ),

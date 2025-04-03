@@ -40,7 +40,7 @@ export function TutorialButton({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        //padding: '0.5vw 1vw',
+        padding: '0 2%',
         borderRadius: '1vw',
         fontSize: '1rem',
         fontWeight: 600,
