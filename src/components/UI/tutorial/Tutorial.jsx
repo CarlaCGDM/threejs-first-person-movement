@@ -1,4 +1,4 @@
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { TutorialScreen } from "./TutorialScreen";
 import { TutorialContentWrapper } from "./TutorialContentWrapper";
 import { TutorialControls } from "./TutorialControls";
@@ -8,26 +8,7 @@ import { Guide } from "../icons/Guide";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 
-const screenshot_npcs_01 = new Image();
-screenshot_npcs_01.src = "/assets/images/screenshots/screenshot_npcs_01.png";
-const screenshot_npcs_02 = new Image();
-screenshot_npcs_02.src = "/assets/images/screenshots/screenshot_npcs_02.png";
-const screenshot_props_03 = new Image();
-screenshot_props_03.src = "/assets/images/screenshots/screenshot_props_03.png";
-const screenshot_props_04 = new Image();
-screenshot_props_04.src = "/assets/images/screenshots/screenshot_props_04.png";
-
-
 export function Tutorial({ onClose }) {
-
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const imageSrc = "/assets/icons/props/MaxilarLeon/64.png";
-
-    useEffect(() => {
-        const img = new Image();
-        img.src = imageSrc;
-        img.onload = () => setImageLoaded(true); // Mark as loaded when finished
-    }, []);
 
     const [currentScreen, setCurrentScreen] = useState(0);
     const tutorialScreens = [
@@ -86,16 +67,16 @@ export function Tutorial({ onClose }) {
                     </p>
                     <p>
                         Por último, en el menú inferior tendrás las <strong>miniaturas</strong><img
-                            src={imageSrc}
-                            alt="miniatura"
-                            style={{
-                                height: "2em",
-                                width: "auto",
-                                verticalAlign: "middle",
-                                margin: "0 0.3em",
-                                marginBottom: "0.1em"
-                            }}
-                        />de los diferentes hallazgos que puedes ver durante el recorrido. De esta manera, te podrás teletransportar directamente delante de ellos.
+                                src="/assets/icons/props/MaxilarLeon/64.png"
+                                alt="miniatura"
+                                style={{
+                                    height: "2em",
+                                    width: "auto",
+                                    verticalAlign: "middle",
+                                    margin: "0 0.3em",
+                                    marginBottom: "0.1em"
+                                }}
+                            />de los diferentes hallazgos que puedes ver durante el recorrido. De esta manera, te podrás teletransportar directamente delante de ellos.
                     </p>
                 </>
             ),
