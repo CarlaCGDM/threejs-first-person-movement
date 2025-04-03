@@ -13,7 +13,7 @@ const initialSettings = {
   devMode: false,
 
   ui: {
-    showMinimap: true,
+    showMinimap: false,
     showInstructions: true,
     showCredits: false,
     showNPCs: true,
