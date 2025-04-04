@@ -29,6 +29,7 @@ import { usePropInteractions } from "../hooks/usePropInteractions";
  * @param {number} [teleportRotationAngle=0] - Facing direction after teleport
  * @param {React.Ref} occlusionMeshRef - Reference for name tag visibility culling
  * @param {React.Ref} ref - Forwarded ref to the group
+ * 
  */
 const Prop = forwardRef((props, ref) => {
     // Destructure all component props
@@ -36,6 +37,7 @@ const Prop = forwardRef((props, ref) => {
         position,
         rotation,
         artifactName,
+        infoViewRotation,
         metadata,
         modelFile,
         detailedModelFile,
@@ -69,6 +71,7 @@ const Prop = forwardRef((props, ref) => {
         materials,
         dispatch,
         artifactName,
+        infoViewRotation,
         metadata,
         detailedModelFile,
         size

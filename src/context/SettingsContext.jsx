@@ -18,7 +18,9 @@ const initialSettings = {
     showCredits: false,
     showNPCs: true,
     showTutorial: true,
-    isFullscreen: false
+    isFullscreen: false,
+    isAudioOn: false,
+    audioVolume: 0.3,
   },
 
   npc: {
@@ -61,10 +63,22 @@ function settingsReducer(state, action) {
       return { ...state, ui: { ...state.ui, showCredits: !state.ui.showCredits } };
     case "TOGGLE_NPCS":
       return { ...state, ui: { ...state.ui, showNPCs: !state.ui.showNPCs } };
-    case 'TOGGLE_TUTORIAL': 
+    case 'TOGGLE_TUTORIAL':
       return { ...state, ui: { ...state.ui, showTutorial: !state.ui.showTutorial } };
     case "TOGGLE_FULLSCREEN":
       return { ...state, ui: { ...state.ui, isFullscreen: !state.ui.isFullscreen } };
+    case "TOGGLE_AUDIO":
+      return { ...state, ui: { ...state.ui, isAudioOn: !state.ui.isAudioOn } };
+
+    case 'SET_VOLUME':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          audioVolume: action.payload,
+          isAudioOn: action.payload > 0 // Automatically unmute if volume > 0
+        }
+      };
 
     // NPC waypoint management cases
     case "ADD_OCCUPIED_WAYPOINT":

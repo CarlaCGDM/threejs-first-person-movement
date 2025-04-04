@@ -1,4 +1,5 @@
 import { useSettings } from '../../context/SettingsContext';
+import { VolumeControl } from './audio/VolumeControl';
 import { IconButton } from './IconButton';
 
 export function Navbar() {
@@ -43,6 +44,8 @@ export function Navbar() {
                         onClick={() => dispatch({ type: "TOGGLE_CREDITS" })}
                         title="Show Credits"
                     />
+
+                    < VolumeControl />
 
                     <IconButton
                         iconOn="toggle_fullscreen.svg"

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Minimap } from "../environment/Minimap";
 import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
+import { AudioManager } from "./audio/AudioManager";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -24,6 +25,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
   const handleToggleTutorial = () => {
     dispatch({ type: "TOGGLE_TUTORIAL" });
     dispatch({ type: "TOGGLE_MINIMAP" });
+    dispatch({ type: "TOGGLE_AUDIO" });
   };
 
   useEffect(() => {
@@ -51,6 +53,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {settings.ui.showTutorial && <Tutorial onClose={handleToggleTutorial} />}
 
       {/* Other components */}
+      <AudioManager />
       <Navbar />
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       <InstructionsPanel />
@@ -61,6 +64,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
           artifactName={selectedProp.artifactName}
           metadata={selectedProp.metadata}
           detailedModelFile={selectedProp.detailedModelFile}
+          infoViewRotation={selectedProp.infoViewRotation}
           size={selectedProp.size}
           onClose={handleClosePropInfo}
         />

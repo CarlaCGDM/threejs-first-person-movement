@@ -1,22 +1,74 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { OrbitControls, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import * as THREE from "three";
 import { LazyLoadModel } from "./LazyLoadModel";
 import { IconButton } from "../../UI/IconButton";
 
-function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) {
+const degToRad = (degrees) => degrees * (Math.PI / 180);
+
+function SmartModel({ url, size, viewerSize }) {
+    const groupRef = useRef();
+    const [initialScale, setInitialScale] = useState(1);
+    const controlsRef = useRef();
+
+    useEffect(() => {
+        if (!size || viewerSize.width === 0) return;
+
+        // Calculate initial scale only once when component mounts
+        const targetScreenHeight = viewerSize.height * 0.7;
+        const maxDimension = Math.max(size.x, size.y, size.z);
+        const scale = (targetScreenHeight / viewerSize.height) * 5 / maxDimension;
+
+        setInitialScale(scale);
+
+        // Set initial camera position based on model size
+        if (controlsRef.current) {
+            const distance = maxDimension * 2.5;
+            controlsRef.current.object.position.set(0, 0, distance);
+            controlsRef.current.target.set(0, 0, 0);
+            controlsRef.current.update();
+        }
+    }, [size, viewerSize]);
+
+    return (
+        <group ref={groupRef} scale={[initialScale, initialScale, initialScale]}>
+            <LazyLoadModel url={url} size={size} />
+        </group>
+    );
+}
+
+
+function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile, size, onClose }) {
     const [showHighestRes, setShowHighestRes] = useState(false);
     const [showMetadata, setShowMetadata] = useState(true);
-    const modelSize = size || new THREE.Vector3(1, 1, 1);
-    const maxDimension = Math.max(modelSize.x, modelSize.y, modelSize.z);
-    const cameraDistance = maxDimension * 1;
+    const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
+    const viewerRef = useRef(null);
+
+    useEffect(() => {
+        const updateSize = () => {
+            if (viewerRef.current) {
+                const rect = viewerRef.current.getBoundingClientRect();
+                setViewerSize({
+                    width: rect.width,
+                    height: rect.height
+                });
+            }
+        };
+
+        updateSize();
+        window.addEventListener('resize', updateSize);
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
 
     const getModelToShow = () => {
         const modelPath = showHighestRes ? "/LOD_04.glb" : "/LOD_02.glb";
         return (
             <Suspense fallback={<Html center><span>Loading...</span></Html>}>
-                <LazyLoadModel url={`${detailedModelFile}${modelPath}`} size={size} />
+                <SmartModel
+                    url={`${detailedModelFile}${modelPath}`}
+                    size={size}
+                    viewerSize={viewerSize}
+                />
             </Suspense>
         );
     };
@@ -34,13 +86,13 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                     {/* Info Viewer (3D Canvas + Metadata) */}
                     <div style={styles.infoViewer}>
                         {/* 3D Canvas Section */}
-                        <div style={{
+                        <div ref={viewerRef} style={{
                             ...styles.modelSection,
                             width: showMetadata ? "65%" : "100%"
                         }}>
                             <Canvas
                                 camera={{
-                                    position: [cameraDistance, cameraDistance, cameraDistance],
+                                    //position: [1, 1, 1],
                                     fov: 45,
                                     near: 0.01,
                                     far: 1000,
@@ -49,7 +101,15 @@ function PropInfo({ artifactName, metadata, detailedModelFile, size, onClose }) 
                             >
                                 <ambientLight intensity={4.5} />
                                 <pointLight position={[10, 10, 10]} intensity={0.5} />
-                                {getModelToShow()}
+                                <group>
+                                    <group rotation={[
+                                        degToRad(infoViewRotation[0]),
+                                        degToRad(infoViewRotation[1]),
+                                        degToRad(infoViewRotation[2])
+                                    ]}>
+                                        {getModelToShow()}
+                                    </group>
+                                </group>
                                 <OrbitControls enablePan={true} enableZoom={true} />
                             </Canvas>
                         </div>
@@ -210,7 +270,7 @@ const styles = {
             backgroundColor: "gray",
             borderRadius: "3px",
         },
-        
+
     },
     metadataList: {
         display: "flex",

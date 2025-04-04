@@ -15,7 +15,7 @@ import * as THREE from "three";
  *   interactionHandlers: { onPointerOver: function, onPointerOut: function, onClick: function }
  * }}
  */
-export const usePropInteractions = (materials, dispatch, artifactName, metadata, detailedModelFile, size) => {
+export const usePropInteractions = (materials, dispatch, artifactName, infoViewRotation, metadata, detailedModelFile, size) => {
   const [isHovered, setIsHovered] = useState(false);
   useCursor(isHovered);
 
@@ -36,7 +36,7 @@ export const usePropInteractions = (materials, dispatch, artifactName, metadata,
   const onClick = () => {
     dispatch({
       type: "SELECT_PROP",
-      payload: { artifactName, metadata, detailedModelFile, size },
+      payload: { artifactName, metadata, infoViewRotation, detailedModelFile, size },
     });
   };
 
