@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSettings } from "../../../context/SettingsContext";
 import { IconButton } from "../IconButton";
 
@@ -6,14 +6,14 @@ export function VolumeControl() {
   const { settings, dispatch } = useSettings();
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef(null);
-  const sliderRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   const toggleMute = () => {
     dispatch({ type: "TOGGLE_AUDIO" });
   };
 
   const handleVolumeChange = (e) => {
+    if (!isDragging) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const height = rect.height;
     const y = rect.bottom - e.clientY;
@@ -21,9 +21,51 @@ export function VolumeControl() {
     dispatch({ type: "SET_VOLUME", payload: volume });
   };
 
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleButtonMouseEnter = () => {
+    setIsHovered(true);
+    clearTimeout(timeoutRef.current);
+  };
+
+  const handleButtonMouseLeave = () => {
+    if (!isDragging) {
+      timeoutRef.current = setTimeout(() => {
+        setIsHovered(false);
+      }, 100);
+    }
+  };
+
+  const handleSliderMouseEnter = () => {
+    clearTimeout(timeoutRef.current);
+  };
+
+  const handleSliderMouseLeave = () => {
+    if (!isDragging) {
+      timeoutRef.current = setTimeout(() => {
+        setIsHovered(false);
+      }, 500);
+    }
+  };
+
+  const startDrag = (e) => {
+    setIsDragging(true);
+    handleVolumeChange(e); // Update volume immediately on click
+  };
+
+  const endDrag = () => {
+    setIsDragging(false);
+  };
+
   return (
     <div 
-      ref={containerRef}
       style={{
         position: "relative",
         display: "flex",
@@ -32,7 +74,8 @@ export function VolumeControl() {
         height: "100%",
         justifyContent: "center",
       }}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleButtonMouseEnter}
+      onMouseLeave={handleButtonMouseLeave}
     >
       <IconButton
         iconOn="toggle_audio_on.svg"
@@ -45,7 +88,6 @@ export function VolumeControl() {
       
       {(isHovered || isDragging) && (
         <div 
-          ref={sliderRef}
           style={{
             position: "absolute",
             top: "calc(100% + 5px)",
@@ -64,14 +106,11 @@ export function VolumeControl() {
             cursor: "pointer",
             marginTop: "4px",
           }}
-          onMouseDown={(e) => {
-            setIsDragging(true);
-            handleVolumeChange(e);
-          }}
-          onMouseMove={(e) => isDragging && handleVolumeChange(e)}
-          onMouseUp={() => setIsDragging(false)}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={handleSliderMouseEnter}
+          onMouseLeave={handleSliderMouseLeave}
+          onMouseDown={startDrag}
+          onMouseMove={handleVolumeChange}
+          onMouseUp={endDrag}
         >
           <div style={{
             width: "4px",
