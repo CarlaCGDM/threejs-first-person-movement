@@ -35,7 +35,7 @@ export default function Content({ playerRef, orbitControlsRef }) {
             }}
             onContextMenu={(e) => e.preventDefault()} // Disable context menu
             tabIndex={0} // Make the canvas focusable
-            style={{ outline: "none", height: "95vh", position: "fixed", bottom: "0px" }}
+            style={{ outline: "none", height: settings.ui.isFullscreen ? "100vh" : "95vh", position: "fixed", bottom: "0px" }}
         >
             <Suspense fallback={<LoadingScreen />} >
                 {/* Performance monitoring overlay */}

@@ -7,6 +7,7 @@ import { Fossil } from "../icons/Fossil";
 import { Guide } from "../icons/Guide";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
+import { WireframeLoader } from "./WireframeLoader";
 
 export function Tutorial({ onClose }) {
 
@@ -16,6 +17,7 @@ export function Tutorial({ onClose }) {
             title: "¡Te damos la bienvenida a la Cova Bonica!",
             content: (
                 <>
+                <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"}/>
                     <p>
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
@@ -66,7 +68,7 @@ export function Tutorial({ onClose }) {
                         />con el que acceder a información interesante sobre el yacimiento arqueológico.
                     </p>
                     <p>
-                        Por último, en el menú inferior tendrás las <strong>miniaturas</strong><img
+                        En el menú inferior tendrás las <strong>miniaturas</strong><img
                                 src="/assets/icons/props/MaxilarLeon/64.png"
                                 alt="miniatura"
                                 style={{
