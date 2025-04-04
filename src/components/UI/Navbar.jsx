@@ -7,10 +7,13 @@ export function Navbar() {
 
     return (
         <>
-            {!settings.ui.isFullscreen && <div style={styles.navbarContainer}>
-                <div style={styles.title}>Cova Bonica Virtual Tour</div>
+            <div style={{...styles.navbarContainer, 
+                backgroundColor: settings.ui.isFullscreen ? 'transparent' : '#272626',
+                borderBottom: settings.ui.isFullscreen ? 'none' : "1px solid #3a3a3a",
+                }}>
+                {!settings.ui.isFullscreen && <div style={styles.title}>Cova Bonica Virtual Tour</div>}
 
-                <div style={styles.buttonsContainer}>
+                <div style={{...styles.buttonsContainer, opacity: settings.ui.isFullscreen ? 0 : 1}}>
                     <IconButton
                         iconOn="toggle_instructions.svg"
                         isActive={settings.ui.showInstructions}
@@ -55,7 +58,7 @@ export function Navbar() {
                         title="Toggle Fullscreen"
                     />
                 </div>
-            </div>}
+            </div>
             {settings.ui.isFullscreen && <div style={styles.hiddenNavbarContainer}>
                 <IconButton
                     iconOn="toggle_fullscreen.svg"
@@ -77,7 +80,6 @@ const styles = {
         width: '100%',
         height: '5vh',
         minHeight: '40px',
-        backgroundColor: '#272626',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -85,7 +87,6 @@ const styles = {
         boxSizing: 'border-box',
         zIndex: 1000,
         pointerEvents: 'auto',
-        borderBottom: "1px solid #3a3a3a", // Matches navbar border
     },
     title: {
         fontFamily: "'Mulish', sans-serif", // Fallback to sans-serif
