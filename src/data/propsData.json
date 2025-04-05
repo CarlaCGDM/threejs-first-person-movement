@@ -13,6 +13,10 @@
         "digitizedBy":"Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "imageFiles": [{
+        "image": "/assets/images/props/elefante.jpg",
+        "imageDescription":"Paleoilustración del Palaeoloxodon antiquus, tal como se encontró en el yacimiento, realizada por Almudena Yagüe para la exposición “Espai prehistòria: fauna, canvi climàtic i arqueologia al Garraf” organizada por el Ayuntamiento de Castelldefels."
+      }],
       "detailedModelFile": "/assets/models/Elefante_LODs",
       "iconFolder": "/assets/icons/props/Elefante/",
       "teleportRotationAngle": 0
@@ -31,6 +35,10 @@
         "digitizedBy":"Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "imageFiles": [{
+        "image": "/assets/images/props/Haploidoceros.jpg",
+        "imageDescription":"Paleoilustración del Haploidoceros mediterraneus realizada por Almudena Yagüe para la Virtual Conference For Women Archaeo and Paleo de 2024."
+      }],
       "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
       "iconFolder": "/assets/icons/props/Hapleidoceros/",
       "teleportRotationAngle": 290
@@ -49,6 +57,7 @@
         "digitizedBy":"Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/MaxilarLeon_LODs",
+      "imageFiles": [],
       "detailedModelFile": "/assets/models/MaxilarLeon_LODs",
       "iconFolder": "/assets/icons/props/MaxilarLeon/",
       "teleportRotationAngle": 0
@@ -67,6 +76,7 @@
         "digitizedBy":"Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/Rino_LODs",
+      "imageFiles": [],
       "detailedModelFile": "/assets/models/Rino_LODs",
       "iconFolder": "/assets/icons/props/Rino/",
       "teleportRotationAngle": 0

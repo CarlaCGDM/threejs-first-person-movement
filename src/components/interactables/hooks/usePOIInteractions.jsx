@@ -6,13 +6,13 @@ import { useCursor } from "@react-three/drei";
  * @param {function} dispatch - Settings context dispatcher
  * @param {string} poiName - Name of the POI
  * @param {object} metadata - Additional POI data
- * @param {string} imageFile - Associated image path
+ * @param {string[]} imageFiles - Associated image path
  * @returns {{
  *   isHovered: boolean,
  *   interactionHandlers: { onPointerOver: function, onPointerOut: function, onClick: function }
  * }}
  */
-export const usePOIInteractions = (dispatch, poiName, metadata, imageFile) => {
+export const usePOIInteractions = (dispatch, poiName, metadata, imageFiles) => {
   const [isHovered, setIsHovered] = useState(false);
   useCursor(isHovered);
 
@@ -23,9 +23,9 @@ export const usePOIInteractions = (dispatch, poiName, metadata, imageFile) => {
     setIsHovered(false);
     dispatch({
       type: "SELECT_POI",
-      payload: { poiName, metadata, imageFile },
+      payload: { poiName, metadata, imageFiles },
     });
-  }, [dispatch, poiName, metadata, imageFile]);
+  }, [dispatch, poiName, metadata, imageFiles]);
 
   return {
     isHovered,

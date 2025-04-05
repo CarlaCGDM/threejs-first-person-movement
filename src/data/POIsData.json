@@ -6,7 +6,16 @@
       "description": "Esta zona corresponde a la primera de las salas laterales que conforman la cueva, la más cercana a la entrada."
     },
     "modelFile": "/assets/models/POIs/POI1.glb",
-    "imageFile": "/assets/images/POIs/Sala1.jpg"
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Sala1.jpg",
+        "imageDescription":"Detalle de la sala lateral 1."
+      },
+      {
+        "image": "/assets/images/POIs/Sala1_02.jpg",
+        "imageDescription":"Detalle de la sala lateral 1."
+      }
+    ]
   },
   {
     "poiName": "Restos neolíticos",
@@ -15,7 +24,20 @@
       "description": "En esta zona de la cueva fue donde se encontraron los restos que, a través de su estudio, ha permitido conocer a las poblaciones que la habitaron durante el neolítico. Se han conservado por un lado, materiales orgánicos (huesos humanos y de pequeños mamíferos o restos carbonizados de árboles y de arbustos), y por otro, herramientas y objetos diversos (utensilios de piedra, adornos, cerámica, etc.)."
     },
     "modelFile": "/assets/models/POIs/POI2.glb",
-    "imageFile": "/assets/images/POIs/RestosNeoliticos.jpg"
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/RestosNeoliticos.jpg",
+        "imageDescription":"Detalle de los restos neolíticos."
+      },
+      {
+        "image": "/assets/images/POIs/huesos_cova_bonica_foto1.png",
+        "imageDescription":"Restos humanos del neolítico antiguo cardial encontrados en la Cova Bonica de Vallirana hace entre 5.000 y 4.300 años de antigüedad.  (Foto: J. Daura & M. Sanz)."
+      },
+      {
+        "image": "/assets/images/POIs/ornamentos_cova_bonica_foto2.png",
+        "imageDescription":"Ornamentos de adorno personal asociados a los restos humanos entre los que destacan una cuenta  en coral rojo (1) (Foto: J. Daura & M. Sanz)."
+      }
+    ]
   },
   {
     "poiName": "Sala lateral 2",
@@ -24,7 +46,16 @@
       "description": "Esta zona corresponde a la segunda de las salas laterales que conforman la cueva, la que se encuentra más al interior."
     },
     "modelFile": "/assets/models/POIs/POI3.glb",
-    "imageFile": "/assets/images/POIs/Sala2.jpg"
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Sala2.jpg",
+        "imageDescription":"Detalle del acceso a la sala lateral 2."
+      },
+      {
+        "image": "/assets/images/POIs/Sala2_02.jpg",
+        "imageDescription":"Detalle de la sala lateral 2."
+      }
+    ]
   },
   {
     "poiName": "Escombrera mina",
@@ -33,6 +64,11 @@
       "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
     },
     "modelFile": "/assets/models/POIs/POI4.glb",
-    "imageFile": "/assets/images/POIs/Escombrera.jpg"
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Escombrera.jpg",
+        "imageDescription":"Detalle de la escombrera de la mina."
+      }
+    ]
   }
 ]

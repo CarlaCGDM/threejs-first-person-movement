@@ -42,6 +42,7 @@ const Prop = forwardRef((props, ref) => {
         modelFile,
         detailedModelFile,
         teleportRotationAngle = 0,  // Default facing forward
+        imageFiles,
         occlusionMeshRef
     } = props;
 
@@ -74,6 +75,7 @@ const Prop = forwardRef((props, ref) => {
         infoViewRotation,
         metadata,
         detailedModelFile,
+        imageFiles,
         size
     );
 

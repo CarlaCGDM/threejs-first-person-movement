@@ -4,7 +4,7 @@ import { TutorialContentWrapper } from "./TutorialContentWrapper";
 import { TutorialControls } from "./TutorialControls";
 import { TutorialOverlay } from "./TutorialOverlay";
 import { Fossil } from "../icons/Fossil";
-import { Guide } from "../icons/Guide";
+import { RightMouseButton } from "../icons/RightMouseButton";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 import { WireframeLoader } from "./WireframeLoader";
@@ -22,7 +22,18 @@ export function Tutorial({ onClose }) {
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
                     <p>
-                        En el menú superior encontrarás la <strong>guía</strong><Guide
+                    Con las teclas<img
+                            src="/assets/icons/ui/letter_set.png"
+                            alt="miniatura"
+                            style={{
+                                height: "2.3em",
+                                width: "auto",
+                                verticalAlign: "middle",
+                                margin: "0 0.3em",
+                                marginBottom: "0.1em",
+                                paddingBottom: "0.5em",
+                            }}
+                        />podrás moverte libremente, mientras que manteniendo pulsado el <strong>clic derecho del ratón</strong><RightMouseButton
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -33,7 +44,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />con los controles para poder moverte por la cueva, podrás consultarla en cualquier momento.
+                        />podrás rotar la cámara para no perderte nada.
                     </p>
                 </>
             ),
@@ -43,7 +54,7 @@ export function Tutorial({ onClose }) {
             content: (
                 <>
                     <p>
-                        También el <strong>localizador</strong>,<MinimapOn
+                        En la parte superior hallarás el <strong>localizador</strong>,<MinimapOn
                             color="#E2E2E2"
                             size={30}
                             style={{

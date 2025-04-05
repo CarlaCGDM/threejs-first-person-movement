@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-
 export function ImageViewer({ imageFiles = [], showMetadata = true }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isHovering, setIsHovering] = useState(false);
 
     const nextImage = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -30,9 +30,9 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
             end = totalImages;
         }
 
-        return imageFiles.slice(start, end).map((src, index) => ({
+        return imageFiles.slice(start, end).map((item, index) => ({
             index: start + index,
-            src,
+            src: item.image,
             isActive: start + index === currentImageIndex
         }));
     };
@@ -47,12 +47,27 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                 ...styles.mainImageContainer,
                 height: showMetadata ? "auto" : "80%"
             }}>
-                <div style={styles.imageContainer}>
+                <div
+                    style={styles.imageContainer}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
+                >
                     <img
-                        src={imageFiles[currentImageIndex]}
+                        src={imageFiles[currentImageIndex]?.image}
                         alt={`Image ${currentImageIndex + 1}/${imageFiles.length}`}
                         style={styles.mainImage}
                     />
+                    {/* Image description overlay (only shows when not hovering) */}
+                    {imageFiles[currentImageIndex]?.imageDescription && (
+                        <div style={{
+                            ...styles.imageDescriptionOverlay,
+                            opacity: isHovering ? 0.5 : 1
+                        }}>
+                            <div style={styles.imageDescriptionText}>
+                                {imageFiles[currentImageIndex].imageDescription}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -108,6 +123,7 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
     );
 }
 
+// Updated styles with overlay caption
 const styles = {
     imageViewer: {
         display: "flex",
@@ -118,12 +134,16 @@ const styles = {
     },
     mainImageContainer: {
         minHeight: "300px",
+        maxHeight: "80%",
         display: "flex",
+        flexDirection: "column",
+        position: 'relative', // Needed for absolute positioning of overlay
     },
     imageContainer: {
         width: "100%",
         height: "100%",
         display: "flex",
+        position: 'relative', // Needed for absolute positioning of overlay
         alignItems: "center",
         justifyContent: "center",
         padding: "10px",
@@ -133,6 +153,22 @@ const styles = {
         height: "100%",
         objectFit: "cover",
         borderRadius: "0.5vw",
+    },
+    imageDescriptionOverlay: {
+        position: 'absolute',
+        bottom: '10px',
+        left: '10px',
+        right: '10px',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        color: '#fff',
+        padding: '8px 12px',
+        borderRadius: '0 0 4px 4px',
+        transition: 'opacity 0.3s ease', // Keep the transition here
+    },
+    imageDescriptionText: {
+        fontSize: '0.8rem',
+        lineHeight: '1.3',
+        textAlign: 'center',
     },
     navButton: {
         position: "relative",
@@ -171,5 +207,5 @@ const styles = {
         width: "100%",
         height: "100%",
         objectFit: "cover",
-    },
+    }
 };

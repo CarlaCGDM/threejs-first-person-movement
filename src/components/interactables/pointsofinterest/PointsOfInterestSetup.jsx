@@ -19,7 +19,7 @@ export function PointsOfInterestSetup({ POIs }) {
                     poiName={poi.poiName}
                     metadata={poi.metadata}
                     modelFile={poi.modelFile}
-                    imageFile={poi.imageFile}
+                    imageFiles={poi.imageFiles}
                     occlusionMeshRef={occlusionMeshRef}
                 />
             ))}

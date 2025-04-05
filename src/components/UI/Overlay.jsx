@@ -9,6 +9,7 @@ import { Minimap } from "../environment/Minimap";
 import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 import { AudioManager } from "./audio/AudioManager";
+import { CreditsModal } from "./CreditsModal";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -26,6 +27,10 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
     dispatch({ type: "TOGGLE_TUTORIAL" });
     dispatch({ type: "TOGGLE_MINIMAP" });
     dispatch({ type: "TOGGLE_AUDIO" });
+  };
+
+  const handleToggleCredits = () => {
+    dispatch({ type: "TOGGLE_CREDITS" });
   };
 
   useEffect(() => {
@@ -52,6 +57,8 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {/* Add the tutorial here, only when showTutorial is true */}
       {settings.ui.showTutorial && <Tutorial onClose={handleToggleTutorial} />}
 
+      {settings.ui.showCredits && <CreditsModal onClose={handleToggleCredits}/>}
+
       {/* Other components */}
       <AudioManager />
       <Navbar />
@@ -65,6 +72,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
           metadata={selectedProp.metadata}
           detailedModelFile={selectedProp.detailedModelFile}
           infoViewRotation={selectedProp.infoViewRotation}
+          imageFiles={selectedProp.imageFiles}
           size={selectedProp.size}
           onClose={handleClosePropInfo}
         />
@@ -75,7 +83,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         <PointOfInterestInfo
           poiName={selectedPOI.poiName}
           metadata={selectedPOI.metadata}
-          imageFiles={[selectedPOI.imageFile]}
+          imageFiles={selectedPOI.imageFiles}
           onClose={handleClosePointOfInterestInfo}
         />
       )}

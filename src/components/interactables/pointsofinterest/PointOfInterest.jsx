@@ -23,7 +23,7 @@ import { usePOIInteractions } from "../hooks/usePOIInteractions";
  * @param {string} poiName - Display name for the POI
  * @param {object} metadata - Additional data about the location
  * @param {string} modelFile - Path to the 3D model asset
- * @param {string} imageFile - Associated image for detailed view
+ * @param {string[]} imageFiles - Associated images for detailed view
  * @param {React.Ref} occlusionMeshRef - Reference for visibility culling
  * @param {React.Ref} ref - Forwarded ref to the group
  */
@@ -32,7 +32,7 @@ const PointOfInterest = forwardRef(({
   poiName,
   metadata,
   modelFile,
-  imageFile,
+  imageFiles,
   occlusionMeshRef
 }, ref) => {
   // State Management
@@ -55,7 +55,7 @@ const PointOfInterest = forwardRef(({
     dispatch,
     poiName,
     metadata,
-    imageFile
+    imageFiles
   );
 
   const { highlightedMaterial, transparentMaterial } = useHighlightMaterial();  // Materials for hover highlighting

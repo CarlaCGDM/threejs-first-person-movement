@@ -59,14 +59,14 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                                 backgroundColor={showHighestRes ? "#272626" : "#777777"}
                             />
                         )}
-                        <IconButton
-                            iconOn="toggle_image_on.svg"
-                            iconOff="toggle_image_off.svg"
+                        {imageFiles.length > 0 && <IconButton
+                            iconOn="toggle_model.svg"
+                            iconOff="toggle_images.svg"
                             isActive={showImages}
                             onClick={() => setShowImages(!showImages)}
                             title={showImages ? "Ver modelo 3D" : "Ver imágenes"}
-                            backgroundColor="#272626"
-                        />
+                            backgroundColor={showImages ? "#272626" : "#777777"}
+                        />}
                         <IconButton
                             iconOn="toggle_info_on.svg"
                             isActive={showMetadata}
