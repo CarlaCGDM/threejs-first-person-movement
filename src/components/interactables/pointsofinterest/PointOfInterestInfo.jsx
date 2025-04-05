@@ -1,43 +1,10 @@
 import { useState } from "react";
 import { IconButton } from "../../UI/IconButton";
+import { ImageViewer } from "../ImageViewer";
+import { MetadataPanel } from "../MetadataPanel";
 
 function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
-
     const [showMetadata, setShowMetadata] = useState(true);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    const nextImage = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === imageFiles.length - 1 ? 0 : prevIndex + 1
-        );
-    };
-
-    const prevImage = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? imageFiles.length - 1 : prevIndex - 1
-        );
-    };
-
-    const getVisibleThumbnails = () => {
-        const thumbnails = [];
-        const totalImages = imageFiles.length;
-
-        // Get the start index for slicing
-        let start = currentImageIndex - 1;
-        if (start < 0) start = 0; // Avoid negative indices
-
-        let end = start + 3;
-        if (end > totalImages) {
-            start = Math.max(0, totalImages - 3); // Ensure exactly 3 images are displayed
-            end = totalImages;
-        }
-
-        return imageFiles.slice(start, end).map((src, index) => ({
-            index: start + index,
-            src,
-            isActive: start + index === currentImageIndex
-        }));
-    };
 
     return (
         <div style={styles.overlay}>
@@ -52,112 +19,23 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                     {/* Horizontal Layout Container */}
                     <div style={styles.horizontalContainer}>
                         {/* Image Viewer - Left Side */}
-                        <div style={{
-                            ...styles.imageViewer,
-                            width: showMetadata ? "60%" : "100%",
-                        }}>
-                            {/* Main Image Container */}
-                            <div style={{...styles.mainImageContainer,
-                                height: showMetadata ? "auto" : "80%"}
-                            }>
-                               
-                                <div style={styles.imageContainer}>
-                                    <img
-                                        src={imageFiles[currentImageIndex]}
-                                        alt={`${poiName} - ${currentImageIndex + 1}/${imageFiles.length}`}
-                                        style={styles.mainImage}
-                                    />
-                                </div>
-
-
-                            </div>
-
-                            {/* <div style={styles.imageCredits}>
-                                <p>Image credits</p>
-                            </div> */}
-
-                            {/* Thumbnail Carousel */}
-                            <div style={styles.thumbnailContainer}>
-                            <button
-                                    onClick={prevImage}
-                                    disabled={imageFiles.length <= 1}
-                                    style={{
-                                        ...styles.navButton,
-                                        opacity: imageFiles.length <= 1 ? 0.5 : 1,
-                                        pointerEvents: imageFiles.length <= 1 ? "none" : "auto"
-                                    }}
-                                >
-                                    &lt;
-                                </button>
-                                {getVisibleThumbnails().map((thumb) => (
-                                    <div
-                                        key={thumb.index}
-                                        style={{
-                                            ...styles.thumbnail,
-                                            border: thumb.isActive ? "2px solid #272626" : "1px solid #ccc",
-                                            opacity: thumb.isActive ? 1 : 0.7
-                                        }}
-                                        onClick={() => setCurrentImageIndex(thumb.index)}
-                                    >
-                                        <img
-                                            src={thumb.src}
-                                            alt={`Thumbnail ${thumb.index + 1}`}
-                                            style={styles.thumbnailImage}
-                                        />
-                                    </div>
-                                ))}
-                                <button
-                                    onClick={nextImage}
-                                    disabled={imageFiles.length <= 1}
-                                    style={{
-                                        ...styles.navButton,
-                                        opacity: imageFiles.length <= 1 ? 0.5 : 1,
-                                        pointerEvents: imageFiles.length <= 1 ? "none" : "auto"
-                                    }}
-                                >
-                                    &gt;
-                                </button>
-                            </div>
-                        </div>
+                        <ImageViewer
+                            imageFiles={imageFiles}
+                            showMetadata={showMetadata}
+                        />
 
                         {/* Metadata Section - Right Side */}
-                        {showMetadata && <div style={styles.metadataContainer}>
-                            <div style={styles.metadataPanel}>
-                                <h2 style={styles.name}>{poiName}</h2>
-                                <div style={styles.metadataList}>
-                                    <div style={styles.metadataItem}>
-                                        <h3 style={styles.label}>Descripción</h3>
-                                        <p style={styles.value}>{metadata.description}</p>
-                                    </div>
-
-                                    {metadata.location && (
-                                        <div style={styles.metadataItem}>
-                                            <h3 style={styles.label}>Location</h3>
-                                            <p style={styles.value}>{metadata.location}</p>
-                                        </div>
-                                    )}
-
-                                    {metadata.historicalPeriod && (
-                                        <div style={styles.metadataItem}>
-                                            <h3 style={styles.label}>Historical Period</h3>
-                                            <p style={styles.value}>{metadata.historicalPeriod}</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>}
+                        <MetadataPanel
+                            title={poiName}
+                            metadata={metadata}
+                            showMetadata={showMetadata}
+                            onToggleMetadata={() => setShowMetadata(!showMetadata)}
+                            customFields={['description']} // Only show these fields
+                        />
                     </div>
 
                     {/* Buttons Row */}
                     <div style={styles.buttonsRow}>
-                        {/* <IconButton
-                            iconOn="icon_measure.svg"
-                            iconOff="icon_measure.svg"
-                            isActive={false}
-                            onClick={() => console.log("Measure tool")}
-                            title="Try quiz"
-                            backgroundColor="#272626"
-                        /> */}
                         <IconButton
                             iconOn="toggle_info_on.svg"
                             iconOff="toggle_info_off.svg"
@@ -173,7 +51,6 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
     );
 }
 
-// Updated Styles with Horizontal Layout
 const styles = {
     overlay: {
         position: "fixed",
@@ -211,138 +88,6 @@ const styles = {
         flex: 1,
         gap: "20px",
         overflow: "hidden",
-        
-    },
-    imageViewer: {
-        display: "flex",
-        height: "100%",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    mainImageContainer: {
-        minHeight: "300px",
-        display: "flex",
-    },
-    imageContainer: {
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "10px",
-        
-    },
-    mainImage: {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        borderRadius: "0.5vw",
-    },
-    imageCredits: {
-        color: "#272626",
-        margin: 0,
-        fontFamily: "Mulish, sans-serif",
-        fontSize: "0.8rem",
-        lineHeight: "1.4",
-    },
-    navButton: {
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
-        backgroundColor: "rgba(39, 38, 38, 0.7)",
-        color: "#E2E2E2",
-        border: "none",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        fontSize: "20px",
-        cursor: "pointer",
-        zIndex: 10,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    thumbnailContainer: {
-        display: "flex",
-        justifyContent: "center",
-        gap: "10px",
-        height: "80px",
-        overflow: "hidden", 
-        width: "100%",
-    },
-    thumbnail: {
-        width: "120px",
-        height: "80px",
-        borderRadius: "4px",
-        overflow: "hidden",
-        cursor: "pointer",
-        transition: "all 0.2s ease",
-    },
-    thumbnailImage: {
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-    },
-    metadataContainer: {
-        width: "50%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    metadataPanel: {
-        height: "90%",
-        overflowY: "scroll",
-        //backgroundColor: "#F3EEEB",
-        padding: "0.5vw 1vw",
-        // border: "2px solid #272626",
-        borderRadius: "0.25vw",
-        paddingBottom: "20px",
-        /* Scrollbar styling */
-        scrollbarWidth: "thin", // For Firefox
-        scrollbarColor: "gray transparent", // For Firefox
-        /* WebKit browsers (Chrome, Safari) */
-        "&::-webkit-scrollbar": {
-            width: "6px",
-        },
-        "&::-webkit-scrollbar-track": {
-            background: "transparent",
-        },
-        "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "gray",
-            borderRadius: "3px",
-        },
-    },
-    metadataList: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-    },
-    metadataItem: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "4px",
-    },
-    name: {
-        color: "#272626",
-        margin: "0 0 15px 0",
-        fontFamily: "Mulish, sans-serif",
-        fontSize: "1.5rem",
-    },
-    label: {
-        color: "#272626",
-        margin: 0,
-        fontFamily: "Mulish, sans-serif",
-        fontSize: "0.9rem",
-        fontWeight: "bold",
-        letterSpacing: "0.5px",
-    },
-    value: {
-        color: "#272626",
-        margin: 0,
-        fontFamily: "Mulish, sans-serif",
-        fontSize: "0.9rem",
-        lineHeight: "1.4",
     },
     buttonsRow: {
         display: "flex",
