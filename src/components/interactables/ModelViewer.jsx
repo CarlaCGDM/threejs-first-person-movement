@@ -1,12 +1,11 @@
 import { Suspense, useRef, useEffect, useState } from "react";
-import { OrbitControls, Html } from "@react-three/drei";
+import { OrbitControls, Html, Environment } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { LazyLoadModel } from "./props/LazyLoadModel";
 
-function SmartModel({ url, size, viewerSize }) {
+function SmartModel({ url, size, viewerSize}) {
     const groupRef = useRef();
     const [initialScale, setInitialScale] = useState(1);
-    const controlsRef = useRef();
 
     useEffect(() => {
         if (!size || viewerSize.width === 0) return;
@@ -16,13 +15,6 @@ function SmartModel({ url, size, viewerSize }) {
         const scale = (targetScreenHeight / viewerSize.height) * 5 / maxDimension;
 
         setInitialScale(scale);
-
-        if (controlsRef.current) {
-            const distance = maxDimension * 2.5;
-            controlsRef.current.object.position.set(0, 0, distance);
-            controlsRef.current.target.set(0, 0, 0);
-            controlsRef.current.update();
-        }
     }, [size, viewerSize]);
 
     return (
@@ -37,7 +29,8 @@ export function ModelViewer({
     size, 
     rotation, 
     showHighestRes, 
-    containerStyle 
+    containerStyle,
+    debug = false
 }) {
     const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
     const viewerRef = useRef(null);
@@ -66,6 +59,7 @@ export function ModelViewer({
                     url={`${modelFiles}${modelPath}`}
                     size={size}
                     viewerSize={viewerSize}
+                    debug={debug}
                 />
             </Suspense>
         );
@@ -81,14 +75,18 @@ export function ModelViewer({
                 }}
                 style={{ width: '100%', height: '100%' }}
             >
-                <ambientLight intensity={4.5} />
-                <pointLight position={[10, 10, 10]} intensity={0.5} />
-                <group>
-                    <group rotation={rotation}>
-                        {getModelToShow()}
-                    </group>
+                <ambientLight intensity={2.5} />
+                <Environment preset="city" />
+                <group rotation={rotation}>
+                    {getModelToShow()}
                 </group>
-                <OrbitControls enablePan={true} enableZoom={true} />
+                <OrbitControls 
+                    enablePan={true} 
+                    enableZoom={true} 
+                />
+                {debug && (
+                    <gridHelper args={[10, 10]} />
+                )}
             </Canvas>
         </div>
     );
