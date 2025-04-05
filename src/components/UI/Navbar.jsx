@@ -9,11 +9,11 @@ export function Navbar() {
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen()
-                .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
+                // .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
                 .catch(err => console.error('Error entering fullscreen:', err));
         } else {
             document.exitFullscreen()
-                .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
+                // .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
                 .catch(err => console.error('Error exiting fullscreen:', err));
         }
     };
@@ -23,7 +23,7 @@ export function Navbar() {
         const handleFullscreenChange = () => {
             const isCurrentlyFullscreen = !!document.fullscreenElement;
             if (isCurrentlyFullscreen !== settings.ui.isFullscreen) {
-                dispatch({ type: "TOGGLE_FULLSCREEN" });
+                // dispatch({ type: "TOGGLE_FULLSCREEN" });
             }
         };
 
