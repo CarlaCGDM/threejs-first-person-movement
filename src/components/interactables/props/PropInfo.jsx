@@ -53,11 +53,10 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                         {!showImages && ( // Only show HD toggle when in 3D view
                             <IconButton
                                 iconOn="toggle_hd_on.svg"
-                                iconOff="toggle_hd_off.svg"
                                 isActive={showHighestRes}
                                 onClick={() => setShowHighestRes(!showHighestRes)}
                                 title={showHighestRes ? "Ver en SD" : "Ver en HD"}
-                                backgroundColor="#272626"
+                                backgroundColor={showHighestRes ? "#272626" : "#777777"}
                             />
                         )}
                         <IconButton
@@ -70,11 +69,10 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                         />
                         <IconButton
                             iconOn="toggle_info_on.svg"
-                            iconOff="toggle_info_off.svg"
                             isActive={showMetadata}
                             onClick={() => setShowMetadata(!showMetadata)}
                             title={showMetadata ? "Ocultar información" : "Mostrar información"}
-                            backgroundColor="#272626"
+                            backgroundColor={showMetadata ? "#272626" : "#777777"}
                         />
                     </div>
                 </div>

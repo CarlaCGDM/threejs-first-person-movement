@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { ArrowLeft } from "../UI/icons/ArrowLeft";
-import { ArrowRight } from "../UI/icons/ArrowRight";
 
 
 export function ImageViewer({ imageFiles = [], showMetadata = true }) {
@@ -69,7 +67,10 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                         pointerEvents: imageFiles.length <= 1 ? "none" : "auto"
                     }}
                 >
-                    <ArrowLeft />
+                    <img
+                        src={`/assets/icons/ui/small_arrow_left.svg`}
+                        alt={"Imagen anterior"}
+                    />
                 </button>
                 {getVisibleThumbnails().map((thumb) => (
                     <div
@@ -97,7 +98,10 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                         pointerEvents: imageFiles.length <= 1 ? "none" : "auto"
                     }}
                 >
-                    <ArrowRight />
+                    <img
+                        src={`/assets/icons/ui/small_arrow_right.svg`}
+                        alt={"Imagen anterior"}
+                    />
                 </button>
             </div>
         </div>
@@ -138,7 +142,7 @@ const styles = {
         color: "#E2E2E2",
         border: "none",
         borderRadius: "50%",
-        width: "2.5vw",
+        width: "40px",
         height: "40px",
         fontSize: "20px",
         cursor: "pointer",
@@ -152,7 +156,7 @@ const styles = {
         justifyContent: "center",
         gap: "10px",
         height: "80px",
-        overflow: "hidden", 
+        overflow: "hidden",
         width: "100%",
     },
     thumbnail: {

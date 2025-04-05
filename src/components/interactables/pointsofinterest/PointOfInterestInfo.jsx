@@ -38,11 +38,10 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                     <div style={styles.buttonsRow}>
                         <IconButton
                             iconOn="toggle_info_on.svg"
-                            iconOff="toggle_info_off.svg"
                             isActive={showMetadata}
                             onClick={() => setShowMetadata(!showMetadata)}
-                            title="Toggle Info Panel"
-                            backgroundColor="#272626"
+                            title={showMetadata ? "Ocultar información" : "Mostrar información"}
+                            backgroundColor={showMetadata ? "#272626" : "#777777"}
                         />
                     </div>
                 </div>
