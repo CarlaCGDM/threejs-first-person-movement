@@ -75,8 +75,8 @@ export function ModelViewer({
                 }}
                 style={{ width: '100%', height: '100%' }}
             >
-                <ambientLight intensity={2.5} />
-                <Environment preset="city" />
+                <ambientLight intensity={4.5} />
+                {/* <Environment preset="city" /> */}
                 <group rotation={rotation}>
                     {getModelToShow()}
                 </group>

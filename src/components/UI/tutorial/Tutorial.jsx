@@ -8,7 +8,6 @@ import { RightMouseButton } from "../icons/RightMouseButton";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 import { WireframeLoader } from "./WireframeLoader";
-import WireframeAnimation from "./animation/WireframeAnimation";
 
 export function Tutorial({ onClose }) {
 
@@ -18,8 +17,7 @@ export function Tutorial({ onClose }) {
             title: "¡Te damos la bienvenida a la Cova Bonica!",
             content: (
                 <>
-                    {/* <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} /> */}
-                    <WireframeAnimation />
+                    <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} />
                     <p>
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
