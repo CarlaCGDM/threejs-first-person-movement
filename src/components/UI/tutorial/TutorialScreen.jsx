@@ -28,6 +28,7 @@ const styles = {
     overflowY: "auto",
     scrollbarWidth: "thin",
     scrollbarColor: "#E5B688 transparent",
+    pointerEvents: "auto",
   },
   progressContainer: {
     display: "flex",

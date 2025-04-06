@@ -1,0 +1,24 @@
+[
+    {
+      "name": "Cova Bonica",
+      "position": [0,0,0],
+      "metadata": {
+        "description": "Se trata de una cueva ubicada en el macizo del Garraf-Ordal (Vallirana, Barcelona) en la que se han encontrado restos que han permitido conocer a las poblaciones humanas que habitaron esta zona hace 7.400 años, durante el neolítico. \n De formación cárstica, tiene una planta aproximada de 30 metros de longitud por unos 20 metros de ancho máximo y una altura de unos 15 metros. \n Está formada por una sala principal y dos salas laterales, una cerca de la entrada (SL1) y la otra más interior (SL2)."
+      },
+      "modelFile": "/assets/models/CovaBonicaLODs/",
+      "imageFiles": [
+        {
+          "image": "/assets/images/environment/Portada.jpg",
+          "imageDescription":"Vista general de la cueva."
+        },
+        {
+            "image": "/assets/images/environment/Portada01.jpg",
+          "imageDescription":"Detalle de la entrada de la cueva.."
+        },
+        {
+            "image": "/assets/images/environment/Portada02.jpg",
+          "imageDescription":"Detalle del perfil estratigráfico de la zona donde actualmente se realizan los trabajos arqueológicos."
+        }
+      ]
+    }
+]

@@ -17,14 +17,15 @@ export function Tutorial({ onClose }) {
             title: "¡Te damos la bienvenida a la Cova Bonica!",
             content: (
                 <>
-                <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"}/>
+                    <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} />
                     <p>
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
                     <p>
-                    Con las teclas<img
+                        Usa las <strong>teclas</strong><img
                             src="/assets/icons/ui/letter_set.png"
-                            alt="miniatura"
+                            alt="teclas WASD"
+                            title="Teclas WASD"
                             style={{
                                 height: "2.3em",
                                 width: "auto",
@@ -33,7 +34,7 @@ export function Tutorial({ onClose }) {
                                 marginBottom: "0.1em",
                                 paddingBottom: "0.5em",
                             }}
-                        />podrás moverte libremente, mientras que manteniendo pulsado el <strong>clic derecho del ratón</strong><RightMouseButton
+                        />para moverte libremente. Mantén pulsado el <strong>clic derecho del ratón</strong><RightMouseButton
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -44,7 +45,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />podrás rotar la cámara para no perderte nada.
+                        />para rotar la cámara y no perderte nada.
                     </p>
                 </>
             ),
@@ -54,7 +55,7 @@ export function Tutorial({ onClose }) {
             content: (
                 <>
                     <p>
-                        En la parte superior hallarás el <strong>localizador</strong>,<MinimapOn
+                        El <strong>localizador</strong>,<MinimapOn
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -65,7 +66,7 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />para mostrar en 3D en que parte de la cueva te encuentras, así como el <strong>fósil</strong><Fossil
+                        />del menú superior te permite mostrar u ocultar el mapa en 3D que te indicará en qué parte de la cueva te encuentras. El <strong>fósil</strong><Fossil
                             color="#E2E2E2"
                             size={30}
                             style={{
@@ -76,20 +77,21 @@ export function Tutorial({ onClose }) {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        />con el que acceder a información interesante sobre el yacimiento arqueológico.
+                        />te dará acceso a información interesante sobre el yacimiento arqueológico.
                     </p>
                     <p>
-                        En el menú inferior tendrás las <strong>miniaturas</strong><img
-                                src="/assets/icons/props/MaxilarLeon/64.png"
-                                alt="miniatura"
-                                style={{
-                                    height: "2em",
-                                    width: "auto",
-                                    verticalAlign: "middle",
-                                    margin: "0 0.3em",
-                                    marginBottom: "0.1em"
-                                }}
-                            />de los diferentes hallazgos que puedes ver durante el recorrido. De esta manera, te podrás teletransportar directamente delante de ellos.
+                        Las <strong>miniaturas</strong><img
+                            src="/assets/icons/props/MaxilarLeon/64.png"
+                            alt="miniatura"
+                            title="Miniatura"
+                            style={{
+                                height: "2em",
+                                width: "auto",
+                                verticalAlign: "middle",
+                                margin: "0 0.3em",
+                                marginBottom: "0.1em"
+                            }}
+                        />del menú inferior representan los hallazgos que puedes ver durante el recorrido.  Si pulsas en alguno, te transportarás directamente delante de él.
                     </p>
                 </>
             ),
@@ -119,7 +121,7 @@ export function Tutorial({ onClose }) {
                             marginBottom: "0.1em"
                         }} />
                     <p>
-                        Puedes hacer clic sobre los <strong>hallazgos</strong> para ver información adicional sobre ellos.
+                        Puedes hacer clic sobre los <strong>hallazgos</strong> o <strong>puntos de interés</strong> para ver información adicional.
                         Los reconocerás por su <strong>etiqueta flotante</strong> <div style={{
                             display: "inline-block",
                             verticalAlign: "middle",

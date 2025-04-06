@@ -10,6 +10,7 @@ import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 import { AudioManager } from "./audio/AudioManager";
 import { CreditsModal } from "./CreditsModal";
+import caveData from "../../data/caveData.json";
 
 export function Overlay({ props, playerRef, orbitControlsRef }) {
   const { settings, dispatch } = useSettings();
@@ -21,6 +22,10 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
 
   const handleClosePointOfInterestInfo = () => {
     dispatch({ type: "CLEAR_SELECTED_POI" });
+  };
+
+  const handleCloseInfo = () => {
+    dispatch({ type: "TOGGLE_INFO" });
   };
 
   const handleToggleTutorial = () => {
@@ -57,7 +62,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {/* Add the tutorial here, only when showTutorial is true */}
       {settings.ui.showTutorial && <Tutorial onClose={handleToggleTutorial} />}
 
-      {settings.ui.showCredits && <CreditsModal onClose={handleToggleCredits}/>}
+      {settings.ui.showCredits && <CreditsModal onClose={handleToggleCredits} />}
 
       {/* Other components */}
       <AudioManager />
@@ -85,6 +90,15 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
           metadata={selectedPOI.metadata}
           imageFiles={selectedPOI.imageFiles}
           onClose={handleClosePointOfInterestInfo}
+        />
+      )}
+
+      {settings.ui.showInfo && (
+        <PointOfInterestInfo
+          poiName={caveData[0].name}
+          metadata={caveData[0].metadata}
+          imageFiles={caveData[0].imageFiles}
+          onClose={handleCloseInfo}
         />
       )}
 

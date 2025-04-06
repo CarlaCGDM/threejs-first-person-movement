@@ -61,7 +61,7 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                     {imageFiles[currentImageIndex]?.imageDescription && (
                         <div style={{
                             ...styles.imageDescriptionOverlay,
-                            opacity: isHovering ? 0.5 : 1
+                            opacity: isHovering ? 0.25 : 1
                         }}>
                             <div style={styles.imageDescriptionText}>
                                 {imageFiles[currentImageIndex].imageDescription}
@@ -174,12 +174,9 @@ const styles = {
         position: "relative",
         top: "50%",
         transform: "translateY(-50%)",
-        backgroundColor: "rgba(39, 38, 38, 0.7)",
-        color: "#E2E2E2",
+        backgroundColor: "rgba(39, 38, 38, 0.2)",
+        //color: "#E2E2E2",
         border: "none",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
         fontSize: "20px",
         cursor: "pointer",
         zIndex: 10,

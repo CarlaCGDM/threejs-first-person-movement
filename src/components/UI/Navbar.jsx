@@ -43,11 +43,11 @@ export function Navbar() {
 
                 <div style={{...styles.buttonsContainer, opacity: settings.ui.isFullscreen ? 0 : 1}}>
                     <IconButton
-                        iconOn="toggle_instructions.svg"
+                        iconOn="fossil.svg"
                         isActive={settings.ui.showInstructions}
                         isHighlighted={!settings.ui.showTutorial}
-                        onClick={() => dispatch({ type: "TOGGLE_INSTRUCTIONS" })}
-                        title="Toggle Instructions"
+                        onClick={() => dispatch({ type: "TOGGLE_INFO" })}
+                        title="Toggle Info"
                     />
 
                     <IconButton
@@ -61,7 +61,7 @@ export function Navbar() {
 
                     <IconButton
                         iconOn="toggle_minimap_on.svg"
-                        iconOff="toggle_minimap_off.svg"
+                        iconOff={!settings.ui.showTutorial ? "toggle_minimap_off.svg" : "toggle_minimap_on.svg"}
                         isActive={settings.ui.showMinimap}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_MINIMAP" })}

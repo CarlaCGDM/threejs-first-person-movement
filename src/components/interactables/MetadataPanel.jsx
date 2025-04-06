@@ -1,11 +1,11 @@
 import { IconButton } from "../UI/IconButton";
 
-export function MetadataPanel({ 
-  title, 
-  metadata, 
-  showMetadata, 
+export function MetadataPanel({
+  title,
+  metadata,
+  showMetadata,
   onToggleMetadata,
-  customFields = null 
+  customFields = null
 }) {
   // Define all possible fields with their display labels
   const fieldDefinitions = {
@@ -18,8 +18,8 @@ export function MetadataPanel({
   };
 
   // Use custom fields if provided, otherwise use all available fields from metadata
-  const fieldsToRender = customFields 
-    ? customFields 
+  const fieldsToRender = customFields
+    ? customFields
     : Object.keys(fieldDefinitions).filter(field => metadata[field]);
 
   return (
@@ -32,7 +32,9 @@ export function MetadataPanel({
               {fieldsToRender.map(field => (
                 <div key={field} style={styles.metadataItem}>
                   <h3 style={styles.label}>{fieldDefinitions[field]}</h3>
-                  <p style={styles.value}>{metadata[field]}</p>
+                  <p style={styles.value} dangerouslySetInnerHTML={{
+                    __html: metadata[field].replace(/\r?\n/g, '<br /><br />')
+                  }}></p>
                 </div>
               ))}
             </div>

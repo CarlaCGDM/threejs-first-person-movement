@@ -14,7 +14,7 @@ const initialSettings = {
 
   ui: {
     showMinimap: false,
-    showInstructions: true,
+    showInfo: false,
     showCredits: false,
     showNPCs: true,
     showTutorial: true,
@@ -57,8 +57,8 @@ function settingsReducer(state, action) {
       return { ...state, playerRef: action.payload };
     case "TOGGLE_MINIMAP":
       return { ...state, ui: { ...state.ui, showMinimap: !state.ui.showMinimap } };
-    case "TOGGLE_INSTRUCTIONS":
-      return { ...state, ui: { ...state.ui, showInstructions: !state.ui.showInstructions } };
+    case "TOGGLE_INFO":
+      return { ...state, ui: { ...state.ui, showInfo: !state.ui.showInfo } };
     case "TOGGLE_CREDITS":
       return { ...state, ui: { ...state.ui, showCredits: !state.ui.showCredits } };
     case "TOGGLE_NPCS":
