@@ -48,12 +48,12 @@
     "modelFile": "/assets/models/POIs/POI3.glb",
     "imageFiles": [
       {
-        "image": "/assets/images/POIs/Sala2_01.jpg",
-        "imageDescription":"Detalle del acceso a la sala lateral 2."
-      },
-      {
         "image": "/assets/images/POIs/Sala2.jpg",
         "imageDescription":"Detalle de la sala lateral 2."
+      },
+      {
+        "image": "/assets/images/POIs/Sala2_01.jpg",
+        "imageDescription":"Detalle del acceso a la sala lateral 2."
       },
       {
         "image": "/assets/images/POIs/Sala2_02.jpg",

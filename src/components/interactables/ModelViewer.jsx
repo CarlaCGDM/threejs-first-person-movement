@@ -2,6 +2,7 @@ import { Suspense, useRef, useEffect, useState } from "react";
 import { OrbitControls, Html, Environment } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { LazyLoadModel } from "./props/LazyLoadModel";
+import { ModelViewerInstructions } from "./ModelViewerInstructions";
 
 function SmartModel({ url, size, viewerSize}) {
     const groupRef = useRef();
@@ -67,6 +68,7 @@ export function ModelViewer({
 
     return (
         <div ref={viewerRef} style={containerStyle}>
+            <ModelViewerInstructions />
             <Canvas
                 camera={{
                     fov: 45,

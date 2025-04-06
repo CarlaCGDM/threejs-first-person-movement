@@ -3,7 +3,7 @@ export function InstructionsPanel() {
       <div style={styles.instructionsPanel}>
         {/* <h2 style={styles.heading}>Instructions</h2> */}
         <p style={styles.text}><img
-                            src={`/assets/icons/ui/mouse_right.svg`}
+                            src={`/assets/icons/ui/mouse_right_02.svg`}
                             alt={"guía"}
                             style={{
                                 height: "2em",
