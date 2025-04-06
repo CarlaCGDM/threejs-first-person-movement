@@ -8,6 +8,7 @@ import { RightMouseButton } from "../icons/RightMouseButton";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 import { WireframeLoader } from "./WireframeLoader";
+import WireframeAnimation from "./animation/WireframeAnimation";
 
 export function Tutorial({ onClose }) {
 
@@ -17,7 +18,8 @@ export function Tutorial({ onClose }) {
             title: "¡Te damos la bienvenida a la Cova Bonica!",
             content: (
                 <>
-                    <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} />
+                    {/* <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} /> */}
+                    <WireframeAnimation />
                     <p>
                         En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.
                     </p>
@@ -138,7 +140,7 @@ export function Tutorial({ onClose }) {
                             transition: 'all 0.3s ease'
                         }}>
                             {"?"}
-                        </div> o su <strong>indicador pulsante</strong>
+                        </div> o su <strong>indicador intermitente</strong>
                         <span style={{ display: "inline-block", verticalAlign: "middle", margin: "0 0.3em", marginBottom: "0.2em" }}>
                             <div className="pulsating-circle"></div>
                         </span>.

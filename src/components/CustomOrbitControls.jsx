@@ -27,14 +27,14 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
         const canvas = document.querySelector("canvas");
 
         const handleMouseDown = (event) => {
-            if (event.button === 2) { // Right-click initiates rotation
+            if (event.button === 2 || event.button === 1) { // Right-click initiates rotation
                 isRotating.current = true;
                 canvas.requestPointerLock(); // Lock pointer for smooth movement
             }
         };
 
         const handleMouseUp = (event) => {
-            if (event.button === 2) {
+            if (event.button === 2 || event.button === 1) {
                 isRotating.current = false;
                 document.exitPointerLock(); // Release pointer lock
             }

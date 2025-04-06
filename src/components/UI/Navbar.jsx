@@ -47,7 +47,7 @@ export function Navbar() {
                         isActive={settings.ui.showInstructions}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_INFO" })}
-                        title="Toggle Info"
+                        title="Información sobre la cueva"
                     />
 
                     <IconButton
@@ -56,7 +56,7 @@ export function Navbar() {
                         isActive={settings.ui.showNPCs}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_NPCS" })}
-                        title="Toggle NPCs"
+                        title="Visitantes virtuales"
                     />
 
                     <IconButton
@@ -65,7 +65,7 @@ export function Navbar() {
                         isActive={settings.ui.showMinimap}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_MINIMAP" })}
-                        title="Toggle Minimap"
+                        title="Minimapa"
                     />
 
                     <IconButton
@@ -73,7 +73,7 @@ export function Navbar() {
                         isActive={settings.ui.showCredits}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_CREDITS" })}
-                        title="Show Credits"
+                        title="Créditos y agradecimientos"
                     />
 
                     < VolumeControl />
@@ -83,7 +83,7 @@ export function Navbar() {
                         isActive={settings.ui.isFullscreen}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={toggleFullscreen}
-                        title="Toggle Fullscreen"
+                        title="Pantalla completa"
                     />
                 </div>
             </div>
@@ -93,7 +93,7 @@ export function Navbar() {
                     isActive={settings.ui.isFullscreen}
                     isHighlighted={false}
                     onClick={() => dispatch({ type: "TOGGLE_FULLSCREEN" })}
-                    title="Toggle Fullscreen"
+                    title="Pantalla completa"
                 />
             </div>}
         </>

@@ -1,0 +1,35 @@
+/* Center everything */
+.animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Image container with fixed aspect ratio */
+  .image-wrapper {
+    position: relative;
+    width: 20vw;
+    height: 15vh;
+    overflow: hidden;
+  }
+  
+  .wire-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg); /* makes image white */
+    opacity: 0.8;
+    animation: float 3s ease-in-out infinite alternate;
+  }
+  
+  /* Simple floating animation */
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-5px);
+    }
+  }

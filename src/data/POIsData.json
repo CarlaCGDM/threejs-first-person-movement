@@ -48,8 +48,12 @@
     "modelFile": "/assets/models/POIs/POI3.glb",
     "imageFiles": [
       {
-        "image": "/assets/images/POIs/Sala2.jpg",
+        "image": "/assets/images/POIs/Sala2_01.jpg",
         "imageDescription":"Detalle del acceso a la sala lateral 2."
+      },
+      {
+        "image": "/assets/images/POIs/Sala2.jpg",
+        "imageDescription":"Detalle de la sala lateral 2."
       },
       {
         "image": "/assets/images/POIs/Sala2_02.jpg",
@@ -66,7 +70,11 @@
     "modelFile": "/assets/models/POIs/POI4.glb",
     "imageFiles": [
       {
-        "image": "/assets/images/POIs/Escombrera.jpg",
+        "image": "/assets/images/POIs/Escombrera2.jpg",
+        "imageDescription":"Detalle de la escombrera de la mina."
+      },
+      {
+        "image": "/assets/images/POIs/Escombrera3.jpg",
         "imageDescription":"Detalle de la escombrera de la mina."
       }
     ]
