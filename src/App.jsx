@@ -1,12 +1,15 @@
 import './App.css'
 import { SettingsProvider } from "./context/SettingsContext";
+import { LanguageProvider } from './context/LanguageContext';
 import Scene from "./components/Scene";
 
 export default function App() {
-    
+
     return (
-        <SettingsProvider>
-            <Scene />
-        </SettingsProvider>
+        <LanguageProvider>
+            <SettingsProvider>
+                <Scene />
+            </SettingsProvider>
+        </LanguageProvider>
     );
 }

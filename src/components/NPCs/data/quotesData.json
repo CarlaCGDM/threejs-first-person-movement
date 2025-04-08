@@ -1,5 +1,5 @@
-[
-    {
+{
+    "ES": {
         "Cova bonica": [
             "¡Qué suerte que la mina no destruyó el yacimiento!",
             "La cueva se dividía en 3 salas… ¿para qué usarían cada una? Me gustaría saber más.",
@@ -25,5 +25,32 @@
             "¿Por qué no se conservarán los cuernos? No están hechos de hueso? Tengo que leer sobre ello.",
             "Que curioso, pone que se encontró en la Cova del Rinoceront, pero esta es la Cova Bonica."
         ]
+    },
+    "EN": {
+        "Cova bonica": [
+            "What a relief to know the mining operations didn't damage this archaeological site!",
+            "The cave had three distinct chambers... I wonder what each one was used for? I'd love to learn more.",
+            "They're still conducting excavations in this cave, aren't they? I bet they'll uncover some extraordinary finds we don't even know about yet."
+        ],
+        "Palaeoloxodon antiquus": [
+            "An elephant skeleton with all its bones in place - I've never seen anything like it!",
+            "Hard to believe these elephants roamed Catalonia 120,000 years ago - it's like something from modern-day Africa!",
+            "They found remains dating from 7,000 years ago in this cave, but this elephant is much older. I wonder why it's displayed here?"
+        ],
+        "Haploidoceros mediterraneus": [
+            "This skull is missing the tips of the antlers. I wonder if any complete specimens have ever been found?",
+            "Modern deer can weigh 200kg, so at about 90kg, this one was relatively small.",
+            "This fossil wasn't even found here... I wonder where the rest of the collection is kept."
+        ],
+        "Panthera leo": [
+            "Lions here, 40,000 years ago? Thank goodness they're gone now!",
+            "The jaw looks smaller than I expected, but that fang is seriously impressive.",
+            "I wonder what animals lived alongside the cave dwellers? This lion wasn't found in this cave..."
+        ],
+        "Stephannorhinus hundsheimensis": [
+            "Look at those teeth - and this wasn't even a full-grown adult!",
+            "Why didn't the horns survive the passage of time? I thought they were made of bone - I should look that up.",
+            "That's odd - the label says it was found at Cova del Rinoceront, but this is the Cova Bonica."
+        ]
     }
-]
+}

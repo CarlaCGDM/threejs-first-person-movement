@@ -19,8 +19,8 @@ const PulsatingIndicator = ({ onPointerOver, onPointerOut, onClick }) => {
                 <style>
                     {`
                         .pulsating-circle {
-                            width: 20px;
-                            height: 20px;
+                            width: 30px;
+                            height: 30px;
                             background-color: rgba(255, 255, 255, 0.8); /* Yellow */
                             border-radius: 50%;
                             box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);

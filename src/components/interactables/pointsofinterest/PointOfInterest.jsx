@@ -8,6 +8,7 @@ import { DebugCube } from "../DebugCube";
 import { useHighlightMaterial } from "../hooks/useHighlightMaterial";
 import { usePOIModelLoader } from "../hooks/usePOIModelLoader";
 import { usePOIInteractions } from "../hooks/usePOIInteractions";
+import { usePlayerDistance } from "../hooks/usePlayerDistance";
 
 /**
  * Interactive Point of Interest component featuring:
@@ -41,14 +42,16 @@ const PointOfInterest = forwardRef(({
   const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb");   // Model URL with fallback to default treasure chest
   const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Dimensions of the loaded model (default 1x1x1 cube)
   const [materials, setMaterials] = useState([]); // Materials from the model for hover effects
-  const [playerDistance, setPlayerDistance] = useState(1);  // Distance to player (default 1 unit)
 
   // Context and Hooks
   // -----------------------------------------------------------------
 
   // Access global settings and dispatch function
   const { dispatch, settings } = useSettings();
-  const { devMode, selectedProp, selectedPOI } = settings;
+  const { devMode, selectedProp, selectedPOI, playerRef } = settings;
+
+  // Track player proximity (optimized with frame skipping)
+  const playerDistance = usePlayerDistance(position, playerRef);
 
   // Interaction state and handlers (must be before model loader)
   const { isHovered, interactionHandlers } = usePOIInteractions(
@@ -109,13 +112,13 @@ const PointOfInterest = forwardRef(({
       )}
 
       {/* Floating name tag (visible on hover when nothing else is selected) */}
-      {isHovered && !selectedPOI && !selectedProp && (
+      {playerDistance <= 5 && !selectedPOI && !selectedProp && (
         <FloatingName
-          name={playerDistance <= 5 ? poiName : "?"} // Show "?" when far away
-          position={[0, 0.7, 0]} // Position above center
+          name={poiName} // Show "?" when far away
+          position={[0, 0.5, 0]} // Position above center
           playerDistance={playerDistance}
           occlusionMeshRef={occlusionMeshRef}
-          distanceFactor={6} // Visibility range
+          distanceFactor={4} // Visibility rangeaw
           style={{
             background: 'rgba(30, 30, 40, 0.9)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
