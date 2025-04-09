@@ -8,8 +8,6 @@ import { PropsSetup } from "./interactables/props/PropsSetup";
 import { PointsOfInterestSetup } from "./interactables/pointsofinterest/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "./player/hooks/useCustomKeyboardControls";
-import propsData from "../data/propsData.json";
-import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./environment/SceneWithRoomEnvironment";
 import { Effects } from "./environment/Effects";
 import NPCNavigation from "./NPCs/NPCNavigation/NPCNavigation";
@@ -18,7 +16,7 @@ import NPCManager from "./NPCs/NPCManager/NPCManager";
 import { Suspense } from "react";
 import { LoadingScreen } from "./LoadingScreen";
 
-export default function Content({ playerRef, orbitControlsRef }) {
+export default function Content({ playerRef, orbitControlsRef, propsData, POIsData }) {
     const keys = useCustomKeyboardControls();
     const { settings } = useSettings();
 
@@ -40,7 +38,7 @@ export default function Content({ playerRef, orbitControlsRef }) {
             <Suspense fallback={<LoadingScreen />} >
                 {/* Performance monitoring overlay */}
 
-                <Stats />             
+                {/* <Stats />              */}
 
                 {/* Scene environment setup */}
                 <SceneWithRoomEnvironment />

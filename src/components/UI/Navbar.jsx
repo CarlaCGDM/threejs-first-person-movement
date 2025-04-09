@@ -2,9 +2,13 @@ import { useSettings } from '../../context/SettingsContext';
 import { VolumeControl } from './audio/VolumeControl';
 import { IconButton } from './IconButton';
 import { useEffect } from 'react';
+import { useTranslations } from '../../hooks/useTranslations';
 
 export function Navbar() {
     const { settings, dispatch } = useSettings();
+
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('navbar'); // Retrieve metadataPanel labels
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -35,19 +39,20 @@ export function Navbar() {
 
     return (
         <>
-            <div style={{...styles.navbarContainer, 
+            <div style={{
+                ...styles.navbarContainer,
                 backgroundColor: settings.ui.isFullscreen ? 'transparent' : '#272626',
                 borderBottom: settings.ui.isFullscreen ? 'none' : "1px solid #3a3a3a",
-                }}>
-                {!settings.ui.isFullscreen && <div style={styles.title}>Cova Bonica Virtual Tour</div>}
+            }}>
+                {!settings.ui.isFullscreen && <div style={styles.title}>{UILabels.title}</div>}
 
-                <div style={{...styles.buttonsContainer, opacity: settings.ui.isFullscreen ? 0 : 1}}>
+                <div style={{ ...styles.buttonsContainer, opacity: settings.ui.isFullscreen ? 0 : 1 }}>
                     <IconButton
                         iconOn="fossil.svg"
                         isActive={settings.ui.showInstructions}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_INFO" })}
-                        title="Información sobre la cueva"
+                        title={UILabels.infoAboutCave}
                     />
 
                     <IconButton
@@ -56,7 +61,7 @@ export function Navbar() {
                         isActive={settings.ui.showNPCs}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_NPCS" })}
-                        title="Visitantes virtuales"
+                        title={UILabels.virtualVisitors}
                     />
 
                     <IconButton
@@ -65,7 +70,7 @@ export function Navbar() {
                         isActive={settings.ui.showMinimap}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_MINIMAP" })}
-                        title="Minimapa"
+                        title={UILabels.minimap}
                     />
 
                     <IconButton
@@ -73,7 +78,7 @@ export function Navbar() {
                         isActive={settings.ui.showCredits}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_CREDITS" })}
-                        title="Créditos y agradecimientos"
+                        title={UILabels.creditsAndAcknowledgments}
                     />
 
                     < VolumeControl />
@@ -83,7 +88,7 @@ export function Navbar() {
                         isActive={settings.ui.isFullscreen}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={toggleFullscreen}
-                        title="Pantalla completa"
+                        title={UILabels.fullscreen}
                     />
                 </div>
             </div>

@@ -1,7 +1,12 @@
+import { useTranslations } from "../../hooks/useTranslations";
+
 export function InstructionsPanel() {
+
+  const { getComponentLabels } = useTranslations();
+  const UIlabels = getComponentLabels('instructionsPanel'); // Retrieve metadataPanel labels
+
     return (
       <div style={styles.instructionsPanel}>
-        {/* <h2 style={styles.heading}>Instructions</h2> */}
         <p style={styles.text}><img
                             src={`/assets/icons/ui/mouse_right_02.svg`}
                             alt={"guía"}
@@ -12,7 +17,7 @@ export function InstructionsPanel() {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> Cámara</p>
+                        /> {UIlabels.camera}</p>
         <p style={styles.text}><img
                             src={`/assets/icons/ui/keys.svg`}
                             alt={"guía"}
@@ -23,7 +28,7 @@ export function InstructionsPanel() {
                                 margin: "0 0.3em",
                                 marginBottom: "0.1em"
                             }}
-                        /> Movimiento</p>
+                        /> {UIlabels.movement}</p>
         
       </div>
     );
@@ -37,10 +42,6 @@ export function InstructionsPanel() {
       left: 5,
       opacity: 0.5,
       zIndex: 1000,
-      // backgroundColor: "rgba(0, 0, 0, 0.7)",
-      // padding: "10px 20px",
-      // borderRadius: "8px",
-      // boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
     },
     heading: {
       margin: "0 0 10px 0",

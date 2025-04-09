@@ -1,20 +1,26 @@
 import { IconButton } from "../UI/IconButton";
+import { useTranslations } from '../../hooks/useTranslations';
 
 export function MetadataPanel({
   title,
+  subtitle,
   metadata,
   showMetadata,
   onToggleMetadata,
   customFields = null
 }) {
+
+  const { getComponentLabels } = useTranslations();
+  const UILabels = getComponentLabels('metadataPanel'); // Retrieve metadataPanel labels
+
   // Define all possible fields with their display labels
   const fieldDefinitions = {
-    historicalPeriod: "Periodo histórico",
-    excavationSite: "Procedencia",
-    currentLocation: "Localización actual",
-    description: "Descripción",
-    size: "Dimensiones",
-    digitizedBy: "Digitalización",
+    historicalPeriod: UILabels.historicalPeriod,
+    excavationSite: UILabels.excavationSite,
+    currentLocation: UILabels.currentLocation,
+    description: UILabels.description,
+    size: UILabels.size,
+    digitizedBy: UILabels.digitizedBy,
   };
 
   // Use custom fields if provided, otherwise use all available fields from metadata
@@ -28,6 +34,7 @@ export function MetadataPanel({
         <div style={styles.metadataContainer}>
           <div style={styles.metadataPanel}>
             <h2 style={styles.name}>{title}</h2>
+            {subtitle && <h3 style={styles.subtitle}><i>{subtitle}</i></h3>}
             <div style={styles.metadataList}>
               {fieldsToRender.map(field => (
                 <div key={field} style={styles.metadataItem}>
@@ -79,6 +86,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     gap: "10px",
+    marginTop: "2vh",
   },
   metadataItem: {
     display: "flex",
@@ -89,6 +97,14 @@ const styles = {
     color: "#272626",
     fontFamily: "Mulish, sans-serif",
     fontSize: "1.5rem",
+    marginBottom: 0,
+  },
+  subtitle: {
+    color: "#777676",
+    fontFamily: "Mulish, sans-serif",
+    fontSize: "1.1rem",
+    fontWeight: "100",
+    margin: 0,
   },
   label: {
     color: "#272626",

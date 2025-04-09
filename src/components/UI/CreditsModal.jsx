@@ -1,5 +1,14 @@
+import multilanguageCreditsData from "../../data/creditsData.json"
+import { useContext } from "react";
+import { LanguageContext } from "../../context/LanguageContext";
 
 export function CreditsModal({ onClose }) {
+
+    // Language settings
+    const { language } = useContext(LanguageContext); // Get language from context
+
+    // Select the appropriate data based on language setting
+    const creditsData = language === 'ES' ? multilanguageCreditsData.ES : multilanguageCreditsData.EN
 
     return (
         <div style={styles.modalContainer}>
@@ -8,21 +17,20 @@ export function CreditsModal({ onClose }) {
                     &times;
                 </button>
                 <div style={styles.modalHeader}>
-                    <h2 style={styles.title}>Créditos</h2>
-
+                    <h2 style={styles.title}>{creditsData.credits.title}</h2>
                 </div>
                 <div style={styles.content}>
                     <p style={styles.paragraph}>
-                        Este proyecto ha sido llevado a cabo por Nadina Carla Cardillo Garreta y Laura Gómez Morgado.
+                        {creditsData.credits.content[0]}
                     </p>
                     <p style={styles.paragraph}>
-                        Los modelos 3D utilizados fueron realizados para el Grup de Recerca del Quaternari (SERP) de la Universitat de Barcelona.
+                        {creditsData.credits.content[1]}
                     </p>
 
                     <div style={styles.section}>
-                        <h3 style={styles.subtitle}>Agradecimientos:</h3>
+                        <h3 style={styles.subtitle}>{creditsData.acknowledgements.title}</h3>
                         <p style={styles.paragraph}>
-                            A Joan Daura y Montserrat Sanz (GRQ) por su colaboración y a Almudena Yagüe por permitir el uso de sus ilustraciones.
+                            {creditsData.acknowledgements.content[0]}
                         </p>
                     </div>
                 </div>

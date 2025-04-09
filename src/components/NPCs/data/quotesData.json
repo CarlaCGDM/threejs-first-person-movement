@@ -30,7 +30,7 @@
         "Cova bonica": [
             "What a relief to know the mining operations didn't damage this archaeological site!",
             "The cave had three distinct chambers... I wonder what each one was used for? I'd love to learn more.",
-            "They're still conducting excavations in this cave, aren't they? I bet they'll uncover some extraordinary finds we don't even know about yet."
+            "They're still conducting excavations in this cave, right? I bet they'll uncover some extraordinary finds we don't even know about yet."
         ],
         "Palaeoloxodon antiquus": [
             "An elephant skeleton with all its bones in place - I've never seen anything like it!",
@@ -38,8 +38,8 @@
             "They found remains dating from 7,000 years ago in this cave, but this elephant is much older. I wonder why it's displayed here?"
         ],
         "Haploidoceros mediterraneus": [
-            "This skull is missing the tips of the antlers. I wonder if any complete specimens have ever been found?",
-            "Modern deer can weigh 200kg, so at about 90kg, this one was relatively small.",
+            "This skull is missing the tips of its antlers. I wonder if any complete specimens have ever been found?",
+            "Modern deer can easily weigh 200kg, so at about 90kg, this one was relatively small.",
             "This fossil wasn't even found here... I wonder where the rest of the collection is kept."
         ],
         "Panthera leo": [
@@ -50,7 +50,7 @@
         "Stephannorhinus hundsheimensis": [
             "Look at those teeth - and this wasn't even a full-grown adult!",
             "Why didn't the horns survive the passage of time? I thought they were made of bone - I should look that up.",
-            "That's odd - the label says it was found at Cova del Rinoceront, but this is the Cova Bonica."
+            "That's odd - the label says it was found at Cova del Rinoceront, but this is Cova Bonica."
         ]
     }
 }

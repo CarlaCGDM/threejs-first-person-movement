@@ -1,4 +1,5 @@
-[
+{ 
+  "ES": [
   {
     "poiName": "Sala lateral 1",
     "position": [4.97213, -2.49965, 2.24257],
@@ -79,4 +80,87 @@
       }
     ]
   }
+],
+"EN": [
+  {
+    "poiName": "1st Lateral Chamber",
+    "position": [4.97213, -2.49965, 2.24257],
+    "metadata": {
+      "description": "This area corresponds to the first of the lateral chambers in the cave, located closest to the entrance."
+    },
+    "modelFile": "/assets/models/POIs/POI1.glb",
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Sala1.jpg",
+        "imageDescription":"Detail of the 1st lateral chamber."
+      },
+      {
+        "image": "/assets/images/POIs/Sala1_02.jpg",
+        "imageDescription":"Detail of the 1st lateral chamber."
+      }
+    ]
+  },
+  {
+    "poiName": "Neolithic Remains",
+    "position": [2.47955, -2.73506, -2.72549],
+    "metadata": {
+      "description": "In this area of the cave, researchers uncovered remains that have provided valuable insights into the populations that inhabited the region during the Neolithic period. Preserved organic materials include human bones, small mammal bones, and carbonized remains of trees and shrubs, along with tools and various objects such as stone utensils, ornaments, pottery, and more."
+    },
+    "modelFile": "/assets/models/POIs/POI2.glb",
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/RestosNeoliticos.jpg",
+        "imageDescription":"Detail of the area where the remains were found."
+      },
+      {
+        "image": "/assets/images/POIs/huesos_cova_bonica_foto1.png",
+        "imageDescription":"Human remains from the Early Neolithic Cardial culture, discovered in the Cova Bonica of Vallirana, estimated to be between 5,000 and 4,300 years old. (Photo: Daura & M. Sanz)"
+      },
+      {
+        "image": "/assets/images/POIs/ornamentos_cova_bonica_foto2.png",
+        "imageDescription":"Personal adornment ornaments associated with the human remains, among which a red coral bead (1) stands out (Photo: J. Daura & M. Sanz)."
+      }
+    ]
+  },
+  {
+    "poiName": "2nd Lateral Chamber",
+    "position": [9.47179, -0.489526, -2.33263],
+    "metadata": {
+      "description": "This area corresponds to the second lateral chamber in the cave, situated further inside."
+    },
+    "modelFile": "/assets/models/POIs/POI3.glb",
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Sala2.jpg",
+        "imageDescription":"Detail of the 2nd lateral chamber."
+      },
+      {
+        "image": "/assets/images/POIs/Sala2_01.jpg",
+        "imageDescription":"Detail of the access to the 2nd lateral chamber."
+      },
+      {
+        "image": "/assets/images/POIs/Sala2_02.jpg",
+        "imageDescription":"Detail of the 2nd lateral chamber."
+      }
+    ]
+  },
+  {
+    "poiName": "Mine Soil Heap",
+    "position": [-4.38825, -3.46406, 3.71715],
+    "metadata": {
+      "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
+    },
+    "modelFile": "/assets/models/POIs/POI4.glb",
+    "imageFiles": [
+      {
+        "image": "/assets/images/POIs/Escombrera2.jpg",
+        "imageDescription":"Detail of the mine spoil heap."
+      },
+      {
+        "image": "/assets/images/POIs/Escombrera3.jpg",
+        "imageDescription":"Detail of the mine spoil heap."
+      }
+    ]
+  }
 ]
+}

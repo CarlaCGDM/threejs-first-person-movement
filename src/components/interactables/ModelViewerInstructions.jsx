@@ -1,4 +1,10 @@
+import { useTranslations } from "../../hooks/useTranslations";
+
 export function ModelViewerInstructions() {
+
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('modelViewerInstructions'); // Retrieve metadataPanel labels
+
     return (
         <div style={styles.instructionsPanel}>
             <p style={styles.text}>
@@ -12,7 +18,7 @@ export function ModelViewerInstructions() {
                         margin: "0 0.3em 0.1em",
                         filter: "brightness(0) saturate(100%)" // Makes icon solid black
                     }}
-                /> Girar
+                /> {UILabels.rotate}
             </p>
             <p style={styles.text}>
                 <img
@@ -25,7 +31,7 @@ export function ModelViewerInstructions() {
                         margin: "0 0.3em 0.1em",
                         filter: "brightness(0) saturate(100%)" // Makes icon solid black
                     }}
-                /> Acercar / alejar
+                /> {UILabels.zoom}
             </p>
             <p style={styles.text}>
                 <img
@@ -38,7 +44,7 @@ export function ModelViewerInstructions() {
                         margin: "0 0.3em 0.1em",
                         filter: "brightness(0) saturate(100%)" // Makes icon solid black
                     }}
-                /> Desplazar
+                /> {UILabels.pan}
             </p>
         </div>
     );

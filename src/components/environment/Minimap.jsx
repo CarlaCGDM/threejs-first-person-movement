@@ -6,6 +6,11 @@ import * as THREE from "three";
 function MinimapScene({ playerRef }) {
     const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb");
     const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
+    const { scene: pawn } = useGLTF("/assets/models/pawn.glb");
+    const { scene: POI1 } = useGLTF("/assets/models/POIs/POI1.glb");
+    const { scene: POI2 } = useGLTF("/assets/models/POIs/POI2.glb");
+    const { scene: POI3 } = useGLTF("/assets/models/POIs/POI3.glb");
+    const { scene: POI4 } = useGLTF("/assets/models/POIs/POI4.glb");
 
     const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
     const [isPlayerReady, setIsPlayerReady] = useState(false); // 🔹 Track when playerRef is valid
@@ -16,7 +21,7 @@ function MinimapScene({ playerRef }) {
         clone.scale.set(0.3, 0.3, 0.3);
         clone.traverse((child) => {
             if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+                child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 });
             }
         });
         return clone;
@@ -28,11 +33,71 @@ function MinimapScene({ playerRef }) {
         clone.scale.set(0.3, 0.3, 0.3);
         clone.traverse((child) => {
             if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: "blue", transparent: true, opacity: 1, side: THREE.DoubleSide });
+                child.material = new THREE.MeshBasicMaterial({ color: "#3d292a", transparent: true, opacity: 1, side: THREE.DoubleSide });
             }
         });
         return clone;
     }, [path]);
+
+    // Clone and scale the path model
+    const miniPawn = useMemo(() => {
+        const clone = pawn.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "orange" });
+            }
+        });
+        return clone;
+    }, [pawn]);
+
+     // Clone and scale the path model
+     const miniPOI1 = useMemo(() => {
+        const clone = POI1.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
+            }
+        });
+        return clone;
+    }, [POI1]);
+
+     // Clone and scale the path model
+     const miniPOI2 = useMemo(() => {
+        const clone = POI2.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
+            }
+        });
+        return clone;
+    }, [POI2]);
+
+    // Clone and scale the path model
+    const miniPOI3 = useMemo(() => {
+        const clone = POI3.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
+            }
+        });
+        return clone;
+    }, [POI3]);
+
+     // Clone and scale the path model
+     const miniPOI4 = useMemo(() => {
+        const clone = POI4.clone();
+        clone.scale.set(0.3, 0.3, 0.3);
+        clone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
+            }
+        });
+        return clone;
+    }, [POI4]);
 
     // Wait for playerRef to become available
     useEffect(() => {
@@ -74,16 +139,21 @@ function MinimapScene({ playerRef }) {
     return (
         <>
             <Suspense fallback={null} >
+                <group position={[-1,0,0]}>
                 <Clone object={miniModel} />
                 <Clone object={miniPath} />
+                {/* <Clone object={miniPOI1} position={[4.97213*0.3, -2.4*0.3, 2.24257*0.3]}/>
+                <Clone object={miniPOI2} position={[2.47955*0.3, -2.6*0.3, -2.72549*0.3]}/>
+                <Clone object={miniPOI3} position={[9.47179*0.3, -0.489526*0.3, -2.33263*0.3]}/>
+                <Clone object={miniPOI4} position={[-4.38825*0.3, -3.46406*0.3, 3.71715*0.3]}/> */}
+                </group>
             </Suspense >
 
             {/* Player Indicator */}
             {isPlayerReady && (
-                <mesh position={playerPosition}>
-                    <sphereGeometry args={[0.2, 16, 16]} />
-                    <meshBasicMaterial color="red" />
-                </mesh>
+                <group position={playerPosition}>
+                     <Clone object={miniPawn} position={[-1,-0.2,0]}/>
+                </group>
             )}
 
             {/* Grid Helper */}
@@ -99,7 +169,7 @@ export function Minimap({ playerRef }) {
     return (
         <div style={styles.minimapContainer}>
             <Canvas
-                camera={{ position: [5, 5, 5], fov: 50 }}
+                camera={{ position: [0,7,0], fov: 50 }}
                 style={styles.minimapCanvas}
             >
                 <MinimapScene playerRef={playerRef} />

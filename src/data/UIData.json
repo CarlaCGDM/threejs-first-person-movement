@@ -1,0 +1,106 @@
+{
+    "ES": {
+        "metadataPanel": {
+            "historicalPeriod": "Periodo histórico",
+            "excavationSite": "Procedencia",
+            "currentLocation": "Localización actual",
+            "description": "Descripción",
+            "size": "Dimensiones",
+            "digitizedBy": "Técnica de digitalización"
+        },
+        "instructionsPanel": {
+            "camera": "Cámara",
+            "movement": "Movimiento"
+        },
+        "propInfo": {
+            "toggleHDOn": "Ver en SD",
+            "toggleHDOff": "Ver en HD",
+            "toggleImages": "Ver imágenes",
+            "toggleModel": "Ver modelo 3D",
+            "toggleMetadataOn": "Ocultar información",
+            "toggleMetadataOff": "Mostrar información",
+            "closeButton": "Cerrar"
+        },
+        "imageViewer": {
+            "previousImage": "Imagen anterior",
+            "nextImage": "Imagen siguiente",
+            "imageAltText": "Imagen",
+            "thumbnailAltText": "Miniatura"
+        },
+        "modelViewerInstructions": {
+            "rotate": "Girar",
+            "zoom": "Acercar / alejar",
+            "pan": "Desplazar"
+        },
+        "modelViewer": {
+            "loading": "Cargando..."
+        },
+        "pointOfInterestInfo": {
+            "toggleMetadataOn": "Ocultar información",
+            "toggleMetadataOff": "Mostrar información"
+        },
+        "tutorialButton": {
+            "start": "Iniciar"
+        },
+        "navbar": {
+            "title": "Cova Bonica Virtual Tour",
+            "infoAboutCave": "Información sobre la cueva",
+            "virtualVisitors": "Visitantes virtuales",
+            "minimap": "Minimapa",
+            "creditsAndAcknowledgments": "Créditos y agradecimientos",
+            "fullscreen": "Pantalla completa"
+        }
+    },
+    "EN": {
+        "metadataPanel": {
+            "historicalPeriod": "Epoch",
+            "excavationSite": "Findspot",
+            "currentLocation": "Current location",
+            "description": "Description",
+            "size": "Dimensions",
+            "digitizedBy": "Digitization technique"
+        },
+        "instructionsPanel": {
+            "camera": "Camera",
+            "movement": "Movement"
+        },
+        "propInfo": {
+            "toggleHDOn": "View in SD",
+            "toggleHDOff": "View in HD",
+            "toggleImages": "View images",
+            "toggleModel": "View 3D model",
+            "toggleMetadataOn": "Hide information",
+            "toggleMetadataOff": "Show information",
+            "closeButton": "Close"
+        },
+        "imageViewer": {
+            "previousImage": "Previous image",
+            "nextImage": "Next image",
+            "imageAltText": "Image",
+            "thumbnailAltText": "Thumbnail"
+        },
+        "modelViewerInstructions": {
+            "rotate": "Rotate",
+            "zoom": "Zoom in / out",
+            "pan": "Pan"
+        },
+        "modelViewer": {
+            "loading": "Loading..."
+        },
+        "pointOfInterestInfo": {
+            "toggleMetadataOn": "Hide information",
+            "toggleMetadataOff": "Show information"
+        },
+        "tutorialButton": {
+            "start": "Start"
+        },
+        "navbar": {
+            "title": "Cova Bonica Virtual Tour",
+            "infoAboutCave": "Information about the cave",
+            "virtualVisitors": "Virtual visitors",
+            "minimap": "Minimap",
+            "creditsAndAcknowledgments": "Credits and acknowledgments",
+            "fullscreen": "Fullscreen"
+        }
+    }
+}

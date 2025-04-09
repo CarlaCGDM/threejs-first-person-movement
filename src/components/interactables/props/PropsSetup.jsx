@@ -18,6 +18,7 @@ export function PropsSetup({ props }) {
           position={prop.position}
           rotation={prop.rotation}
           artifactName={prop.artifactName}
+          commonName={prop.commonName}
           infoViewRotation={prop.infoViewRotation}
           metadata={prop.metadata}
           modelFile={prop.modelFile}

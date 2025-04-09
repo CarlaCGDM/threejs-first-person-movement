@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { useTranslations } from "../../hooks/useTranslations";
 
 export function ImageViewer({ imageFiles = [], showMetadata = true }) {
+
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('metadataPanel'); // Retrieve metadataPanel labels
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
 
@@ -84,7 +89,7 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                 >
                     <img
                         src={`/assets/icons/ui/small_arrow_left.svg`}
-                        alt={"Imagen anterior"}
+                        alt={UILabels.prevImage}
                     />
                 </button>
                 {getVisibleThumbnails().map((thumb) => (
@@ -99,7 +104,7 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                     >
                         <img
                             src={thumb.src}
-                            alt={`Thumbnail ${thumb.index + 1}`}
+                            alt={`${UILabels.thumbnailAltText} ${thumb.index + 1}`}
                             style={styles.thumbnailImage}
                         />
                     </div>
@@ -115,7 +120,7 @@ export function ImageViewer({ imageFiles = [], showMetadata = true }) {
                 >
                     <img
                         src={`/assets/icons/ui/small_arrow_right.svg`}
-                        alt={"Imagen anterior"}
+                        alt={UILabels.nextImage}
                     />
                 </button>
             </div>

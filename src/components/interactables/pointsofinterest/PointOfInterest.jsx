@@ -94,10 +94,7 @@ const PointOfInterest = forwardRef(({
   return (
     <group ref={ref} position={position}>
       {/* Async model loading with fallback UI */}
-      <Suspense fallback={
-        <Html center>
-          <span>Loading...</span>
-        </Html>
+      <Suspense fallback={null
       }>
         {/* Only render if model loaded successfully */}
         {scene && <Clone object={scene} />}

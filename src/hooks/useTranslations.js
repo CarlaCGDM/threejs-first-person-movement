@@ -2,6 +2,7 @@
 import { useContext, useCallback } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import phrases from '../components/NPCs/data/quotesData.json';
+import UIData from '../data/UIData.json';
 
 export const useTranslations = () => {
   const { language } = useContext(LanguageContext);
@@ -20,5 +21,12 @@ export const useTranslations = () => {
       : "I'm observing this interesting artifact";
   }, [language]);  // Only recreate when language changes
 
-  return { getRandomPhrase, language };
+  // Wrap in useCallback with language as dependency
+  const getComponentLabels = useCallback((component) => {
+    // Get the translation object for the component and return it.
+    const componentData = UIData[language]?.[component] || UIData['EN'][component];
+    return componentData || {};
+  }, [language]); // Only recreate when language changes
+
+  return { getRandomPhrase, getComponentLabels, language };
 };
