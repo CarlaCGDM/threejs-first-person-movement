@@ -148,7 +148,7 @@
     "poiName": "Mine Soil Heap",
     "position": [-4.38825, -3.46406, 3.71715],
     "metadata": {
-      "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
+      "description": "This section corresponds to the remnants of the spoil heap from the mine that turned the cave into a mining site between the late 19th and early 20th centuries.\nThe material extracted was a highly pure type of calcite known as Sparry calcite, commonly referred to in the area as 'wolf salt' due to the large crystals it forms when fractured.\nContinuous extraction led to the destruction of a significant portion of the stalactites and stalagmites that once adorned the cave."
     },
     "modelFile": "/assets/models/POIs/POI4.glb",
     "imageFiles": [
