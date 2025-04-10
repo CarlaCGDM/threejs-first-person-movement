@@ -7,13 +7,15 @@ function MinimapScene({ playerRef }) {
     const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb");
     const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
     const { scene: pawn } = useGLTF("/assets/models/pawn.glb");
+    const { scene: pawnBase } = useGLTF("/assets/models/pawnBase.glb");
     const { scene: POI1 } = useGLTF("/assets/models/POIs/POI1.glb");
     const { scene: POI2 } = useGLTF("/assets/models/POIs/POI2.glb");
     const { scene: POI3 } = useGLTF("/assets/models/POIs/POI3.glb");
     const { scene: POI4 } = useGLTF("/assets/models/POIs/POI4.glb");
 
     const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
-    const [isPlayerReady, setIsPlayerReady] = useState(false); // 🔹 Track when playerRef is valid
+    const [playerRotation, setPlayerRotation] = useState(0); // Track player's Y rotation
+    const [isPlayerReady, setIsPlayerReady] = useState(false);
 
     // Clone and scale the cave model
     const miniModel = useMemo(() => {
@@ -39,7 +41,7 @@ function MinimapScene({ playerRef }) {
         return clone;
     }, [path]);
 
-    // Clone and scale the path model
+    // Clone and scale the pawn model
     const miniPawn = useMemo(() => {
         const clone = pawn.clone();
         clone.scale.set(0.3, 0.3, 0.3);
@@ -51,53 +53,17 @@ function MinimapScene({ playerRef }) {
         return clone;
     }, [pawn]);
 
-     // Clone and scale the path model
-     const miniPOI1 = useMemo(() => {
-        const clone = POI1.clone();
+    // Clone and scale the pawnBase model
+    const miniPawnBase = useMemo(() => {
+        const clone = pawnBase.clone();
         clone.scale.set(0.3, 0.3, 0.3);
         clone.traverse((child) => {
             if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
+                child.material = new THREE.MeshBasicMaterial({ color: "yellow" });
             }
         });
         return clone;
-    }, [POI1]);
-
-     // Clone and scale the path model
-     const miniPOI2 = useMemo(() => {
-        const clone = POI2.clone();
-        clone.scale.set(0.3, 0.3, 0.3);
-        clone.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
-            }
-        });
-        return clone;
-    }, [POI2]);
-
-    // Clone and scale the path model
-    const miniPOI3 = useMemo(() => {
-        const clone = POI3.clone();
-        clone.scale.set(0.3, 0.3, 0.3);
-        clone.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
-            }
-        });
-        return clone;
-    }, [POI3]);
-
-     // Clone and scale the path model
-     const miniPOI4 = useMemo(() => {
-        const clone = POI4.clone();
-        clone.scale.set(0.3, 0.3, 0.3);
-        clone.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: "red", side: THREE.DoubleSide});
-            }
-        });
-        return clone;
-    }, [POI4]);
+    }, [pawnBase]);
 
     // Wait for playerRef to become available
     useEffect(() => {
@@ -115,18 +81,20 @@ function MinimapScene({ playerRef }) {
         }
     }, [playerRef]);
 
-    // Update player position when ref is available
+    // Update player position and rotation when ref is available
     useEffect(() => {
         if (!isPlayerReady) return;
 
         const updatePlayerPosition = () => {
             if (playerRef.current) {
                 const newPlayerPosition = playerRef.current.translation();
+                const newPlayerRotation = playerRef.current.rotation().y; // Get Y rotation
                 setPlayerPosition([
                     newPlayerPosition.x * 0.3,
                     newPlayerPosition.y * 0.3,
-                    newPlayerPosition.z * 0.3
+                    newPlayerPosition.z * 0.3,
                 ]);
+                setPlayerRotation(newPlayerRotation); // Update player rotation
             }
             requestAnimationFrame(updatePlayerPosition);
         };
@@ -134,25 +102,22 @@ function MinimapScene({ playerRef }) {
         updatePlayerPosition();
 
         return () => cancelAnimationFrame(updatePlayerPosition);
-    }, [isPlayerReady]); // 🔹 Start updating only when playerRef is ready
+    }, [isPlayerReady]);
 
     return (
         <>
             <Suspense fallback={null} >
                 <group position={[-1,0,0]}>
-                <Clone object={miniModel} />
-                <Clone object={miniPath} />
-                {/* <Clone object={miniPOI1} position={[4.97213*0.3, -2.4*0.3, 2.24257*0.3]}/>
-                <Clone object={miniPOI2} position={[2.47955*0.3, -2.6*0.3, -2.72549*0.3]}/>
-                <Clone object={miniPOI3} position={[9.47179*0.3, -0.489526*0.3, -2.33263*0.3]}/>
-                <Clone object={miniPOI4} position={[-4.38825*0.3, -3.46406*0.3, 3.71715*0.3]}/> */}
+                    <Clone object={miniModel} />
+                    <Clone object={miniPath} />
                 </group>
             </Suspense >
 
             {/* Player Indicator */}
             {isPlayerReady && (
-                <group position={playerPosition}>
-                     <Clone object={miniPawn} position={[-1,-0.2,0]}/>
+                <group position={playerPosition} rotation={[0, playerRotation, 0]}> {/* Apply Y rotation */}
+                    <Clone object={miniPawn} position={[-1,-0.2,0]} />
+                    <Clone object={miniPawnBase} position={[-1,-0.2,0]} />
                 </group>
             )}
 
@@ -181,17 +146,16 @@ export function Minimap({ playerRef }) {
 // Styles
 const styles = {
     minimapContainer: {
-        position: "fixed", // Changed from absolute to fixed
+        position: "fixed", 
         bottom: "5px",
         right: "5px",
         width: "200px",
         height: "200px",
-        border: "1px solid #3a3a3a", // Matches navbar border
+        border: "1px solid #3a3a3a", 
         borderRadius: "0.5vw",
-        backgroundColor: "#272626CC", // Same as navbar
+        backgroundColor: "#272626CC", 
         zIndex: 1000,
         overflow: "hidden",
-        // Remove borderRadius for sharp corners
     },
     minimapCanvas: {
         width: "100%",

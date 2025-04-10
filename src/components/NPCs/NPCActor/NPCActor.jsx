@@ -176,8 +176,6 @@ export function NPCActor({
     };
   }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
 
-  console.log(playerDistance)
-
   return (
     <group ref={groupRef}>
       <Suspense fallback={null}>

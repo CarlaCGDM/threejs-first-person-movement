@@ -92,7 +92,7 @@ export function LoadingScreen() {
           ></div>
         </div>
         <div style={styles.progressText}>
-          {Math.round(progress)}% complete
+          {Math.round(progress)}%
         </div>
       </div>
     </Html>
