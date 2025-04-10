@@ -1,8 +1,13 @@
 // components/UI/LoadingScreen.jsx
 import { Html, useProgress } from "@react-three/drei";
+import { useTranslations } from "../hooks/useTranslations";
 
 export function LoadingScreen() {
   const { progress } = useProgress();
+
+  const { getComponentLabels } = useTranslations();
+  const UILabels = getComponentLabels('loadingScreen'); // Retrieve metadataPanel labels
+
 
   const styles = {
     wrapper: {
@@ -74,15 +79,15 @@ export function LoadingScreen() {
       style={styles.wrapper}
     >
       <style>{styles.spinKeyframes}</style>
-      
+
       <div style={styles.container}>
         <div style={styles.title}>Loading Cova Bonica</div>
         <div style={styles.spinner}></div>
         <div style={styles.progressBar}>
-          <div 
-            style={{ 
+          <div
+            style={{
               ...styles.progressFill,
-              width: `${progress}%` 
+              width: `${progress}%`
             }}
           ></div>
         </div>

@@ -11,7 +11,7 @@ function Model({ url }) {
   scene.traverse((child) => {
     if (child.isMesh) {
       child.material = new THREE.MeshBasicMaterial({ 
-        color: 'cccccc',
+        color: '#cccccc',
         //wireframe: true,
         //transparent: true,
         opacity: 0.6,

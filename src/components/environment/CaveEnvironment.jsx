@@ -1,5 +1,5 @@
 import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
-import { useMemo, Suspense } from "react";
+import { useMemo, Suspense, useEffect } from "react";
 import * as THREE from "three";
 
 const MemoizedModel = ({ modelUrl }) => {
@@ -7,6 +7,14 @@ const MemoizedModel = ({ modelUrl }) => {
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+
+  useEffect(() => {
+    let count = 0;
+    scene.traverse(child => {
+      if (child.isMesh) count++;
+    });
+    console.log(`Draw call estimate for ${modelUrl}:`, count);
+  }, [scene]);
 
   return <primitive object={scene} />;
 };
@@ -16,6 +24,15 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+
+  useEffect(() => {
+    let count = 0;
+    scene.traverse(child => {
+      if (child.isMesh) count++;
+    });
+    console.log(`Draw call estimate for ${modelUrl}:`, count);
+  }, [scene]);
+
   scene.frustumCulled = false
   scene.traverse((child) => {
     if (child.isMesh && child.material) {
@@ -68,17 +85,6 @@ export function Ground() {
 
   return (
     <>
-      {/* <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
-      <Suspense fallback={
-        <>
-          <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_01.glb'} />
-          <Loader />
-        </>
-      }>
-        
-
-      </Suspense> */}
-
       <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
     </>

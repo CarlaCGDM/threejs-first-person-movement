@@ -21,10 +21,6 @@ const initialSettings = {
     isFullscreen: false,
     isAudioOn: false,
     audioVolume: 0.3,
-  },
-
-  npc: {
-    occupiedWaypoints: new Set() // Store waypoint indices instead of positions
   }
 
 };
@@ -77,37 +73,6 @@ function settingsReducer(state, action) {
           ...state.ui,
           audioVolume: action.payload,
           isAudioOn: action.payload > 0 // Automatically unmute if volume > 0
-        }
-      };
-
-    // NPC waypoint management cases
-    case "ADD_OCCUPIED_WAYPOINT":
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: new Set([...state.npc.occupiedWaypoints, action.payload])
-        }
-      };
-
-    case "REMOVE_OCCUPIED_WAYPOINT":
-      const updatedWaypoints = new Set(state.npc.occupiedWaypoints);
-      updatedWaypoints.delete(action.payload);
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: updatedWaypoints
-        }
-      };
-
-
-    case "CLEAR_OCCUPIED_WAYPOINTS":
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: new Set()
         }
       };
 

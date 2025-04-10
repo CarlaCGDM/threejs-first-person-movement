@@ -49,6 +49,9 @@
             "minimap": "Minimapa",
             "creditsAndAcknowledgments": "Créditos y agradecimientos",
             "fullscreen": "Pantalla completa"
+        },
+        "loadingScreen":{
+            "loading":"Cargando la experiencia 3D..."
         }
     },
     "EN": {
@@ -101,6 +104,9 @@
             "minimap": "Minimap",
             "creditsAndAcknowledgments": "Credits and acknowledgments",
             "fullscreen": "Fullscreen"
+        },
+        "loadingScreen":{
+            "loading":"Getting everything ready..."
         }
     }
 }

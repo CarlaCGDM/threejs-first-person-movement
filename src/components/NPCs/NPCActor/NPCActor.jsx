@@ -11,6 +11,15 @@ const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation
   const { scene } = useGLTF(modelUrl);
   const { actions } = useAnimations(animations, scene);
 
+  // ✨ Set backface culling to avoid "seeing inside" NPCs
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.side = THREE.FrontSide; // default in Three.js, but just to be explicit
+      }
+    });
+  }, [scene]);
+
   useEffect(() => {
     if (actions && initialAnimation) {
       actions[initialAnimation]?.reset().fadeIn(0).play();
@@ -20,6 +29,7 @@ const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation
 
   return <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
 };
+
 
 export function NPCActor({
   path,
@@ -39,10 +49,11 @@ export function NPCActor({
   const lastLowResActionRef = useRef(null);
   const lastHighResActionRef = useRef(null);
   const [currentAnimation, setCurrentAnimation] = useState('Walk');
+  const [playerDistance, setPlayerDistance] = useState(Infinity);
 
   // Load animations from low-res model
   const { scene, animations } = useGLTF(model + '/LOD_01.glb');
-
+  
   useEffect(() => {
     if (animations && animations.length > 0) {
       setAnimationsReady(true);
@@ -165,10 +176,12 @@ export function NPCActor({
     };
   }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
 
+  console.log(playerDistance)
+
   return (
     <group ref={groupRef}>
       <Suspense fallback={null}>
-        {animationsReady && (
+        { playerDistance > 0.25 && animationsReady && (
           <HighResModel
             modelUrl={model + '/LOD_03.glb'}
             animations={animations}
@@ -187,6 +200,7 @@ export function NPCActor({
         playerRef={playerRef}
         groupRef={groupRef}
         color={color}
+        onDistanceChange={setPlayerDistance}
       />
     </group>
   );
