@@ -103,7 +103,7 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
         />
       )}
 
-      {settings.ui.showMinimap && <Minimap playerRef={playerRef} />}
+      {settings.ui.showMinimap && <Minimap playerRef={playerRef} customOrbitControlsRef={orbitControlsRef} />}
     </div>
   );
 }

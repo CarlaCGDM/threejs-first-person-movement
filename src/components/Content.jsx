@@ -44,7 +44,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                 <Suspense fallback={<LoadingScreen />} >
                     {/* Performance monitoring overlay */}
 
-                    <Stats />
+                    {/* <Stats /> */}
 
                     {/* Scene environment setup */}
                     <SceneWithRoomEnvironment />
