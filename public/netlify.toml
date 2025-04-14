@@ -14,8 +14,3 @@
 
 [build.processing]
   skip_processing = true  # Disables fingerprinting
-
-[[plugins]]
-package = "@netlify/blobs"
-  [plugins.inputs]
-  type = "database"  # Stores blobs in Netlify's DB
