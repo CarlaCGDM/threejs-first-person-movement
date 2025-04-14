@@ -13,7 +13,7 @@
   environment = { NODE_ENV = "production" }
 
 [build]
-  command = "npm run build && node scripts/upload-models.js"
+  functions = "netlify/functions"
 
 [build.processing]
   skip_processing = true  # Disables fingerprinting
@@ -25,3 +25,4 @@ package = "@netlify/blobs"
 
 [functions]
 directory = "netlify/functions"
+node_bundler = "esbuild"
