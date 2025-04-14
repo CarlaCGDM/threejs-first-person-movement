@@ -17,6 +17,7 @@
     "@react-three/rapier": "^2.0.0",
     "drei": "^2.2.21",
     "http-proxy-middleware": "^3.0.3",
+    "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "three-pathfinding": "^1.3.0",
