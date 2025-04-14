@@ -22,3 +22,11 @@ package = "@netlify/blobs"
 
 [functions]
 directory = "netlify/functions"
+
+# For local testing add this:
+[dev]
+  autoLaunch = false
+  framework = "#custom"
+  [dev.environment]
+    NETLIFY_SITE_ID = "62f44a5a-ba8e-4d55-b9a8-90c95f43cf16"  # From Site Settings -> Site Information
+    NETLIFY_ACCESS_TOKEN = "nfp_9g9vj2ycKZnC5WxeuXp6RMRsUhnfW8ej8333" # From User Settings -> Applications
