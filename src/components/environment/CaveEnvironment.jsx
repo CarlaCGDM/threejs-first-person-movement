@@ -1,13 +1,21 @@
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Html } from "@react-three/drei";
 import { useMemo, useEffect } from "react";
 import { useBlobGLTF } from "../../utils/useBlobGLTF";
 
 const MemoizedModel = ({ modelUrl }) => {
 
-  const gltf = useBlobGLTF(modelUrl); // Changed from useGLTF
+  const { gltf, error } = useBlobGLTF(modelUrl.replace('/assets/models/', ''));
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+
+  useEffect(() => {
+    if (!scene) return;
+    // Your existing draw call logic
+  }, [scene]);
+
+  if (error) return <Html center>Error loading model</Html>;
+  if (!gltf) return <Html center>Loading...</Html>;
 
   return <primitive object={scene} />;
 };

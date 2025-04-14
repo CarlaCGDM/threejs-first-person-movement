@@ -19,3 +19,6 @@
 package = "@netlify/blobs"
   [plugins.inputs]
   type = "database"  # Stores blobs in Netlify's DB
+
+[functions]
+directory = "netlify/functions"
