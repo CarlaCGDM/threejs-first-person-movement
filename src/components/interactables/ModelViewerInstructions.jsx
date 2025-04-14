@@ -10,7 +10,7 @@ export function ModelViewerInstructions() {
             <p style={styles.text}>
                 <img
                     src={`/assets/icons/ui/mouse_left.svg`}
-                    alt="Orbitar"
+                    alt={UILabels.pan}
                     style={{
                         height: "2em",
                         width: "auto",
@@ -18,12 +18,12 @@ export function ModelViewerInstructions() {
                         margin: "0 0.3em 0.1em",
                         filter: "brightness(0) saturate(100%)" // Makes icon solid black
                     }}
-                /> {UILabels.rotate}
+                /> {UILabels.pan}
             </p>
             <p style={styles.text}>
                 <img
                     src={`/assets/icons/ui/mouse_middle.svg`}
-                    alt="Zoom"
+                    alt={UILabels.zoom}
                     style={{
                         height: "2em",
                         width: "auto",
@@ -33,10 +33,11 @@ export function ModelViewerInstructions() {
                     }}
                 /> {UILabels.zoom}
             </p>
+            
             <p style={styles.text}>
                 <img
                     src={`/assets/icons/ui/mouse_right.svg`}
-                    alt="Desplazamiento"
+                    alt={UILabels.rotate}
                     style={{
                         height: "2em",
                         width: "auto",
@@ -44,7 +45,7 @@ export function ModelViewerInstructions() {
                         margin: "0 0.3em 0.1em",
                         filter: "brightness(0) saturate(100%)" // Makes icon solid black
                     }}
-                /> {UILabels.pan}
+                /> {UILabels.rotate}
             </p>
         </div>
     );

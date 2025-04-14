@@ -12,5 +12,13 @@
 [build]
   environment = { NODE_ENV = "production" }
 
+[build]
+  command = "npm run build && node scripts/upload-models.js"
+
 [build.processing]
   skip_processing = true  # Disables fingerprinting
+
+[[plugins]]
+package = "@netlify/blobs"
+  [plugins.inputs]
+  type = "database"  # Stores blobs in Netlify's DB

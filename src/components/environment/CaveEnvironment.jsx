@@ -1,20 +1,13 @@
-import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
-import { useMemo, Suspense, useEffect } from "react";
-import * as THREE from "three";
+import { useGLTF } from "@react-three/drei";
+import { useMemo, useEffect } from "react";
+import { useBlobGLTF } from "../../utils/useBlobGLTF";
 
 const MemoizedModel = ({ modelUrl }) => {
-  const gltf = useGLTF(modelUrl);
+
+  const gltf = useBlobGLTF(modelUrl); // Changed from useGLTF
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
-
-  useEffect(() => {
-    let count = 0;
-    scene.traverse(child => {
-      if (child.isMesh) count++;
-    });
-    console.log(`Draw call estimate for ${modelUrl}:`, count);
-  }, [scene]);
 
   return <primitive object={scene} />;
 };
@@ -45,48 +38,12 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
   return <primitive object={scene} />;
 };
 
-const Loader = () => {
-  const { progress, loaded, total } = useProgress();
-  return (
-    <Html center>
-      <div style={{
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        padding: "20px",
-        borderRadius: "10px",
-        textAlign: "center",
-        color: "white",
-      }}>
-        <div className="spinner" style={{
-          border: "4px solid rgba(255, 255, 255, 0.3)",
-          borderTop: "4px solid white",
-          borderRadius: "50%",
-          width: "40px",
-          height: "40px",
-          animation: "spin 1s linear infinite",
-          margin: "0 auto 10px",
-        }} />
-        <div style={{ width: "200px", height: "10px", backgroundColor: "#444", borderRadius: "5px" }}>
-          <div
-            style={{
-              width: `${progress}%`,
-              height: "100%",
-              backgroundColor: "white",
-              borderRadius: "5px",
-            }}
-          />
-        </div>
-        <p style={{ marginTop: "10px" }}>{Math.round(progress)}% loaded ({loaded}/{total} items)</p>
-      </div>
-    </Html>
-  );
-}
-
 export function Ground() {
 
   return (
     <>
-      <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
-      <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
+      <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb' } /> {/* Remove '/assets/models/' prefix since blob paths are relative */}
+      <MemoizedModel modelUrl={'CovaBonica_LODs/LOD_03.glb'} />
     </>
   );
 }

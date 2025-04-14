@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { LazyLoadModel } from "./props/LazyLoadModel";
 import { ModelViewerInstructions } from "./ModelViewerInstructions";
 import { useTranslations } from "../../hooks/useTranslations";
+import * as THREE from "three";
 
 function SmartModel({ url, size, viewerSize}) {
     const groupRef = useRef();
@@ -88,7 +89,12 @@ export function ModelViewer({
                 </group>
                 <OrbitControls 
                     enablePan={true} 
-                    enableZoom={true} 
+                    enableZoom={true}
+                    mouseButtons={{
+                        LEFT: THREE.MOUSE.PAN,
+                        MIDDLE: THREE.MOUSE.DOLLY,
+                        RIGHT: THREE.MOUSE.ROTATE
+                      }} 
                 />
                 {debug && (
                     <gridHelper args={[10, 10]} />
