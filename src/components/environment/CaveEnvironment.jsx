@@ -51,6 +51,7 @@ export function Ground() {
     <>
       <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_03.glb'} />
+      <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_background.glb'} />
     </>
   );
 }

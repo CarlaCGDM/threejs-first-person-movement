@@ -42,13 +42,13 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
             >
                 <StatsCollector onStats={setStats}/>
                 <Suspense fallback={<LoadingScreen />} >
-                    {/* Performance monitoring overlay */}
-
+                
                     {/* <Stats /> */}
 
                     {/* Scene environment setup */}
                     <SceneWithRoomEnvironment />
                     <ambientLight intensity={0} />
+                    {/* <fog attach="fog" color="gray" near={3} far={20} /> */}
 
 
                     {/* NPC Management */}
@@ -99,7 +99,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                     <Effects />
                 </Suspense>
             </Canvas>
-            {/* <ProfilerOverlay stats={stats}/> */}
+            <ProfilerOverlay stats={stats}/>
         </>
     );
 }
