@@ -10,6 +10,7 @@ import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 import { AudioManager } from "./audio/AudioManager";
 import { CreditsModal } from "./CreditsModal";
+import { QualityToggle } from "../interactables/props/QualityToggle";
 
 export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
 
@@ -69,6 +70,8 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
       <Navbar />
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       <InstructionsPanel />
+
+      {/* <QualityToggle /> */}
 
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (
