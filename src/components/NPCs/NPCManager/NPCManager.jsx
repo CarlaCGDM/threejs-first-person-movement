@@ -8,7 +8,7 @@ const NPCManager = ({ children }) => {
   const reservedWaypoints = useRef(new Set());
 
   useEffect(() => {
-    console.log(occupiedWaypoints);
+    //console.log(occupiedWaypoints);
   }, [occupiedWaypoints]);
 
   // --- Waypoint Management ---
@@ -43,9 +43,9 @@ const NPCManager = ({ children }) => {
 
   // --- Mount / Unmount Cleanup ---
   useEffect(() => {
-    console.log("NPCManager mounted, setting up waypoints");
+    //console.log("NPCManager mounted, setting up waypoints");
     return () => {
-      console.log("NPCManager unmounted, clearing waypoints");
+      //console.log("NPCManager unmounted, clearing waypoints");
       clearAllWaypoints();
     };
   }, []);

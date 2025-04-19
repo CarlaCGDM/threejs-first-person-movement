@@ -1,0 +1,1 @@
+export const CF_WORKER_URL = "https://my-worker.nadinaccg.workers.dev/?path=";

@@ -1,22 +1,13 @@
-import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
-import { useMemo, Suspense, useEffect } from "react";
-import * as THREE from "three";
-import { useSettings } from "../../context/SettingsContext";
+import { useGLTF } from "@react-three/drei";
+import { useMemo, useEffect } from "react";
+import { CF_WORKER_URL } from "../../config";
+import { MemoizedChunkedModel } from "./MemoizedChunkedModel";
 
 const MemoizedModel = ({ modelUrl }) => {
   const gltf = useGLTF(modelUrl);
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
-
-  useEffect(() => {
-    let count = 0;
-    scene.traverse(child => {
-      if (child.isMesh) count++;
-    });
-    console.log(`Draw call estimate for ${modelUrl}:`, count);
-  }, [scene]);
-
   return <primitive object={scene} />;
 };
 
@@ -25,14 +16,6 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
 
   // Memoize the cloned scene to avoid re-cloning on every render
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
-
-  useEffect(() => {
-    let count = 0;
-    scene.traverse(child => {
-      if (child.isMesh) count++;
-    });
-    console.log(`Draw call estimate for ${modelUrl}:`, count);
-  }, [scene]);
 
   scene.frustumCulled = false
   scene.traverse((child) => {
@@ -48,12 +31,10 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
 
 export function Ground() {
 
-  const { settings } = useSettings();
-
   return (
     <>
       <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
-      <MemoizedModel modelUrl={`${settings.workerUrl}CovaBonica_LODs/LOD_03.glb`} />
+      <MemoizedChunkedModel modelPath={`${CF_WORKER_URL}CovaBonica_LODs/LOD_03_Chunks/`} />
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_background.glb'} />
     </>
   );

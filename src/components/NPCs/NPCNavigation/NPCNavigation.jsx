@@ -29,7 +29,7 @@ export default function NPCNavigation({
         const startPos = startPosition || new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
         const endPos = new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
     
-        console.log("Attempting path generation", startPos.toArray(), endPos.toArray());
+        //console.log("Attempting path generation", startPos.toArray(), endPos.toArray());
     
         const newPath = pathfindingRef.current.findPath(startPos, endPos);
     
@@ -67,7 +67,7 @@ export default function NPCNavigation({
             lastOccupiedWaypointRef.current = nearestWaypointIndex;
     
             setPath(newPath);
-            console.log("New path set:", newPath);
+            //console.log("New path set:", newPath);
             return newPath;
         } else {
             console.error("Path generation failed");
@@ -78,7 +78,7 @@ export default function NPCNavigation({
     
 
     const handlePathComplete = useCallback(() => {
-        console.log("Path complete, releasing waypoint:", lastOccupiedWaypointRef.current);
+        //console.log("Path complete, releasing waypoint:", lastOccupiedWaypointRef.current);
 
         if (lastOccupiedWaypointRef.current !== null) {
             releaseWaypoint(lastOccupiedWaypointRef.current);

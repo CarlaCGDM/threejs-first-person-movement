@@ -36,7 +36,7 @@ export class PathfindingLogic {
         adjacencyList
       };
       
-      console.log(`Waypoint graph loaded for zone ${zone}:`, waypoints.length, "waypoints");
+      //console.log(`Waypoint graph loaded for zone ${zone}:`, waypoints.length, "waypoints");
       return true;
       
     } catch (error) {
@@ -67,7 +67,7 @@ export class PathfindingLogic {
     // If start and end waypoints are the same, but the positions are different,
     // we need to handle this special case
     if (startWaypoint.index === endWaypoint.index) {
-      console.log('Start and end waypoints are the same');
+      //console.log('Start and end waypoints are the same');
       // Return a path with just the waypoint
       const waypointPosition = waypoints[startWaypoint.index].clone();
       return [waypointPosition];
@@ -76,7 +76,7 @@ export class PathfindingLogic {
     // Check first if there's a direct path using breadth-first search
     let directPath = this.findDirectPath(startWaypoint.index, endWaypoint.index, adjacencyList, waypoints);
     if (directPath && directPath.length > 1) {
-      console.log('Direct path found using BFS');
+      //console.log('Direct path found using BFS');
       // Add projected start/end positions
       const finalPath = [
         this.projectPositionToPath(startPos, directPath[0], directPath[1]), 

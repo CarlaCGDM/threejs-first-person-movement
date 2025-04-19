@@ -60,7 +60,7 @@ const Prop = forwardRef((props, ref) => {
     // -----------------------------------------------------------------
 
     // Model URL handling with fallback
-    const [validUrl, setValidUrl] = useState("/assets/models/Hapleidoceros_LODs");
+    const [validUrl, setValidUrl] = useState("Hapleidoceros_LODs");
 
     // Track player proximity (optimized with frame skipping)
     const playerDistance = usePlayerDistance(position, playerRef);

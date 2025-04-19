@@ -6,7 +6,7 @@ export function useNPCSpeech(closestTarget) {
   const { getRandomPhrase } = useTranslations();
 
   useEffect(() => {
-    console.log("getting new phrase!")
+    //console.log("getting new phrase!")
     const key = closestTarget?.type === 'prop' 
       ? closestTarget.artifactName 
       : "Cova bonica";
