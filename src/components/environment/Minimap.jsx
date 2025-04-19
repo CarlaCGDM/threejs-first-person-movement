@@ -4,7 +4,10 @@ import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
 
 function MinimapScene({ playerRef, orbitControlsRef, customOrbitControlsRef }) {
-    const { scene: model } = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb");
+
+    const workerUrl = "https://my-worker.nadinaccg.workers.dev/?path="
+
+    const { scene: model } = useGLTF(`${workerUrl}CovaBonica_LODs/LOD_00.glb`);
     const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
     const { scene: pawn } = useGLTF("/assets/models/pawn.glb");
     const { scene: pawnBase } = useGLTF("/assets/models/pawnBase.glb");

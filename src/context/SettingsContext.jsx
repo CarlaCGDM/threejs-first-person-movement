@@ -1,6 +1,7 @@
 import { createContext, useReducer, useContext } from "react";
 
 const initialSettings = {
+  workerUrl: "https://my-worker.nadinaccg.workers.dev/?path=",
   cameraRotationSpeed: 4.0,
   playerWalkSpeed: 1.5,
   playerJumpForce: 4,

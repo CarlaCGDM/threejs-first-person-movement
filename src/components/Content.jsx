@@ -57,7 +57,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="leonard"
                                 color="lime"
-                                model="/assets/models/characters/lewis"
+                                model={`${settings.workerUrl}characters/lewis`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}
@@ -65,7 +65,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="sophie"
                                 color="lime"
-                                model="/assets/models/characters/sophie"
+                                model={`${settings.workerUrl}characters/sophie`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}
@@ -73,7 +73,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="lewis"
                                 color="lime"
-                                model="/assets/models/characters/leonard"
+                                model={`${settings.workerUrl}characters/leonard`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}

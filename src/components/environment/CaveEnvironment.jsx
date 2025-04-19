@@ -1,6 +1,7 @@
 import { useGLTF, Html, useProgress, Clone } from "@react-three/drei";
 import { useMemo, Suspense, useEffect } from "react";
 import * as THREE from "three";
+import { useSettings } from "../../context/SettingsContext";
 
 const MemoizedModel = ({ modelUrl }) => {
   const gltf = useGLTF(modelUrl);
@@ -47,12 +48,12 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
 
 export function Ground() {
 
-  const workerUrl = "https://my-worker.nadinaccg.workers.dev/?path=";
+  const { settings } = useSettings();
 
   return (
     <>
       <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
-      <MemoizedModel modelUrl={`${workerUrl}CovaBonica_LODs/LOD_03.glb`} />
+      <MemoizedModel modelUrl={`${settings.workerUrl}CovaBonica_LODs/LOD_03.glb`} />
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_background.glb'} />
     </>
   );

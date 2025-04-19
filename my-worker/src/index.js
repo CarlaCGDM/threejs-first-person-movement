@@ -29,7 +29,7 @@ addEventListener('fetch', event => {
 	const response = await fetch(objectUrl, {
 	  headers: {
 		'Authorization': `Bearer NtzU3T1efaWucpOFUe0elfVQp_nB2F689cX8OFAE`,
-		'Cache-Control': 'public, max-age=3600'
+		'Cache-Control': 'public, max-age=604800'
 	  }
 	});
   
