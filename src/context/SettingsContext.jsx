@@ -12,6 +12,7 @@ const initialSettings = {
   selectedProp: null,
   selectedPOI: null,
   devMode: false,
+  visitedProps: {},
 
   ui: {
     showMinimap: false,
@@ -42,6 +43,16 @@ function settingsReducer(state, action) {
       return { ...state, selectedProp: action.payload };
     case "CLEAR_SELECTED_PROP":
       return { ...state, selectedProp: null };
+    case "SET_VISITED_PROP":
+      return {
+        ...state,
+        visitedProps: {
+          ...state.visitedProps,
+          [action.payload.propName]: action.payload.visited
+        }
+      };
+    case "CLEAR_VISITED_PROPS": 
+      return { ...state, visitedProps: {} };
     case "SELECT_POI":
       return { ...state, selectedPOI: action.payload };
     case "CLEAR_SELECTED_POI":

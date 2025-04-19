@@ -38,6 +38,10 @@ export const usePropInteractions = (materials, dispatch, artifactName, commonNam
       type: "SELECT_PROP",
       payload: { artifactName, commonName, metadata, infoViewRotation, detailedModelFile, imageFiles, size },
     });
+    dispatch({
+      type: "SET_VISITED_PROP",
+      payload: { propName: artifactName, visited: true }
+    });
   };
 
   return { 

@@ -35,6 +35,7 @@ export function Ground() {
     <>
       <MemoizedTransparentModel modelUrl={'/assets/models/CovaBonica_LODs/cb_pasarela.glb'} />
       <MemoizedChunkedModel modelPath={`${CF_WORKER_URL}CovaBonica_LODs/LOD_03_Chunks/`} />
+      {/* <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/LOD_02.glb'} /> */}
       <MemoizedModel modelUrl={'/assets/models/CovaBonica_LODs/cb_background.glb'} />
     </>
   );

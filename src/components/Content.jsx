@@ -43,7 +43,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                 <StatsCollector onStats={setStats}/>
                 <Suspense fallback={<LoadingScreen />} >
                 
-                    <Stats />
+                    {/* <Stats /> */}
 
                     {/* Scene environment setup */}
                     <SceneWithRoomEnvironment />
@@ -99,7 +99,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                     <Effects />
                 </Suspense>
             </Canvas>
-            <ProfilerOverlay stats={stats}/>
+            {/* <ProfilerOverlay stats={stats}/> */}
         </>
     );
 }

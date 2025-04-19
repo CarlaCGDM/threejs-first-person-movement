@@ -5,9 +5,8 @@ import { useSettings } from "../../../context/SettingsContext";
 import * as THREE from "three";
 
 export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
-  const [visitedProps, setVisitedProps] = useState({});
   const { teleportToProp, teleportToStart } = usePlayerTeleport(playerRef);
-  const { settings } = useSettings();
+  const { settings, dispatch } = useSettings(); // Get dispatch from context
 
   const handleTeleport = (prop) => {
     teleportToProp(prop);
@@ -17,7 +16,11 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
         orbitControlsRef.current.lookAt(propPosition);
       }
     }, 50);
-    setVisitedProps((prev) => ({ ...prev, [prop.artifactName]: true }));
+    // Update visited props through context
+    dispatch({
+      type: "SET_VISITED_PROP",
+      payload: { propName: prop.artifactName, visited: true }
+    });
   };
 
   const handleReturnToStart = () => {
@@ -35,7 +38,7 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
             key={index}
             prop={prop}
             onClick={handleTeleport}
-            isVisited={visitedProps[prop.artifactName]}
+            isVisited={settings.visitedProps[prop.artifactName]} // Get from settings
           />
         ))}
       </div>
