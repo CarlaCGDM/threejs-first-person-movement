@@ -100,6 +100,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                 </Suspense>
             </Canvas>
             {/* <ProfilerOverlay stats={stats}/> */}
+            
         </>
     );
 }
