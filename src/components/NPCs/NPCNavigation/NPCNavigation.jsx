@@ -2,9 +2,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { PathfindingLogic } from "../utils/pathfindingLogic";
 import { NPCActor } from "../NPCActor/NPCActor";
 import * as THREE from "three";
+import { useDebug } from "../../../context/DebugContext";
 
 export default function NPCNavigation({
-    color = "hotpink",
     model = "/assets/models/characters/sophie",
     propsData = [],
     poisData = [],
@@ -20,65 +20,87 @@ export default function NPCNavigation({
     const waypointsLoadedRef = useRef(false);
     const lastOccupiedWaypointRef = useRef(null);
 
+    // Get debug flags from context
+    const debugPathfinding = useDebug('NPCs', 'Pathfinding');
+    const debugErrors = useDebug('NPCs', 'Errors');
+
+    const debugFlags = { debugPathfinding, debugErrors };
+
     const generateNewPath = (startPosition = null) => {
         if (!pathfindingRef.current || !waypointsLoadedRef.current) {
-            console.warn("Path generation prevented");
+            if (debugErrors) console.warn("[NPCs/Errors] Path generation prevented - system not ready");
             return null;
         }
     
-        const startPos = startPosition || new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
-        const endPos = new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
+        const startPos = startPosition || new THREE.Vector3(
+            Math.random() * 20 - 10, 
+            0, 
+            Math.random() * 20 - 10
+        );
+        const endPos = new THREE.Vector3(
+            Math.random() * 20 - 10, 
+            0, 
+            Math.random() * 20 - 10
+        );
     
-        //console.log("Attempting path generation", startPos.toArray(), endPos.toArray());
+        if (debugPathfinding) {
+            console.log("[NPCs/Pathfinding] Generating new path", {
+                start: startPos.toArray(),
+                end: endPos.toArray()
+            });
+        }
     
-        const newPath = pathfindingRef.current.findPath(startPos, endPos);
+        const newPath = pathfindingRef.current.findPath(startPos, endPos, debugFlags);
     
         if (newPath && newPath.length > 0) {
             const lastWaypoint = newPath[newPath.length - 1];
-    
             const zoneName = Object.keys(pathfindingRef.current.zones)[0];
             const nearestWaypoint = pathfindingRef.current.findNearestWaypoint(
                 lastWaypoint,
                 pathfindingRef.current.zones[zoneName].waypoints
             );
     
-            const nearestWaypointIndex = nearestWaypoint ? nearestWaypoint.index : null;
+            const nearestWaypointIndex = nearestWaypoint?.index ?? null;
     
-            // Step 1: Check if the waypoint is already occupied
             if (isWaypointOccupied(nearestWaypointIndex)) {
-                console.warn("Waypoint is already occupied, trying again...");
-                return generateNewPath(startPosition); // 🔁 Try again if occupied
+                if (debugPathfinding) console.warn("[NPCs/Pathfinding] Waypoint occupied, retrying...");
+                return generateNewPath(startPosition);
             }
     
-            // Step 2: Reserve the waypoint if it's free
             const reserved = reserveWaypoint(nearestWaypointIndex);
             if (!reserved) {
-                console.warn("Waypoint couldn't be reserved, trying again...");
-                return generateNewPath(startPosition); // 🔁 Retry logic in case it fails
+                if (debugPathfinding) console.warn("[NPCs/Pathfinding] Waypoint reservation failed, retrying...");
+                return generateNewPath(startPosition);
             }
     
-            // Step 3: Release the old waypoint, if any
             if (lastOccupiedWaypointRef.current !== null) {
+                if (debugPathfinding) console.log("[NPCs/Pathfinding] Releasing previous waypoint:", lastOccupiedWaypointRef.current);
                 releaseWaypoint(lastOccupiedWaypointRef.current);
             }
     
-            // Step 4: Commit the new waypoint
             commitWaypoint(nearestWaypointIndex);
             lastOccupiedWaypointRef.current = nearestWaypointIndex;
     
             setPath(newPath);
-            //console.log("New path set:", newPath);
+            if (debugPathfinding) {
+                console.log("[NPCs/Pathfinding] New path set", {
+                    length: newPath.length,
+                    waypoints: newPath.map(p => p.toArray())
+                });
+            }
             return newPath;
         } else {
-            console.error("Path generation failed");
+            if (debugErrors) console.error("[NPCs/Errors] Path generation failed");
             return null;
         }
     };
     
-    
-
     const handlePathComplete = useCallback(() => {
-        //console.log("Path complete, releasing waypoint:", lastOccupiedWaypointRef.current);
+        if (debugPathfinding) {
+            console.log("[NPCs/Pathfinding] Path complete, releasing waypoint:", 
+                lastOccupiedWaypointRef.current
+            );
+        }
 
         if (lastOccupiedWaypointRef.current !== null) {
             releaseWaypoint(lastOccupiedWaypointRef.current);
@@ -86,11 +108,13 @@ export default function NPCNavigation({
         }
 
         if (path && path.length > 0) {
+            if (debugPathfinding) console.log("[NPCs/Pathfinding] Generating continuation path");
             generateNewPath(path[path.length - 1]);
         } else {
+            if (debugPathfinding) console.log("[NPCs/Pathfinding] Generating new random path");
             generateNewPath();
         }
-    }, [path, releaseWaypoint]);
+    }, [path, releaseWaypoint, debugPathfinding]);
 
     useEffect(() => {
         let isMounted = true;
@@ -98,8 +122,11 @@ export default function NPCNavigation({
 
         const loadWaypoints = async () => {
             try {
+                if (debugPathfinding) console.log("[NPCs/Pathfinding] Loading waypoints...");
+                
                 const success = await pathfindingRef.current.loadFromJSON(
-                    "/assets/models/CovaBonica_LODs/waypoints.json"
+                    "/assets/models/CovaBonica_LODs/waypoints.json",
+                    debugFlags
                 );
 
                 if (isMounted) {
@@ -107,14 +134,17 @@ export default function NPCNavigation({
                     waypointsLoadedRef.current = success;
 
                     if (success) {
+                        if (debugPathfinding) console.log("[NPCs/Pathfinding] Waypoints loaded successfully");
                         requestAnimationFrame(() => {
                             const generatedPath = generateNewPath();
-                            if (!generatedPath) console.error("Initial path failed");
+                            if (!generatedPath && debugErrors) {
+                                console.error("[NPCs/Errors] Initial path generation failed");
+                            }
                         });
                     }
                 }
             } catch (error) {
-                console.error("Waypoint loading error:", error);
+                if (debugErrors) console.error("[NPCs/Errors] Waypoint loading error:", error);
                 if (isMounted) {
                     setWaypointsLoaded(false);
                     waypointsLoadedRef.current = false;
@@ -126,6 +156,9 @@ export default function NPCNavigation({
 
         return () => {
             isMounted = false;
+            if (lastOccupiedWaypointRef.current !== null) {
+                releaseWaypoint(lastOccupiedWaypointRef.current);
+            }
         };
     }, []);
 
@@ -140,6 +173,7 @@ export default function NPCNavigation({
                     propsData={propsData}
                     poisData={poisData}
                     playerRef={playerRef}
+                    debugFlags={debugFlags} // Pass debug flags to NPCActor if needed
                 />
             )}
         </group>

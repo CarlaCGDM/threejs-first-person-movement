@@ -11,6 +11,7 @@ import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 import { AudioManager } from "./audio/AudioManager";
 import { CreditsModal } from "./CreditsModal";
 import { QualityToggle } from "../interactables/props/QualityToggle";
+import { DebugPanel } from "./DebugPanel";
 
 export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
 
@@ -71,8 +72,6 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
       <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       <InstructionsPanel />
 
-      {/* <QualityToggle /> */}
-
       {/* Render PropInfo if a prop is selected */}
       {selectedProp && (
         <PropInfo
@@ -107,6 +106,8 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
       )}
 
       {settings.ui.showMinimap && <Minimap playerRef={playerRef} customOrbitControlsRef={orbitControlsRef} />}
+
+      <DebugPanel />
 
     </div>
   );

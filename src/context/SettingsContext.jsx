@@ -96,41 +96,10 @@ function settingsReducer(state, action) {
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
-  // NPC waypoint management functions
-  const addOccupiedWaypoint = (waypointIndex) => {
-    dispatch({
-      type: "ADD_OCCUPIED_WAYPOINT",
-      payload: waypointIndex
-    });
-  };
-
-  const removeOccupiedWaypoint = (waypointIndex) => {
-    dispatch({
-      type: "REMOVE_OCCUPIED_WAYPOINT",
-      payload: waypointIndex
-    });
-  };
-
-  const isWaypointOccupied = (waypointIndex) => {
-    console.log("Checking occupied waypoints:", settings.npc.occupiedWaypoints);
-    console.log("Trying to assign:", waypointIndex);
-    return settings.npc.occupiedWaypoints.has(waypointIndex);
-  };
-
-  const clearAllOccupiedWaypoints = () => {
-    dispatch({ type: "CLEAR_OCCUPIED_WAYPOINTS" });
-  };
-
-
   return (
     <SettingsContext.Provider value={{
       settings,
       dispatch,
-      // NPC functions
-      addOccupiedWaypoint,
-      removeOccupiedWaypoint,
-      clearAllOccupiedWaypoints,
-      isWaypointOccupied
     }}>
       {children}
     </SettingsContext.Provider>

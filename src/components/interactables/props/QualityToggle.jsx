@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import caveIcon from '/assets/icons/ui/cave.svg';
 
-export function QualityToggle ({ isHighRes, onToggle }) {
+export function QualityToggle({ isHighRes, onToggle }) {
   const [isActive, setIsActive] = useState(isHighRes);
 
   const handleToggle = () => {
@@ -12,18 +13,21 @@ export function QualityToggle ({ isHighRes, onToggle }) {
   return (
     <div style={styles.toggleContainer}>
       {/* <label style={styles.toggleLabel}>Ver en alta calidad:</label> */}
-      <div 
+      <div style={styles.iconContainer}>
+        <img src={caveIcon} alt="Quality toggle" style={styles.icon} />
+      </div>
+      <div
         style={{
-            ...styles.toggleSwitch,
-            backgroundColor: isActive ? '#bbbbbb' : 'grey'
-          }}
+          ...styles.toggleSwitch,
+          backgroundColor: isActive ? '#bbbbbb' : 'grey'
+        }}
         onClick={handleToggle}
       >
         <div style={{
           ...styles.toggleSlider,
           transform: isActive ? 'translateX(20px)' : 'translateX(0)'
         }}>
-        {isActive ? "HD" : "SD"}
+          {isActive ? "HD" : "SD"}
         </div>
       </div>
     </div>
@@ -41,7 +45,7 @@ const styles = {
     alignItems: "center",
     gap: "8px",
     opacity: 0.5,
-    
+
   },
   toggleLabel: {
     fontSize: "14px",
@@ -69,5 +73,14 @@ const styles = {
     backgroundColor: "white",
     color: "black",
     fontSize: "0.7em",
+  },
+  iconContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '24px',
+  },
+  icon: {
+    height: '24px',
   }
 };

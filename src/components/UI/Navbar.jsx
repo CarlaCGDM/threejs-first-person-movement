@@ -1,7 +1,6 @@
 import { useSettings } from '../../context/SettingsContext';
 import { VolumeControl } from './audio/VolumeControl';
 import { IconButton } from './IconButton';
-import { useEffect } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
 
 export function Navbar() {
@@ -13,29 +12,12 @@ export function Navbar() {
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen()
-                // .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
                 .catch(err => console.error('Error entering fullscreen:', err));
         } else {
             document.exitFullscreen()
-                // .then(() => dispatch({ type: "TOGGLE_FULLSCREEN" }))
                 .catch(err => console.error('Error exiting fullscreen:', err));
         }
     };
-
-    // Sync fullscreen state with browser events
-    useEffect(() => {
-        const handleFullscreenChange = () => {
-            const isCurrentlyFullscreen = !!document.fullscreenElement;
-            if (isCurrentlyFullscreen !== settings.ui.isFullscreen) {
-                // dispatch({ type: "TOGGLE_FULLSCREEN" });
-            }
-        };
-
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => {
-            document.removeEventListener('fullscreenchange', handleFullscreenChange);
-        };
-    }, [settings.ui.isFullscreen, dispatch]);
 
     return (
         <>
