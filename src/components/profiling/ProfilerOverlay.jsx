@@ -42,6 +42,8 @@ export function ProfilerOverlay({ stats }) {
     );
   }
 
+  if (import.meta.env.PROD) return null; // Auto-hides in production
+
   return (
     <div style={{
       position: 'fixed',
