@@ -173,7 +173,6 @@ export default function NPCNavigation({
                     propsData={propsData}
                     poisData={poisData}
                     playerRef={playerRef}
-                    debugFlags={debugFlags} // Pass debug flags to NPCActor if needed
                 />
             )}
         </group>

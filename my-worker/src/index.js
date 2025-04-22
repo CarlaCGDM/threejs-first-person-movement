@@ -11,7 +11,7 @@ async function handleRequest(event) {
 	const ALLOWED_DOMAINS = [
 		'cova-bonica-virtual-tour-dev.netlify.app',
 		'cova-bonica-virtual-tour.netlify.app',
-		'localhost',];
+		'localhost'];
 	const origin = request.headers.get('Origin') || '';
 	const isAllowed = ALLOWED_DOMAINS.some(domain =>
 		origin === `https://${domain}` ||

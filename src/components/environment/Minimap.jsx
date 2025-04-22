@@ -2,13 +2,12 @@ import { useEffect, useMemo, useState, Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
+import { CF_WORKER_URL } from "../../config";
 
 function MinimapScene({ playerRef, orbitControlsRef, customOrbitControlsRef }) {
 
-    const workerUrl = "https://my-worker.nadinaccg.workers.dev/?path="
-
-    const { scene: model } = useGLTF(`${workerUrl}CovaBonica_LODs/LOD_00.glb`);
-    const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
+    const { scene: model } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/LOD_00.glb`);
+    const { scene: path } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb/`);
     const { scene: pawn } = useGLTF("/assets/models/pawn.glb");
     const { scene: pawnBase } = useGLTF("/assets/models/pawnBase.glb");
     const { scene: POI1 } = useGLTF("/assets/models/POIs/POI1.glb");
