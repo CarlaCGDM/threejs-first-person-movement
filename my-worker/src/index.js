@@ -8,7 +8,11 @@ async function handleRequest(event) {
 	const path = url.searchParams.get('path');
 
 	// 1. SECURITY CHECKS
-	const ALLOWED_DOMAINS = ['cova-bonica-virtual-tour-dev.netlify.app', 'cova-bonica-virtual-tour.netlify.app', 'localhost'];
+	const ALLOWED_DOMAINS = [
+		'cova-bonica-virtual-tour-dev.netlify.app', 
+		'cova-bonica-virtual-tour.netlify.app', 
+		'localhost',
+		'https://cova-bonica-virtual-tour.netlify.app'];
 	const origin = request.headers.get('Origin') || '';
 	const isAllowed = ALLOWED_DOMAINS.some(domain => origin.includes(domain));
 	if (!isAllowed) return new Response('Access denied', { status: 403 });
