@@ -9,12 +9,15 @@ async function handleRequest(event) {
 
 	// 1. SECURITY CHECKS
 	const ALLOWED_DOMAINS = [
-		'cova-bonica-virtual-tour-dev.netlify.app', 
-		'cova-bonica-virtual-tour.netlify.app', 
-		'localhost',
-		'https://cova-bonica-virtual-tour.netlify.app'];
+		'cova-bonica-virtual-tour-dev.netlify.app',
+		'cova-bonica-virtual-tour.netlify.app',
+		'localhost',];
 	const origin = request.headers.get('Origin') || '';
-	const isAllowed = ALLOWED_DOMAINS.some(domain => origin.includes(domain));
+	const isAllowed = ALLOWED_DOMAINS.some(domain =>
+		origin === `https://${domain}` ||
+		origin === `http://${domain}` ||
+		(domain === 'localhost' && origin.startsWith('http://localhost'))
+	);
 	if (!isAllowed) return new Response('Access denied', { status: 403 });
 
 	// 2. SPECIAL HANDLING FOR MANIFESTS
@@ -40,7 +43,10 @@ async function handleRequest(event) {
 		} catch (err) {
 			return new Response(JSON.stringify({ error: "Manifest generation failed" }), {
 				status: 500,
-				headers: { 'Content-Type': 'application/json' }
+				headers: { 
+					'Content-Type': 'application/json' 
+					
+				}
 			});
 		}
 	}
