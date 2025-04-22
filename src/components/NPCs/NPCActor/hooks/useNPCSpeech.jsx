@@ -1,28 +1,18 @@
 import { useState, useEffect } from 'react';
-import phrases from '../../data/quotesData.json';
+import { useTranslations } from '../../../../hooks/useTranslations';
 
 export function useNPCSpeech(closestTarget) {
   const [currentPhrase, setCurrentPhrase] = useState("");
-
-  const getRandomPhrase = (key) => {
-    const category = phrases[0][key];
-    if (category && category.length > 0) {
-      return category[Math.floor(Math.random() * category.length)];
-    }
-    return "I'm observing this interesting artifact";
-  };
+  const { getRandomPhrase } = useTranslations();
 
   useEffect(() => {
-    if (closestTarget) {
-      if (closestTarget.type === 'prop') {
-        setCurrentPhrase(getRandomPhrase(closestTarget.artifactName));
-      } else {
-        setCurrentPhrase(getRandomPhrase("Cova bonica"));
-      }
-    } else {
-      setCurrentPhrase(getRandomPhrase("Cova bonica"));
-    }
-  }, [closestTarget]);
+    //console.log("getting new phrase!")
+    const key = closestTarget?.type === 'prop' 
+      ? closestTarget.artifactName 
+      : "Cova bonica";
+    
+    setCurrentPhrase(getRandomPhrase(key));
+  }, [closestTarget, getRandomPhrase]);
 
   return currentPhrase;
 }

@@ -11,6 +11,15 @@ const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation
   const { scene } = useGLTF(modelUrl);
   const { actions } = useAnimations(animations, scene);
 
+  // ✨ Set backface culling to avoid "seeing inside" NPCs
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.side = THREE.FrontSide; // default in Three.js, but just to be explicit
+      }
+    });
+  }, [scene]);
+
   useEffect(() => {
     if (actions && initialAnimation) {
       actions[initialAnimation]?.reset().fadeIn(0).play();
@@ -20,6 +29,7 @@ const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation
 
   return <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
 };
+
 
 export function NPCActor({
   path,
@@ -39,10 +49,11 @@ export function NPCActor({
   const lastLowResActionRef = useRef(null);
   const lastHighResActionRef = useRef(null);
   const [currentAnimation, setCurrentAnimation] = useState('Walk');
+  const [playerDistance, setPlayerDistance] = useState(Infinity);
 
   // Load animations from low-res model
   const { scene, animations } = useGLTF(model + '/LOD_01.glb');
-
+  
   useEffect(() => {
     if (animations && animations.length > 0) {
       setAnimationsReady(true);
@@ -82,11 +93,30 @@ export function NPCActor({
   // Handle high-res model load completion
   const handleHighResLoaded = (highResActions) => {
     highResActionsRef.current = highResActions;
-    setHighResLoaded(true);
-
-    if (animationsReady) {
-      updateAnimation(highResActionsRef.current, true);
+    
+    // Get the current animation name and state from low-res
+    const currentLowResAction = lastLowResActionRef.current;
+    let currentAnimName = currentAnimation; // Default to the tracked state
+    
+    // Find the specific animation that's currently playing in low-res
+    if (currentLowResAction) {
+      Object.entries(lowResActions).forEach(([name, action]) => {
+        if (action === currentLowResAction && action.isRunning()) {
+          currentAnimName = name;
+        }
+      });
     }
+    
+    // Start the same animation on high-res model immediately
+    // before setting highResLoaded to prevent any gap
+    if (currentAnimName && highResActions[currentAnimName]) {
+      const highResAction = highResActions[currentAnimName];
+      highResAction.reset().fadeIn(0).play();
+      lastHighResActionRef.current = highResAction;
+    }
+    
+    // Now that animation is already playing, update the state
+    setHighResLoaded(true);
   };
 
   const updateAnimation = (actionsObj, isHighRes) => {
@@ -108,11 +138,17 @@ export function NPCActor({
     const lastActionRef = isHighRes ? lastHighResActionRef : lastLowResActionRef;
     const currentAction = lastActionRef.current;
   
+    // Don't reset the animation before crossfading
     if (currentAction && currentAction !== nextAction) {
-      currentAction.crossFadeTo(nextAction, 0.3, true);
-      nextAction.reset().play();
+      // Use proper crossfade duration for smoother transitions
+      const crossFadeDuration = 0.3;
+      
+      // Important: Use crossFadeTo which handles the reset internally
+      currentAction.crossFadeTo(nextAction, crossFadeDuration, true);
+      nextAction.play();
     } else if (!currentAction) {
-      nextAction.reset().fadeIn(0).play();
+      // If there's no current action, then we can safely reset and play
+      nextAction.reset().fadeIn(0.2).play();
     }
   
     lastActionRef.current = nextAction;
@@ -140,23 +176,10 @@ export function NPCActor({
     };
   }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
 
-  // useEffect(() => {
-  //   console.log('Current animation state:', {
-  //     isPerformingActions,
-  //     closestTarget,
-  //     highResLoaded,
-  //     animationsReady,
-  //     lowResActions: Object.keys(lowResActions || {}),
-  //     highResActions: highResActionsRef.current ? Object.keys(highResActionsRef.current || {}) : "Not Loaded",
-  //     lastLowResAction: lastLowResActionRef.current ? lastLowResActionRef.current.getClip().name : "None",
-  //     lastHighResAction: lastHighResActionRef.current ? lastHighResActionRef.current.getClip().name : "None"
-  //   });
-  // }, [isPerformingActions, closestTarget, highResLoaded, highResActionsRef.current]);
-
   return (
     <group ref={groupRef}>
       <Suspense fallback={null}>
-        {animationsReady && (
+        { playerDistance > 0.25 && animationsReady && (
           <HighResModel
             modelUrl={model + '/LOD_03.glb'}
             animations={animations}
@@ -175,6 +198,7 @@ export function NPCActor({
         playerRef={playerRef}
         groupRef={groupRef}
         color={color}
+        onDistanceChange={setPlayerDistance}
       />
     </group>
   );

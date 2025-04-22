@@ -1,0 +1,126 @@
+{
+    "ES": [
+        {
+            "title": "¡Te damos la bienvenida a la Cova Bonica!",
+            "content": {
+                "0": {
+                    "content": "@@wireframeModel@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "En este tour virtual podrás explorar la cueva, descubrir algunos de los restos que se hallaron y conocer más sobre los pobladores que la habitaron.",
+                    "type": "paragraph"
+                },
+                "2": {
+                    "content": "Usa las <strong>teclas</strong> @@letterSetIcon@@ para moverte libremente. Mantén pulsado el <strong>clic derecho del ratón</strong> @@rightMouseButtonIcon@@ para rotar la cámara y no perderte nada.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "El <strong>localizador</strong> @@minimapIcon@@ del menú superior te permite mostrar u ocultar el mapa en 3D que te indicará en qué parte de la cueva te encuentras. El <strong>fósil</strong> @@fossilIcon@@ te dará acceso a información interesante sobre el yacimiento arqueológico.",
+                    "type": "paragraph"
+                },
+                "1": {
+                    "content": "Las <strong>miniaturas</strong> @@miniaturesIcon@@ del menú inferior representan los hallazgos que puedes ver durante el recorrido. Si pulsas en alguno, te transportarás directamente delante de él.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "@@screenshot_01@@ @@screenshot_02@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "Puedes hacer clic sobre los <strong>hallazgos</strong> o <strong>puntos de interés</strong> para ver información adicional. Los reconocerás por su <strong>etiqueta flotante</strong> @@floatingNameTag@@ o su <strong>indicador intermitente</strong> @@pulsatingIndicator@@.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "@@screenshot_03@@ @@screenshot_04@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "Otros <strong>visitantes virtuales</strong> te acompañarán en la visita. Prueba a acercarte a ellos, ¡tienen cosas muy interesantes que decir!",
+                    "type": "paragraph"
+                },
+                "2": {
+                    "content": "Si prefieres realizar la visita en solitario, puedes ocultarlos pulsando sobre el <strong>visitante</strong> @@NPCsIcon@@ en el menú superior.",
+                    "type": "paragraph"
+                }
+            }
+        }
+    ],
+    "EN": [
+        {
+            "title": "Welcome to Cova Bonica!",
+            "content": {
+                "0": {
+                    "content": "@@wireframeModel@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "In this virtual tour, you’ll be able to explore the cave, discover some of the remains that were found here, and learn more about the people who once lived in it.",
+                    "type": "paragraph"
+                },
+                "2": {
+                    "content": "Use the <strong>keys</strong> @@letterSetIcon@@ to move freely. Hold down and drag the <strong>right mouse button</strong> @@rightMouseButtonIcon@@ to look around and make sure you don't miss anything.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "The <strong>locator</strong> @@minimapIcon@@  in the top menu lets you toggle the 3D map on and off, which will help you better track your position within the cave. The <strong>fossil icon</strong> @@fossilIcon@@ provides access to interesting information about the archaeological site.",
+                    "type": "paragraph"
+                },
+                "1": {
+                    "content": "The <strong>thumbnails</strong> @@miniaturesIcon@@ in the bottom menu represent the findings you can discover during the tour. Click on any thumbnail to travel to that finding instantly.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "@@screenshot_01@@ @@screenshot_02@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "Click on the <strong>findings</strong> or <strong>points of interest</strong> to view more information. You’ll recognize them by their <strong>floating name tag</strong> @@floatingNameTag@@ or <strong>flashing indicator</strong> @@pulsatingIndicator@@.",
+                    "type": "paragraph"
+                }
+            }
+        },
+        {
+            "title": "Tutorial",
+            "content": {
+                "0": {
+                    "content": "@@screenshot_03@@ @@screenshot_04@@",
+                    "type": "media"
+                },
+                "1": {
+                    "content": "Other <strong>virtual visitors</strong> will join you during the tour. Try walking up to them – they have some really cool facts to share!",
+                    "type": "paragraph"
+                },
+                "2": {
+                    "content": "If you prefer to explore on your own, you can hide them through the <strong>visitor icon</strong> @@NPCsIcon@@ in the top menu.",
+                    "type": "paragraph"
+                }
+            }
+        }
+    ]
+}

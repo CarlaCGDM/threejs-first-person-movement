@@ -1,6 +1,7 @@
-[
+{ "ES": [
     {
       "artifactName": "Palaeoloxodon antiquus",
+      "commonName": "Elefante antiguo",
       "position": [5.666, 0.034, -7.234],
       "rotation": [1.791, -34.677, -3.79],
       "infoViewRotation": [80,0,0],
@@ -10,19 +11,20 @@
         "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona)",
         "description":"Esqueleto en conexión anatómica de una cría de elefante de la especie conocida como elefante antiguo. Se trata de un macho de entre 6 y 10 años de edad que debía de pesar alrededor de 2.300-2.700 kg, que vivió hace 120.000 años.",
         "size": "263 cm de largo x 200 cm de alto",
-        "digitizedBy":"Laura Gómez Morgado"
+        "digitizedBy":"Fotogrametría realizada por Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "modelFile": "ElefanteSinCaja_LODs",
       "imageFiles": [{
         "image": "/assets/images/props/elefante.jpg",
         "imageDescription":"Paleoilustración del Palaeoloxodon antiquus, tal como se encontró en el yacimiento, realizada por Almudena Yagüe para la exposición “Espai prehistòria: fauna, canvi climàtic i arqueologia al Garraf” organizada por el Ayuntamiento de Castelldefels."
       }],
-      "detailedModelFile": "/assets/models/Elefante_LODs",
+      "detailedModelFile": "Elefante_LODs",
       "iconFolder": "/assets/icons/props/Elefante/",
       "teleportRotationAngle": 0
     },
     {
       "artifactName": "Haploidoceros mediterraneus",
+      "commonName": "Ciervo del mediterráneo",
       "position": [0.106, -1.544, -7.646],
       "rotation": [25.8, 30.633, -8.39],
       "infoViewRotation": [0,45,0],
@@ -32,19 +34,20 @@
         "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona)",
         "description":"Cráneo de ciervo del mediterráneo, una especie hoy extinguida y prácticamente desconocida. Se caracteriza por las grandes dimensiones de sus astas, con tan sólo dos puntas cada una, la principal de las cuales tiene forma de hoz. Su peso corporal era de unos 70-80 kg y vivió hace 90.000 años.",
         "size": "51,3 cm de largo x 45,2 de ancho",
-        "digitizedBy":"Laura Gómez Morgado"
+        "digitizedBy":"Fotogrametría realizada por Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "modelFile": "Hapleidoceros_LODs",
       "imageFiles": [{
         "image": "/assets/images/props/Haploidoceros.jpg",
         "imageDescription":"Paleoilustración del Haploidoceros mediterraneus realizada por Almudena Yagüe para la Virtual Conference For Women Archaeo and Paleo de 2024."
       }],
-      "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
+      "detailedModelFile": "Hapleidoceros_LODs",
       "iconFolder": "/assets/icons/props/Hapleidoceros/",
       "teleportRotationAngle": 290
     },
     {
       "artifactName": "Panthera leo",
+      "commonName": "León",
       "position": [5.825, -2.129, 2.659],
       "rotation": [-12.074, -110.73, 0.099],
       "infoViewRotation": [70,0,0],
@@ -52,9 +55,97 @@
         "historicalPeriod":"Pleistoceno superior | Paleolítico superior",
         "excavationSite":"Cova del Rinoceront, Castelldefels",
         "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona)",
-        "description":"Maxilar de un ejemplar de león adulto que vivió hace 39.500 años",
+        "description":"Maxilar de un ejemplar de león adulto que vivió hace 39.500 años.",
         "size": "12 cm de largo x 7,57 cm de ancho",
-        "digitizedBy":"Laura Gómez Morgado"
+        "digitizedBy":"Fotogrametría realizada por Laura Gómez Morgado"
+      },
+      "modelFile": "MaxilarLeon_LODs",
+      "imageFiles": [],
+      "detailedModelFile": "MaxilarLeon_LODs",
+      "iconFolder": "/assets/icons/props/MaxilarLeon/",
+      "teleportRotationAngle": 0
+    },
+    {
+      "artifactName": "Stephannorhinus hundsheimensis",
+      "commonName": "Rinoceronte de Hundsheim",
+      "position": [-4.567, -4.914, -3.330],
+      "rotation": [-90, 0, 90],
+      "infoViewRotation": [0,0,0],
+      "metadata": {
+        "historicalPeriod":"Pleistoceno medio",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona)",
+        "description":"Cráneo de rinoceronte de Hundsheim, una familia considerada más rara y menos extendida que el resto de especies. Se trata de un individuo juvenil, que vivió hace 90.000 años.",
+        "size": "66,8 cm de largo x 42,2 cm de ancho",
+        "digitizedBy":"Fotogrametría realizada por Laura Gómez Morgado"
+      },
+      "modelFile": "Rino_LODs",
+      "imageFiles": [],
+      "detailedModelFile": "Rino_LODs",
+      "iconFolder": "/assets/icons/props/Rino/",
+      "teleportRotationAngle": 0
+    }
+  ],
+  "EN": [
+    {
+      "artifactName": "Palaeoloxodon antiquus",
+      "commonName": "Straight-tusked elephant",
+      "position": [5.666, 0.034, -7.234],
+      "rotation": [1.791, -34.677, -3.79],
+      "infoViewRotation": [80,0,0],
+      "metadata": {
+        "historicalPeriod":"Late Middle Pleistocene - Early Upper Pleistocene",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Ramón Fernández Jurado Library, Castelldefels (Barcelona)",
+        "description":"Skeleton in anatomical connection of a juvenile elephant of the species known as the ancient elephant. This is a male between 6 and 10 years of age, estimated to have weighed approximately 2,300-2,700 kg, and to have lived approximately 120,000 years ago.",
+        "size": "263 cm in height x 200 cm in width",
+        "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "imageFiles": [{
+        "image": "/assets/images/props/elefante.jpg",
+        "imageDescription":"Paleoillustration of Palaeoloxodon antiquus, as found at the site, created by Almudena Yagüe for the exhibition 'Espai prehistòria: fauna, canvi climàtic i arqueologia al Garraf' organized by the Town Hall of Castelldefels."
+      }],
+      "detailedModelFile": "/assets/models/Elefante_LODs",
+      "iconFolder": "/assets/icons/props/Elefante/",
+      "teleportRotationAngle": 0
+    },
+    {
+      "artifactName": "Haploidoceros mediterraneus",
+      "commonName": "Mediterranean deer",
+      "position": [0.106, -1.544, -7.646],
+      "rotation": [25.8, 30.633, -8.39],
+      "infoViewRotation": [0,45,0],
+      "metadata": {
+        "historicalPeriod":"Late Middle Pleistocene - Early Upper Pleistocene",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Ramón Fernández Jurado Library, Castelldefels (Barcelona)",
+        "description":"Skull of the Mediterranean deer, a species that is now extinct and virtually unknown. It is distinguished by the large size of its antlers, each with only two tines, the main one being crescent-shaped. Its body weight was around 70-80 kg, and it lived approximately 90,000 years ago.",
+        "size": "51,3 cm in height x 45,2 in width",
+        "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
+      },
+      "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "imageFiles": [{
+        "image": "/assets/images/props/Haploidoceros.jpg",
+        "imageDescription": "Paleoillustration of Haploidoceros mediterraneus created by Almudena Yagüe for the 2024 Virtual Conference For Women Archaeo and Paleo."
+      }],
+      "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
+      "iconFolder": "/assets/icons/props/Hapleidoceros/",
+      "teleportRotationAngle": 290
+    },
+    {
+      "artifactName": "Panthera leo",
+      "commonName": "Lion",
+      "position": [5.825, -2.129, 2.659],
+      "rotation": [-12.074, -110.73, 0.099],
+      "infoViewRotation": [70,0,0],
+      "metadata": {
+        "historicalPeriod": "Upper Pleistocene | Upper Paleolithic",
+        "excavationSite":"Cova del Rinoceront, Castelldefels",
+        "currentLocation":"Ramón Fernández Jurado Library, Castelldefels (Barcelona)",
+        "description":"Maxilla of an adult lion that lived approximately 39,500 years ago.",
+        "size": "12 cm in height x 7,57 cm in width",
+        "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/MaxilarLeon_LODs",
       "imageFiles": [],
@@ -64,16 +155,17 @@
     },
     {
       "artifactName": "Stephannorhinus hundsheimensis",
+      "commonName": "Hundsheim rhinoceros",
       "position": [-4.567, -4.914, -3.330],
       "rotation": [-90, 0, 90],
       "infoViewRotation": [0,0,0],
       "metadata": {
-        "historicalPeriod":"Final  Pleistoceno medio - inicio del superior",
+        "historicalPeriod":"Middle Pleistocene",
         "excavationSite":"Cova del Rinoceront, Castelldefels",
-        "currentLocation":"Biblioteca Ramon Fernàndez Jurado, Castelldefels (Barcelona)",
-        "description":"Cráneo de rinoceronte de Hundsheim, una familia considerada más rara y menos extendida que el resto de especies. Se trata de un individuo juvenil, que vivió hace 90.000 años.",
-        "size": "66,8 cm de largo x 42,2 cm de ancho",
-        "digitizedBy":"Laura Gómez Morgado"
+        "currentLocation":"Ramón Fernández Jurado Library, Castelldefels (Barcelona)",
+        "description":"Skull of the Hundsheim rhinoceros, a family considered rarer and less widespread than other species. This is a juvenile individual that lived approximately 120,000 years ago.",
+        "size": "66,8 cm in height x 42,2 cm in width",
+        "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
       "modelFile": "/assets/models/Rino_LODs",
       "imageFiles": [],
@@ -82,3 +174,4 @@
       "teleportRotationAngle": 0
     }
   ]
+}

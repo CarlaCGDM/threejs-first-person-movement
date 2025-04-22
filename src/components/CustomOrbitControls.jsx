@@ -21,6 +21,12 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
             pitch.current = euler.x;
             yaw.current = euler.y;
         },
+        // Expose the getCameraRotation method
+        getCameraRotation: () => {
+            // Convert camera's quaternion to Euler angles
+            const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, "YXZ");
+            return euler; // Return Euler angles (pitch, yaw, roll)
+        }
     }));
 
     useEffect(() => {
@@ -78,7 +84,7 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
             // Create quaternions for rotation
             const pitchQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), pitch.current);
             const yawQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw.current);
-            
+
             // Apply combined rotation to camera
             camera.quaternion.copy(yawQuaternion.multiply(pitchQuaternion));
         }

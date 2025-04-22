@@ -1,0 +1,32 @@
+{
+    "ES": {
+        "credits": {
+            "title": "Créditos",
+            "content": {
+                "0": "Este proyecto ha sido llevado a cabo por Nadina Carla Cardillo Garreta y Laura Gómez Morgado.",
+                "1": "Los modelos 3D utilizados fueron realizados para el Grup de Recerca del Quaternari (SERP) de la Universitat de Barcelona."
+            }
+        },
+        "acknowledgements": {
+            "title": "Agradecimientos:",
+            "content": {
+                "0": "A Joan Daura y Montserrat Sanz (GRQ) por su colaboración y a Almudena Yagüe por permitir el uso de sus ilustraciones."
+            }
+        }
+    },
+    "EN": {
+        "credits": {
+            "title": "Credits",
+            "content": {
+                "0": "This project was conducted by Nadina Carla Cardillo Garreta and Laura Gómez Morgado.",
+                "1": "The 3D models used were created for the Quaternary Research Group (SERP) at the University of Barcelona."
+            }
+        },
+        "acknowledgements": {
+            "title": "Acknowledgments",
+            "content": {
+                "0": "We would like to thank Joan Daura and Montserrat Sanz (GRQ) for their collaboration, and Almudena Yagüe for generously allowing the use of her illustrations."
+            }
+        }
+    }
+}

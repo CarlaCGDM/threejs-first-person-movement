@@ -1,4 +1,4 @@
-[
+{"ES": [
     {
       "name": "Cova Bonica",
       "position": [0,0,0],
@@ -13,7 +13,7 @@
         },
         {
             "image": "/assets/images/environment/Portada01.jpg",
-          "imageDescription":"Detalle de la entrada de la cueva.."
+          "imageDescription":"Detalle de la entrada de la cueva."
         },
         {
             "image": "/assets/images/environment/Portada02.jpg",
@@ -21,4 +21,29 @@
         }
       ]
     }
+],
+"EN": [
+  {
+    "name": "Cova Bonica",
+    "position": [0,0,0],
+    "metadata": {
+      "description": "This cave is located in the Garraf-Ordal massif (Vallirana, Barcelona), where remains have been found that offer valuable insights into the human populations that inhabited the region 7,400 years ago, during the Neolithic period. \n  A karstic formation, it measures approximately 30 meters in length, 20 meters in maximum width, and reaches a height of around 15 meters. \n The cave consists of a main chamber and two lateral chambers: one near the entrance (LC1) and the other deeper within (LC2)."
+    },
+    "modelFile": "/assets/models/CovaBonicaLODs/",
+    "imageFiles": [
+      {
+        "image": "/assets/images/environment/Portada.jpg",
+        "imageDescription":"General view of the cave."
+      },
+      {
+          "image": "/assets/images/environment/Portada01.jpg",
+        "imageDescription":"Detail of the cave's entrance."
+      },
+      {
+          "image": "/assets/images/environment/Portada02.jpg",
+        "imageDescription":"Detail of the stratigraphic profile of the area where archaeological work is currently being carried out."
+      }
+    ]
+  }
 ]
+}

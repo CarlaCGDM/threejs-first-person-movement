@@ -1,0 +1,10 @@
+name = "my-worker"  # name of your worker, can be any unique name
+type = "javascript"  # worker type (can also be "rust" if you’re using that)
+
+account_id = "your-cloudflare-account-id"
+workers_dev = true  # if you're using a workers.dev domain, set to true
+compatibility_date = "2025-04-19"  # today's date
+
+[env.production]
+CLOUDFARE_ACCOUNT_ID = "9ce87ad1267c000dd53fd2a0a6f9672a"
+CLOUDFARE_API_TOKEN = "pBRJfjimakLshDZXa-ZE8hx20lXfE3POtLtuGY0U"

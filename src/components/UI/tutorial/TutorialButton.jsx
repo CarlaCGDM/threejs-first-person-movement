@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from '../icons/ArrowLeft';
 import { ArrowRight } from '../icons/ArrowRight';
+import { useTranslations } from '../../../hooks/useTranslations';
 
 export function TutorialButton({
   children,
@@ -11,6 +12,10 @@ export function TutorialButton({
   iconSize = 30, // Size in pixels
   ...props
 }) {
+
+  const { getComponentLabels } = useTranslations();
+  const UILabels = getComponentLabels('tutorialButton'); // Retrieve metadataPanel labels
+
   const [isHovered, setIsHovered] = useState(false);
   
   // Color system
@@ -68,7 +73,7 @@ export function TutorialButton({
           size={iconSize}
         />
       )}
-      {children || (variant === 'primary' && icon === null ? 'Iniciar' : null)}
+      {children || (variant === 'primary' && icon === null ? UILabels.start : null)}
       {icon === 'arrow_right' && (
         <ArrowRight 
           color={currentIconColor} 

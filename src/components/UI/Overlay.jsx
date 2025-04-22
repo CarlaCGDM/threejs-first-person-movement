@@ -10,9 +10,11 @@ import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
 import { AudioManager } from "./audio/AudioManager";
 import { CreditsModal } from "./CreditsModal";
-import caveData from "../../data/caveData.json";
+import { QualityToggle } from "../interactables/props/QualityToggle";
+import { DebugPanel } from "./DebugPanel";
 
-export function Overlay({ props, playerRef, orbitControlsRef }) {
+export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
+
   const { settings, dispatch } = useSettings();
   const { selectedProp, selectedPOI } = settings;
 
@@ -74,6 +76,7 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
       {selectedProp && (
         <PropInfo
           artifactName={selectedProp.artifactName}
+          commonName={selectedProp.commonName}
           metadata={selectedProp.metadata}
           detailedModelFile={selectedProp.detailedModelFile}
           infoViewRotation={selectedProp.infoViewRotation}
@@ -102,7 +105,10 @@ export function Overlay({ props, playerRef, orbitControlsRef }) {
         />
       )}
 
-      {settings.ui.showMinimap && <Minimap playerRef={playerRef} />}
+      {settings.ui.showMinimap && <Minimap playerRef={playerRef} customOrbitControlsRef={orbitControlsRef} />}
+
+      <DebugPanel />
+
     </div>
   );
 }

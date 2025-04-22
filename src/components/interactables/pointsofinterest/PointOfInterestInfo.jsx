@@ -2,9 +2,13 @@ import { useState } from "react";
 import { IconButton } from "../../UI/IconButton";
 import { ImageViewer } from "../ImageViewer";
 import { MetadataPanel } from "../MetadataPanel";
+import { useTranslations } from "../../../hooks/useTranslations";
 
 function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
     const [showMetadata, setShowMetadata] = useState(true);
+
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('pointOfInterestInfo'); // Retrieve metadataPanel labels
 
     return (
         <div style={styles.overlay}>
@@ -40,7 +44,7 @@ function PointOfInterestInfo({ poiName, metadata, imageFiles = [], onClose }) {
                             iconOn="toggle_info_on.svg"
                             isActive={showMetadata}
                             onClick={() => setShowMetadata(!showMetadata)}
-                            title={showMetadata ? "Ocultar información" : "Mostrar información"}
+                            title={showMetadata ? UILabels.toggleMetadataOff : UILabels.toggleMetadataOn}
                             backgroundColor={showMetadata ? "#272626" : "#777777"}
                         />
                     </div>

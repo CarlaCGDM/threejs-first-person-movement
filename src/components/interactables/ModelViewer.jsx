@@ -3,6 +3,8 @@ import { OrbitControls, Html, Environment } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { LazyLoadModel } from "./props/LazyLoadModel";
 import { ModelViewerInstructions } from "./ModelViewerInstructions";
+import { useTranslations } from "../../hooks/useTranslations";
+import * as THREE from "three";
 
 function SmartModel({ url, size, viewerSize}) {
     const groupRef = useRef();
@@ -33,6 +35,9 @@ export function ModelViewer({
     containerStyle,
     debug = false
 }) {
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('modelViewer'); // Retrieve metadataPanel labels
+
     const [viewerSize, setViewerSize] = useState({ width: 0, height: 0 });
     const viewerRef = useRef(null);
 
@@ -55,7 +60,7 @@ export function ModelViewer({
     const getModelToShow = () => {
         const modelPath = showHighestRes ? "/LOD_04.glb" : "/LOD_02.glb";
         return (
-            <Suspense fallback={<Html center><span>Loading...</span></Html>}>
+            <Suspense fallback={<Html center><span>{UILabels.loading}</span></Html>}>
                 <SmartModel
                     url={`${modelFiles}${modelPath}`}
                     size={size}
@@ -84,7 +89,12 @@ export function ModelViewer({
                 </group>
                 <OrbitControls 
                     enablePan={true} 
-                    enableZoom={true} 
+                    enableZoom={true}
+                    mouseButtons={{
+                        LEFT: THREE.MOUSE.PAN,
+                        MIDDLE: THREE.MOUSE.DOLLY,
+                        RIGHT: THREE.MOUSE.ROTATE
+                      }} 
                 />
                 {debug && (
                     <gridHelper args={[10, 10]} />

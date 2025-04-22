@@ -4,11 +4,15 @@ import { MetadataPanel } from "../MetadataPanel";
 import { ModelViewer } from "../ModelViewer";
 import { ImageViewer } from "../ImageViewer"; // Import the ImageViewer component
 import { degreesToRadians } from "../../../utils/math";
+import { useTranslations } from "../../../hooks/useTranslations";
 
-function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile, size, onClose, imageFiles = [] }) {
+function PropInfo({ artifactName, commonName, infoViewRotation, metadata, detailedModelFile, size, onClose, imageFiles = [] }) {
     const [showHighestRes, setShowHighestRes] = useState(false);
     const [showMetadata, setShowMetadata] = useState(true);
     const [showImages, setShowImages] = useState(false); // New state for toggling between 3D and images
+
+    const { getComponentLabels } = useTranslations();
+    const UILabels = getComponentLabels('propInfo'); // Retrieve metadataPanel labels
 
     return (
         <div style={styles.overlay}>
@@ -42,7 +46,8 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                         )}
 
                         <MetadataPanel
-                            title={artifactName}
+                            title={commonName}
+                            subtitle={artifactName}
                             metadata={metadata}
                             showMetadata={showMetadata}
                             onToggleMetadata={() => setShowMetadata(!showMetadata)}
@@ -55,7 +60,7 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                                 iconOn="toggle_hd_on.svg"
                                 isActive={showHighestRes}
                                 onClick={() => setShowHighestRes(!showHighestRes)}
-                                title={showHighestRes ? "Ver en SD" : "Ver en HD"}
+                                title={showHighestRes ? UILabels.toggleHDOn : UILabels.toggleHDOff}
                                 backgroundColor={showHighestRes ? "#272626" : "#777777"}
                             />
                         )}
@@ -64,14 +69,14 @@ function PropInfo({ artifactName, infoViewRotation, metadata, detailedModelFile,
                             iconOff="toggle_images.svg"
                             isActive={showImages}
                             onClick={() => setShowImages(!showImages)}
-                            title={showImages ? "Ver modelo 3D" : "Ver imágenes"}
+                            title={showImages ? UILabels.toggleModel : UILabels.toggleImages}
                             backgroundColor={showImages ? "#272626" : "#777777"}
                         />}
                         <IconButton
                             iconOn="toggle_info_on.svg"
                             isActive={showMetadata}
                             onClick={() => setShowMetadata(!showMetadata)}
-                            title={showMetadata ? "Ocultar información" : "Mostrar información"}
+                            title={showMetadata ? UILabels.toggleMetadataOn : UILabels.toggleMetadataOff}
                             backgroundColor={showMetadata ? "#272626" : "#777777"}
                         />
                     </div>

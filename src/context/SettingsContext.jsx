@@ -1,6 +1,7 @@
 import { createContext, useReducer, useContext } from "react";
 
 const initialSettings = {
+  workerUrl: "https://my-worker.nadinaccg.workers.dev/?path=",
   cameraRotationSpeed: 4.0,
   playerWalkSpeed: 1.5,
   playerJumpForce: 4,
@@ -11,6 +12,7 @@ const initialSettings = {
   selectedProp: null,
   selectedPOI: null,
   devMode: false,
+  visitedProps: {},
 
   ui: {
     showMinimap: false,
@@ -21,10 +23,6 @@ const initialSettings = {
     isFullscreen: false,
     isAudioOn: false,
     audioVolume: 0.3,
-  },
-
-  npc: {
-    occupiedWaypoints: new Set() // Store waypoint indices instead of positions
   }
 
 };
@@ -45,6 +43,16 @@ function settingsReducer(state, action) {
       return { ...state, selectedProp: action.payload };
     case "CLEAR_SELECTED_PROP":
       return { ...state, selectedProp: null };
+    case "SET_VISITED_PROP":
+      return {
+        ...state,
+        visitedProps: {
+          ...state.visitedProps,
+          [action.payload.propName]: action.payload.visited
+        }
+      };
+    case "CLEAR_VISITED_PROPS": 
+      return { ...state, visitedProps: {} };
     case "SELECT_POI":
       return { ...state, selectedPOI: action.payload };
     case "CLEAR_SELECTED_POI":
@@ -80,37 +88,6 @@ function settingsReducer(state, action) {
         }
       };
 
-    // NPC waypoint management cases
-    case "ADD_OCCUPIED_WAYPOINT":
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: new Set([...state.npc.occupiedWaypoints, action.payload])
-        }
-      };
-
-    case "REMOVE_OCCUPIED_WAYPOINT":
-      const updatedWaypoints = new Set(state.npc.occupiedWaypoints);
-      updatedWaypoints.delete(action.payload);
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: updatedWaypoints
-        }
-      };
-
-
-    case "CLEAR_OCCUPIED_WAYPOINTS":
-      return {
-        ...state,
-        npc: {
-          ...state.npc,
-          occupiedWaypoints: new Set()
-        }
-      };
-
     default:
       return state;
   }
@@ -119,41 +96,10 @@ function settingsReducer(state, action) {
 export function SettingsProvider({ children }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
 
-  // NPC waypoint management functions
-  const addOccupiedWaypoint = (waypointIndex) => {
-    dispatch({
-      type: "ADD_OCCUPIED_WAYPOINT",
-      payload: waypointIndex
-    });
-  };
-
-  const removeOccupiedWaypoint = (waypointIndex) => {
-    dispatch({
-      type: "REMOVE_OCCUPIED_WAYPOINT",
-      payload: waypointIndex
-    });
-  };
-
-  const isWaypointOccupied = (waypointIndex) => {
-    console.log("Checking occupied waypoints:", settings.npc.occupiedWaypoints);
-    console.log("Trying to assign:", waypointIndex);
-    return settings.npc.occupiedWaypoints.has(waypointIndex);
-  };
-
-  const clearAllOccupiedWaypoints = () => {
-    dispatch({ type: "CLEAR_OCCUPIED_WAYPOINTS" });
-  };
-
-
   return (
     <SettingsContext.Provider value={{
       settings,
       dispatch,
-      // NPC functions
-      addOccupiedWaypoint,
-      removeOccupiedWaypoint,
-      clearAllOccupiedWaypoints,
-      isWaypointOccupied
     }}>
       {children}
     </SettingsContext.Provider>

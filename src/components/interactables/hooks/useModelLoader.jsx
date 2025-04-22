@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import { CF_WORKER_URL } from "../../../config";
 
 /**
  * A hook to load a 3D model, compute its size, and collect materials.
@@ -10,7 +11,8 @@ import { useGLTF } from "@react-three/drei";
  * @returns {object} - The loaded GLTF scene.
  */
 export const useModelLoader = (modelUrl, onComputedSize, onMaterialsLoaded) => {
-    const gltf = useGLTF(modelUrl);
+    
+    const gltf = useGLTF(CF_WORKER_URL + modelUrl);
 
     useEffect(() => {
         if (gltf.scene) {

@@ -7,8 +7,8 @@ export const NpcsOn = ({
     ...props
   }) => (
     <svg
-      width={size}
-      height={height || size * (37/30)}
+      width={size * 0.9}
+      height={height || size }
       viewBox="0 0 30 37"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

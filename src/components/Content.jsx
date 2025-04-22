@@ -8,91 +8,99 @@ import { PropsSetup } from "./interactables/props/PropsSetup";
 import { PointsOfInterestSetup } from "./interactables/pointsofinterest/PointsOfInterestSetup";
 import { CustomOrbitControls } from "./CustomOrbitControls";
 import { useCustomKeyboardControls } from "./player/hooks/useCustomKeyboardControls";
-import propsData from "../data/propsData.json";
-import POIsData from "../data/POIsData.json";
 import { SceneWithRoomEnvironment } from "./environment/SceneWithRoomEnvironment";
 import { Effects } from "./environment/Effects";
 import NPCNavigation from "./NPCs/NPCNavigation/NPCNavigation";
 import { useSettings } from "../context/SettingsContext";
 import NPCManager from "./NPCs/NPCManager/NPCManager";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { LoadingScreen } from "./LoadingScreen";
+import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
+import { StatsCollector } from "./profiling/StatsCollector";
 
-export default function Content({ playerRef, orbitControlsRef }) {
+export default function Content({ playerRef, orbitControlsRef, propsData, POIsData }) {
     const keys = useCustomKeyboardControls();
     const { settings } = useSettings();
 
+    const [stats, setStats] = useState(null);
+
     return (
-        <Canvas
-            frameloop="always"
-            gl={{ antialias: false }}
-            vsync="true"
-            shadows
-            camera={{ fov: 60 }}
-            onPointerDown={(e) => {
-                e.target.setPointerCapture(e.pointerId);
-                e.target.focus();
-            }}
-            onContextMenu={(e) => e.preventDefault()} // Disable context menu
-            tabIndex={0} // Make the canvas focusable
-            style={{ outline: "none", height: settings.ui.isFullscreen ? "100vh" : "95vh", position: "fixed", bottom: "0px" }}
-        >
-            <Suspense fallback={<LoadingScreen />} >
-                {/* Performance monitoring overlay */}
-             
+        <>
+            <Canvas
+                frameloop="always"
+                gl={{ antialias: false }}
+                vsync="true"
+                shadows
+                camera={{ fov: 60, near: 0.01, far: 1000 }}
+                onPointerDown={(e) => {
+                    e.target.setPointerCapture(e.pointerId);
+                    e.target.focus();
+                }}
+                onContextMenu={(e) => e.preventDefault()} // Disable context menu
+                tabIndex={0} // Make the canvas focusable
+                style={{ outline: "none", height: settings.ui.isFullscreen ? "100vh" : "95vh", position: "fixed", bottom: "0px" }}
+            >
+                <StatsCollector onStats={setStats}/>
+                <Suspense fallback={<LoadingScreen />} >
+                
+                    {/* <Stats /> */}
 
-                {/* Scene environment setup */}
-                <SceneWithRoomEnvironment />
-                <ambientLight intensity={0} />
-
-
-                {/* NPC Management */}
-                {settings.ui.showNPCs && (
-                    <NPCManager>
-                        <NPCNavigation
-                            key="leonard"
-                            color="lime"
-                            model="/assets/models/characters/lewis"
-                            propsData={propsData}
-                            poisData={POIsData}
-                            playerRef={playerRef}
-                        />
-                        <NPCNavigation
-                            key="sophie"
-                            color="lime"
-                            model="/assets/models/characters/sophie"
-                            propsData={propsData}
-                            poisData={POIsData}
-                            playerRef={playerRef}
-                        />
-                        <NPCNavigation
-                            key="lewis"
-                            color="lime"
-                            model="/assets/models/characters/leonard"
-                            propsData={propsData}
-                            poisData={POIsData}
-                            playerRef={playerRef}
-                        />
-                    </NPCManager>
-                )}
-
-                {/* Physics simulation with environment and player */}
-                <Physics gravity={[0, -9.81, 0]}>
-                    <EnvironmentColliders />
-                    <Ground />
-                    <Player ref={playerRef} keys={keys} />
-                    <PropsSetup props={propsData} />
-                    <PointsOfInterestSetup POIs={POIsData} />
-                </Physics>
+                    {/* Scene environment setup */}
+                    <SceneWithRoomEnvironment />
+                    <ambientLight intensity={0} />
+                    {/* <fog attach="fog" color="gray" near={3} far={20} /> */}
 
 
+                    {/* NPC Management */}
+                    {settings.ui.showNPCs && (
+                        <NPCManager>
+                            <NPCNavigation
+                                key="leonard"
+                                color="lime"
+                                model={`${settings.workerUrl}characters/lewis`}
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                            <NPCNavigation
+                                key="sophie"
+                                color="lime"
+                                model={`${settings.workerUrl}characters/sophie`}
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                            <NPCNavigation
+                                key="lewis"
+                                color="lime"
+                                model={`${settings.workerUrl}characters/leonard`}
+                                propsData={propsData}
+                                poisData={POIsData}
+                                playerRef={playerRef}
+                            />
+                        </NPCManager>
+                    )}
 
-                {/* Camera controls and post-processing effects */}
-                <CustomOrbitControls ref={orbitControlsRef} />
+                    {/* Physics simulation with environment and player */}
+                    <Physics gravity={[0, -9.81, 0]}>
+                        <EnvironmentColliders />
+                        <Ground />
+                        <Player ref={playerRef} keys={keys} />
+                        <PropsSetup props={propsData} />
+                        <PointsOfInterestSetup POIs={POIsData} />
+                    </Physics>
 
 
-                <Effects />
-            </Suspense>
-        </Canvas>
+
+                    {/* Camera controls and post-processing effects */}
+                    <CustomOrbitControls ref={orbitControlsRef} />
+
+
+                    <Effects />
+                </Suspense>
+            </Canvas>
+            {/* <ProfilerOverlay stats={stats}/> */}
+            
+        </>
     );
 }

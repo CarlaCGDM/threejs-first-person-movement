@@ -29,6 +29,7 @@ const styles = {
     scrollbarWidth: "thin",
     scrollbarColor: "#E5B688 transparent",
     pointerEvents: "auto",
+    position: "relative",
   },
   progressContainer: {
     display: "flex",
