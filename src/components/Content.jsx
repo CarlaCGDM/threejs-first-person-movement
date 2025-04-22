@@ -17,6 +17,7 @@ import { Suspense, useState } from "react";
 import { LoadingScreen } from "./LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
+import { CF_WORKER_URL } from "../config";
 
 export default function Content({ playerRef, orbitControlsRef, propsData, POIsData }) {
     const keys = useCustomKeyboardControls();
@@ -57,7 +58,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="leonard"
                                 color="lime"
-                                model={`${settings.workerUrl}characters/lewis`}
+                                model={`${CF_WORKER_URL}characters/lewis`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}
@@ -65,7 +66,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="sophie"
                                 color="lime"
-                                model={`${settings.workerUrl}characters/sophie`}
+                                model={`${CF_WORKER_URL}characters/sophie`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}
@@ -73,7 +74,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                             <NPCNavigation
                                 key="lewis"
                                 color="lime"
-                                model={`${settings.workerUrl}characters/leonard`}
+                                model={`${CF_WORKER_URL}characters/leonard`}
                                 propsData={propsData}
                                 poisData={POIsData}
                                 playerRef={playerRef}
