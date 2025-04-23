@@ -9,6 +9,7 @@ import { useHighlightMaterial } from "../hooks/useHighlightMaterial";
 import { usePOIModelLoader } from "../hooks/usePOIModelLoader";
 import { usePOIInteractions } from "../hooks/usePOIInteractions";
 import { usePlayerDistance } from "../hooks/usePlayerDistance";
+import { CF_WORKER_URL } from "../../../config";
 
 /**
  * Interactive Point of Interest component featuring:
@@ -39,7 +40,7 @@ const PointOfInterest = forwardRef(({
   // State Management
   // -----------------------------------------------------------------
 
-  const [validUrl, setValidUrl] = useState("/assets/models/treasureChest.glb");   // Model URL with fallback to default treasure chest
+  const [validUrl, setValidUrl] = useState(`tabbyCat.glb`);   // Model URL with fallback to default treasure chest
   const [size, setSize] = useState(new THREE.Vector3(1, 1, 1)); // Dimensions of the loaded model (default 1x1x1 cube)
   const [materials, setMaterials] = useState([]); // Materials from the model for hover effects
 

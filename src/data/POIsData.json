@@ -6,7 +6,7 @@
     "metadata": {
       "description": "Esta zona corresponde a la primera de las salas laterales que conforman la cueva, la más cercana a la entrada."
     },
-    "modelFile": "/assets/models/POIs/POI1.glb",
+    "modelFile": "POIs/POI1.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Sala1.jpg",
@@ -24,7 +24,7 @@
     "metadata": {
       "description": "En esta zona de la cueva fue donde se encontraron los restos que, a través de su estudio, ha permitido conocer a las poblaciones que la habitaron durante el neolítico. Se han conservado por un lado, materiales orgánicos (huesos humanos y de pequeños mamíferos o restos carbonizados de árboles y de arbustos), y por otro, herramientas y objetos diversos (utensilios de piedra, adornos, cerámica, etc.)."
     },
-    "modelFile": "/assets/models/POIs/POI2.glb",
+    "modelFile": "POIs/POI2.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/RestosNeoliticos.jpg",
@@ -46,7 +46,7 @@
     "metadata": {
       "description": "Esta zona corresponde a la segunda de las salas laterales que conforman la cueva, la que se encuentra más al interior."
     },
-    "modelFile": "/assets/models/POIs/POI3.glb",
+    "modelFile": "POIs/POI3.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Sala2.jpg",
@@ -68,7 +68,7 @@
     "metadata": {
       "description": "Esta parte corresponde a los restos de la escombrera de la mina en la que se convirtió la cueva entre finales del siglo XIX y principios del XX.\nSe extraía de un tipo de calcita muy pura: la calcita esparítica, conocida popularmente en la zona como sal de lobo, porque forma grandes cristales cuando se resquebraja.\nLa extracción continuada hizo que se destruyeran buena parte de las estalactitas y de las estalagmitas que adornaban la cueva."
     },
-    "modelFile": "/assets/models/POIs/POI4.glb",
+    "modelFile": "POIs/POI4.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Escombrera2.jpg",
@@ -88,7 +88,7 @@
     "metadata": {
       "description": "This area corresponds to the first of the lateral chambers in the cave, located closest to the entrance."
     },
-    "modelFile": "/assets/models/POIs/POI1.glb",
+    "modelFile": "POIs/POI1.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Sala1.jpg",
@@ -106,7 +106,7 @@
     "metadata": {
       "description": "In this area of the cave, researchers uncovered remains that have provided valuable insights into the populations that inhabited the region during the Neolithic period. Preserved organic materials include human bones, small mammal bones, and carbonized remains of trees and shrubs, along with tools and various objects such as stone utensils, ornaments, pottery, and more."
     },
-    "modelFile": "/assets/models/POIs/POI2.glb",
+    "modelFile": "POIs/POI2.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/RestosNeoliticos.jpg",
@@ -128,7 +128,7 @@
     "metadata": {
       "description": "This area corresponds to the second lateral chamber in the cave, situated further inside."
     },
-    "modelFile": "/assets/models/POIs/POI3.glb",
+    "modelFile": "POIs/POI3.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Sala2.jpg",
@@ -150,7 +150,7 @@
     "metadata": {
       "description": "This section corresponds to the remnants of the spoil heap from the mine that turned the cave into a mining site between the late 19th and early 20th centuries.\nThe material extracted was a highly pure type of calcite known as Sparry calcite, commonly referred to in the area as 'wolf salt' due to the large crystals it forms when fractured.\nContinuous extraction led to the destruction of a significant portion of the stalactites and stalagmites that once adorned the cave."
     },
-    "modelFile": "/assets/models/POIs/POI4.glb",
+    "modelFile": "POIs/POI4.glb",
     "imageFiles": [
       {
         "image": "/assets/images/POIs/Escombrera2.jpg",

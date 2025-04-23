@@ -1,11 +1,12 @@
 import { useGLTF, Clone } from "@react-three/drei";
 import { useRef } from "react";
 import Prop from "./Prop";
+import { CF_WORKER_URL } from "../../../config";
 
 export function PropsSetup({ props }) {
 
   // Load the low-poly environment mesh
-  const occlusionMesh = useGLTF("/assets/models/CovaBonica_LODs/LOD_00.glb");
+  const occlusionMesh = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/LOD_00.glb`);
 
   // Ref for the occlusion mesh
   const occlusionMeshRef = useRef();

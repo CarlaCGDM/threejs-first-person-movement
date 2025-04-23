@@ -1,10 +1,11 @@
 import { useGLTF, Html } from "@react-three/drei";
 import { useMemo, useState } from "react";
 import { useChunkedModel } from "./hooks/useChunkedModel";
+import { CF_WORKER_URL } from "../../config";
 
 export function MemoizedChunkedModel({ modelPath }) {
   const { modelUrl } = useChunkedModel(modelPath);
-  const [fallback] = useState(`assets/models/tabbyCat.glb`); // Fallback to first chunk
+  const [fallback] = useState(`${CF_WORKER_URL}tabbyCat.glb`); // Fallback to first chunk
   
   // Only call useGLTF when we have a valid URL
   const gltf = useGLTF(modelUrl || fallback);
