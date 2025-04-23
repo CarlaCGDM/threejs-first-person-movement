@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { Stats } from "@react-three/drei";
+import { Stats, useProgress } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Ground } from "./environment/CaveEnvironment";
 import { EnvironmentColliders } from "./environment/EnvironmentColliders";
@@ -13,14 +13,25 @@ import { Effects } from "./environment/Effects";
 import NPCNavigation from "./NPCs/NPCNavigation/NPCNavigation";
 import { useSettings } from "../context/SettingsContext";
 import NPCManager from "./NPCs/NPCManager/NPCManager";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { LoadingScreen } from "./LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
+import { CF_WORKER_URL } from "../config";
 
-export default function Content({ playerRef, orbitControlsRef, propsData, POIsData }) {
+export default function Content({ playerRef, orbitControlsRef, propsData, POIsData, environmentUrl }) {
     const keys = useCustomKeyboardControls();
     const { settings } = useSettings();
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const { active, progress } = useProgress();
+
+    // Check if everything is loaded
+    useEffect(() => {
+        if (!active && progress === 100) {
+            setIsLoaded(true);
+        }
+    }, [active, progress]);
 
     const [stats, setStats] = useState(null);
 
@@ -40,67 +51,67 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                 tabIndex={0} // Make the canvas focusable
                 style={{ outline: "none", height: settings.ui.isFullscreen ? "100vh" : "95vh", position: "fixed", bottom: "0px" }}
             >
-                <StatsCollector onStats={setStats}/>
-                <Suspense fallback={<LoadingScreen />} >
-                
+                <StatsCollector onStats={setStats} />
+                <Suspense fallback={null} >
+
                     {!import.meta.env.PROD && <Stats />}
 
                     {/* Scene environment setup */}
                     <SceneWithRoomEnvironment />
                     <ambientLight intensity={0} />
-                    {/* <fog attach="fog" color="gray" near={3} far={20} /> */}
-
-
-                    {/* NPC Management */}
-                    {settings.ui.showNPCs && (
-                        <NPCManager>
-                            <NPCNavigation
-                                key="leonard"
-                                color="lime"
-                                model={`${settings.workerUrl}characters/lewis`}
-                                propsData={propsData}
-                                poisData={POIsData}
-                                playerRef={playerRef}
-                            />
-                            <NPCNavigation
-                                key="sophie"
-                                color="lime"
-                                model={`${settings.workerUrl}characters/sophie`}
-                                propsData={propsData}
-                                poisData={POIsData}
-                                playerRef={playerRef}
-                            />
-                            <NPCNavigation
-                                key="lewis"
-                                color="lime"
-                                model={`${settings.workerUrl}characters/leonard`}
-                                propsData={propsData}
-                                poisData={POIsData}
-                                playerRef={playerRef}
-                            />
-                        </NPCManager>
-                    )}
-
-                    {/* Physics simulation with environment and player */}
-                    <Physics gravity={[0, -9.81, 0]}>
-                        <EnvironmentColliders />
-                        <Ground />
-                        <Player ref={playerRef} keys={keys} />
-                        <PropsSetup props={propsData} />
-                        <PointsOfInterestSetup POIs={POIsData} />
-                    </Physics>
-
-
-
                     {/* Camera controls and post-processing effects */}
                     <CustomOrbitControls ref={orbitControlsRef} />
-
-
                     <Effects />
+
+                    {/* NPC Management */}
+
+                    <Suspense fallback={null}>
+                        {settings.ui.showNPCs && (
+                            <NPCManager>
+                                <NPCNavigation
+                                    key="leonard"
+                                    color="lime"
+                                    model={`${CF_WORKER_URL}characters/lewis`}
+                                    propsData={propsData}
+                                    poisData={POIsData}
+                                    playerRef={playerRef}
+                                />
+                                <NPCNavigation
+                                    key="sophie"
+                                    color="lime"
+                                    model={`${CF_WORKER_URL}characters/sophie`}
+                                    propsData={propsData}
+                                    poisData={POIsData}
+                                    playerRef={playerRef}
+                                />
+                                <NPCNavigation
+                                    key="lewis"
+                                    color="lime"
+                                    model={`${CF_WORKER_URL}characters/leonard`}
+                                    propsData={propsData}
+                                    poisData={POIsData}
+                                    playerRef={playerRef}
+                                />
+                            </NPCManager>
+                        )}
+                    </Suspense>
+
+                    {/* Physics simulation with environment and player */}
+                    <Suspense fallback={null}>
+                        <Physics gravity={[0, -9.81, 0]}>
+                            <EnvironmentColliders />
+                            <Ground environmentUrl={environmentUrl}/>
+                            <Player ref={playerRef} keys={keys} />
+                            <PropsSetup props={propsData} />
+                            <PointsOfInterestSetup POIs={POIsData} />
+                        </Physics>
+                    </Suspense>
+
                 </Suspense>
             </Canvas>
-            <ProfilerOverlay stats={stats}/>
-            
+            <ProfilerOverlay stats={stats} />
+            {(!isLoaded) && <LoadingScreen />}
+
         </>
     );
 }

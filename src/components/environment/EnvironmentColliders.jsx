@@ -1,8 +1,9 @@
 import { useGLTF } from "@react-three/drei";
 import { RigidBody, TrimeshCollider } from "@react-three/rapier";
+import { CF_WORKER_URL } from "../../config";
 
 export function EnvironmentColliders() {
-    const { scene } = useGLTF("/assets/models/CovaBonica_LODs/cb_trimeshcollider.glb");
+    const { scene } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/cb_trimeshcollider.glb`);
 
     // Log the scene to inspect its structure
     // console.log("GLTF Scene:", scene);

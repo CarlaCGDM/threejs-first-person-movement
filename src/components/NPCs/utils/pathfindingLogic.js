@@ -9,144 +9,207 @@ export class PathfindingLogic {
   }
 
   // Load and process the Blender JSON
-  async loadFromJSON(url, { debugPathfinding = false, debugErrors = false } = {}) {
+  async loadFromJSON(url, zone = this.defaultZone) {
     try {
-      if (debugPathfinding) console.log("[NPCs/Pathfinding] Loading waypoint graph from:", url);
-      
       const response = await fetch(url);
       const data = await response.json();
       
+      // Create waypoints from vertices
       const waypoints = data.vertices.map(v => new THREE.Vector3(v[0], v[1], v[2]));
       
+      // Build adjacency list
       const adjacencyList = new Map();
       waypoints.forEach((_, index) => {
         adjacencyList.set(index, new Set());
       });
       
+      // Process connections from edges
       data.edges.forEach(edge => {
         const [a, b] = edge;
         adjacencyList.get(a).add(b);
-        adjacencyList.get(b).add(a);
+        adjacencyList.get(b).add(a); // For bidirectional connections
       });
       
-      this.zones[this.defaultZone] = { waypoints, adjacencyList };
+      // Store the processed data
+      this.zones[zone] = {
+        waypoints,
+        adjacencyList
+      };
       
-      if (debugPathfinding) {
-        console.log("[NPCs/Pathfinding] Waypoint graph loaded:", {
-          waypoints: waypoints.length,
-          edges: data.edges.length,
-          firstWaypoint: waypoints[0].toArray()
-        });
-      }
+      //console.log(`Waypoint graph loaded for zone ${zone}:`, waypoints.length, "waypoints");
       return true;
       
     } catch (error) {
-      if (debugErrors) console.error("[NPCs/Errors] Error loading waypoint graph:", error);
+      console.error("Error loading waypoint graph:", error);
       return false;
     }
   }
 
-  findPath(startPos, endPos, { debugPathfinding = false, debugErrors = false } = {}) {
-    const zoneData = this.zones[this.defaultZone];
+  // Improved findPath method
+  findPath(startPos, endPos, zone = this.defaultZone) {
+    const zoneData = this.zones[zone];
     if (!zoneData) {
-      if (debugErrors) console.error("[NPCs/Errors] Zone not loaded");
+      console.error(`Zone ${zone} not found`);
       return null;
     }
 
     const { waypoints, adjacencyList } = zoneData;
     
+    // Find the initial waypoints
     const startWaypoint = this.findNearestWaypoint(startPos, waypoints);
     const endWaypoint = this.findNearestWaypoint(endPos, waypoints);
     
     if (startWaypoint === null || endWaypoint === null) {
-      if (debugErrors) console.error("[NPCs/Errors] Invalid start/end positions");
+      console.error('Could not find start/end waypoints');
       return null;
     }
     
+    // If start and end waypoints are the same, but the positions are different,
+    // we need to handle this special case
     if (startWaypoint.index === endWaypoint.index) {
-      if (debugPathfinding) console.log("[NPCs/Pathfinding] Start and end at same waypoint");
-      return [waypoints[startWaypoint.index].clone()];
+      //console.log('Start and end waypoints are the same');
+      // Return a path with just the waypoint
+      const waypointPosition = waypoints[startWaypoint.index].clone();
+      return [waypointPosition];
     }
     
-    // Try direct path first
-    let directPath = this.findDirectPath(
-      startWaypoint.index, 
-      endWaypoint.index, 
-      adjacencyList, 
-      waypoints, 
-      { debugPathfinding }
-    );
-    
-    if (directPath) {
-      if (debugPathfinding) console.log("[NPCs/Pathfinding] Direct path found via BFS");
-      return this.finalizePath(startPos, endPos, directPath);
+    // Check first if there's a direct path using breadth-first search
+    let directPath = this.findDirectPath(startWaypoint.index, endWaypoint.index, adjacencyList, waypoints);
+    if (directPath && directPath.length > 1) {
+      //console.log('Direct path found using BFS');
+      // Add projected start/end positions
+      const finalPath = [
+        this.projectPositionToPath(startPos, directPath[0], directPath[1]), 
+        ...directPath.slice(1, -1),
+        this.projectPositionToPath(endPos, directPath[directPath.length-1], directPath[directPath.length-2])
+      ];
+      return finalPath;
     }
-
-    // Fallback to A* with retries
+    
+    // If direct path failed, try A* with multiple attempts
     for (let attempt = 0; attempt < this.maxPathGenerationAttempts; attempt++) {
+      // For retries, try alternative nearby waypoints
+      const alternativeStartWaypoint = attempt > 0 ? 
+        this.findAlternativeWaypoint(startWaypoint, adjacencyList, waypoints, attempt) : 
+        startWaypoint;
+        
+      const alternativeEndWaypoint = attempt > 0 ? 
+        this.findAlternativeWaypoint(endWaypoint, adjacencyList, waypoints, attempt) : 
+        endWaypoint;
+      
+      if (alternativeStartWaypoint === null || alternativeEndWaypoint === null) {
+        continue;
+      }
+      
+      // A* implementation
       const path = this.findPathAStar(
-        startWaypoint.index,
-        endWaypoint.index,
-        adjacencyList,
-        waypoints,
-        { debugPathfinding, attempt }
+        alternativeStartWaypoint.index, 
+        alternativeEndWaypoint.index, 
+        adjacencyList, 
+        waypoints
       );
       
-      if (path) {
-        if (debugPathfinding) {
-          console.log("[NPCs/Pathfinding] Path found via A* (attempt " + (attempt + 1) + ")", {
-            length: path.length,
-            waypoints: path.map(p => p.toArray())
-          });
-        }
-        return this.finalizePath(startPos, endPos, path);
+      if (path && path.length > 1) {
+        // Add projected start/end positions to stay on the mesh
+        const finalPath = [
+          this.projectPositionToPath(startPos, path[0], path[1]),
+          ...path.slice(1, -1),
+          this.projectPositionToPath(endPos, path[path.length-1], path[path.length-2])
+        ];
+        
+        console.log('Path generated successfully', {
+          from: startPos,
+          to: endPos,
+          length: finalPath.length,
+          attempt: attempt + 1
+        });
+        
+        return finalPath;
       }
+      
+      console.warn(`Path generation attempt ${attempt + 1} failed`);
     }
-
-    if (debugErrors) console.error("[NPCs/Errors] All pathfinding attempts failed");
+    
+    console.error('Failed to generate a valid path after multiple attempts');
     return null;
   }
-
-  findDirectPath(startIndex, endIndex, adjacencyList, waypoints, { debugPathfinding = false } = {}) {
-    if (debugPathfinding) console.log("[NPCs/Pathfinding] Starting BFS search");
-    
+  
+  // Find a direct path using breadth-first search
+  findDirectPath(startIndex, endIndex, adjacencyList, waypoints) {
     const visited = new Set([startIndex]);
-    const queue = [[startIndex]];
+    const queue = [[startIndex]]; // Queue of paths (not just nodes)
     
     while (queue.length > 0) {
       const currentPath = queue.shift();
       const currentNode = currentPath[currentPath.length - 1];
       
       if (currentNode === endIndex) {
-        if (debugPathfinding) console.log("[NPCs/Pathfinding] BFS found path length:", currentPath.length);
+        // We found the target, convert indices to positions
         return currentPath.map(index => waypoints[index].clone());
       }
       
+      // Explore neighbors
       for (const neighbor of adjacencyList.get(currentNode)) {
         if (!visited.has(neighbor)) {
           visited.add(neighbor);
-          queue.push([...currentPath, neighbor]);
+          // Create a new path with the neighbor appended
+          const newPath = [...currentPath, neighbor];
+          queue.push(newPath);
         }
       }
     }
     
-    if (debugPathfinding) console.log("[NPCs/Pathfinding] No direct BFS path found");
-    return null;
+    return null; // No path found
   }
-
-  findPathAStar(startIndex, endIndex, adjacencyList, waypoints, { debugPathfinding = false, attempt = 0 } = {}) {
-    if (debugPathfinding) console.log(`[NPCs/Pathfinding] A* attempt ${attempt + 1}`);
+  
+  // Find alternative waypoints for retry attempts
+  findAlternativeWaypoint(originalWaypoint, adjacencyList, waypoints, attempt) {
+    // Start with the original waypoint
+    let currentIndex = originalWaypoint.index;
     
+    // Determine how many steps to take (based on attempt number)
+    const steps = Math.min(5, Math.floor(attempt / 10) + 1);
+    
+    // Walk a random path from the original waypoint
+    for (let i = 0; i < steps; i++) {
+      const neighbors = Array.from(adjacencyList.get(currentIndex));
+      if (neighbors.length === 0) break;
+      
+      // Pick a random neighbor
+      const nextIndex = neighbors[Math.floor(Math.random() * neighbors.length)];
+      currentIndex = nextIndex;
+    }
+    
+    return {
+      index: currentIndex,
+      position: waypoints[currentIndex]
+    };
+  }
+  
+  // Project a position onto the path defined by two waypoints
+  projectPositionToPath(position, pathPoint1, pathPoint2) {
+    // Create a line segment defined by the two path points
+    const line = new THREE.Line3(pathPoint1, pathPoint2);
+    
+    // Project the position onto this line segment
+    const projected = new THREE.Vector3();
+    line.closestPointToPoint(position, true, projected);
+    
+    return projected;
+  }
+  
+  // A* implementation for finding paths
+  findPathAStar(startIndex, endIndex, adjacencyList, waypoints) {
     const openSet = new Set([startIndex]);
     const cameFrom = new Map();
     const gScore = new Map();
     const fScore = new Map();
 
     // Initialize scores
-    waypoints.forEach((_, index) => {
-      gScore.set(index, Infinity);
-      fScore.set(index, Infinity);
-    });
+    for (let i = 0; i < waypoints.length; i++) {
+      gScore.set(i, Infinity);
+      fScore.set(i, Infinity);
+    }
 
     gScore.set(startIndex, 0);
     fScore.set(startIndex, this.heuristic(waypoints[startIndex], waypoints[endIndex]));
@@ -155,20 +218,20 @@ export class PathfindingLogic {
       const current = this.getLowestFScore(openSet, fScore);
 
       if (current === endIndex) {
-        if (debugPathfinding) console.log("[NPCs/Pathfinding] A* found path");
+        // Path found, reconstruct it
         return this.reconstructPath(cameFrom, current, waypoints);
       }
 
       openSet.delete(current);
 
       for (const neighbor of adjacencyList.get(current)) {
-        const tentativeGScore = gScore.get(current) + 
+        const tentativeGScore = gScore.get(current) +
           waypoints[current].distanceTo(waypoints[neighbor]);
 
         if (tentativeGScore < gScore.get(neighbor)) {
           cameFrom.set(neighbor, current);
           gScore.set(neighbor, tentativeGScore);
-          fScore.set(neighbor, tentativeGScore + 
+          fScore.set(neighbor, tentativeGScore +
             this.heuristic(waypoints[neighbor], waypoints[endIndex]));
 
           if (!openSet.has(neighbor)) {
@@ -178,33 +241,15 @@ export class PathfindingLogic {
       }
     }
 
-    if (debugPathfinding) console.log("[NPCs/Pathfinding] A* failed this attempt");
-    return null;
+    return null; // No path found
   }
 
-  // Helper methods
-  finalizePath(startPos, endPos, path) {
-    if (path.length === 0) return [];
-    if (path.length === 1) return [path[0].clone()];
-    
-    return [
-      this.projectPositionToPath(startPos, path[0], path[1]),
-      ...path.slice(1, -1),
-      this.projectPositionToPath(endPos, path[path.length-1], path[path.length-2])
-    ];
-  }
-
-  projectPositionToPath(position, pathPoint1, pathPoint2) {
-    const line = new THREE.Line3(pathPoint1, pathPoint2);
-    const projected = new THREE.Vector3();
-    line.closestPointToPoint(position, true, projected);
-    return projected;
-  }
-
+  // Standard A* heuristic
   heuristic(a, b) {
     return a.distanceTo(b);
   }
 
+  // Find nearest waypoint to a position
   findNearestWaypoint(position, waypoints) {
     let nearest = null;
     let minDistance = Infinity;
@@ -223,21 +268,23 @@ export class PathfindingLogic {
     return nearest;
   }
 
+  // Get node with lowest f-score from open set
   getLowestFScore(openSet, fScore) {
     let lowest = null;
     let lowestScore = Infinity;
 
-    for (const index of openSet) {
+    openSet.forEach(index => {
       const score = fScore.get(index);
       if (score < lowestScore) {
         lowestScore = score;
         lowest = index;
       }
-    }
+    });
 
     return lowest;
   }
 
+  // Reconstruct path from A* results
   reconstructPath(cameFrom, current, waypoints) {
     const path = [waypoints[current].clone()];
     while (cameFrom.has(current)) {
@@ -247,7 +294,7 @@ export class PathfindingLogic {
     return path;
   }
 
-  // Debug visualization
+  // Visualization helper
   createDebugScene(zone = this.defaultZone) {
     const zoneData = this.zones[zone];
     if (!zoneData) return null;
@@ -255,24 +302,29 @@ export class PathfindingLogic {
     const { waypoints, adjacencyList } = zoneData;
     const group = new THREE.Group();
     
-    // Add waypoint markers
+    // Add spheres for waypoints
     waypoints.forEach((pos, index) => {
       const sphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.1),
         new THREE.MeshBasicMaterial({ color: 0xff0000 })
       );
       sphere.position.copy(pos);
+      
+      // Identify waypoints with only one connection
+      const connections = adjacencyList.get(index).size;
+      if (connections <= 1) {
+        sphere.material.color.set(0x0000ff); // Blue for endpoints
+      }
+      
       group.add(sphere);
     });
     
-    // Add connections
+    // Add lines for connections
     adjacencyList.forEach((neighbors, index) => {
       const origin = waypoints[index];
       neighbors.forEach(neighborIndex => {
-        const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-          origin,
-          waypoints[neighborIndex]
-        ]);
+        const neighbor = waypoints[neighborIndex];
+        const lineGeometry = new THREE.BufferGeometry().setFromPoints([origin, neighbor]);
         const line = new THREE.Line(
           lineGeometry,
           new THREE.LineBasicMaterial({ color: 0x00ff00 })

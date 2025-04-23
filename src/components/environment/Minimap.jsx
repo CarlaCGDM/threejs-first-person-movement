@@ -2,19 +2,18 @@ import { useEffect, useMemo, useState, Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Clone } from "@react-three/drei";
 import * as THREE from "three";
+import { CF_WORKER_URL } from "../../config";
 
 function MinimapScene({ playerRef, orbitControlsRef, customOrbitControlsRef }) {
 
-    const workerUrl = "https://my-worker.nadinaccg.workers.dev/?path="
-
-    const { scene: model } = useGLTF(`${workerUrl}CovaBonica_LODs/LOD_00.glb`);
-    const { scene: path } = useGLTF("/assets/models/CovaBonica_LODs/cb_pasarela.glb");
-    const { scene: pawn } = useGLTF("/assets/models/pawn.glb");
-    const { scene: pawnBase } = useGLTF("/assets/models/pawnBase.glb");
-    const { scene: POI1 } = useGLTF("/assets/models/POIs/POI1.glb");
-    const { scene: POI2 } = useGLTF("/assets/models/POIs/POI2.glb");
-    const { scene: POI3 } = useGLTF("/assets/models/POIs/POI3.glb");
-    const { scene: POI4 } = useGLTF("/assets/models/POIs/POI4.glb");
+    const { scene: model } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/LOD_00.glb`);
+    const { scene: path } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb/`);
+    const { scene: pawn } = useGLTF(`${CF_WORKER_URL}pawn.glb`);
+    const { scene: pawnBase } = useGLTF(`${CF_WORKER_URL}pawnBase.glb`);
+    const { scene: POI1 } = useGLTF(`${CF_WORKER_URL}POIs/POI1.glb`);
+    const { scene: POI2 } = useGLTF(`${CF_WORKER_URL}POIs/POI2.glb`);
+    const { scene: POI3 } = useGLTF(`${CF_WORKER_URL}POIs/POI3.glb`);
+    const { scene: POI4 } = useGLTF(`${CF_WORKER_URL}POIs/POI4.glb`);
 
     const [playerPosition, setPlayerPosition] = useState([0, 0, 0]);
     const [isPlayerReady, setIsPlayerReady] = useState(false); // 🔹 Track when playerRef is valid

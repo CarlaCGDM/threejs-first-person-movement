@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import { CF_WORKER_URL } from "../../../config";
 
 /**
  * Handles POI model loading, size calculation, and material management
@@ -11,7 +12,7 @@ import { useGLTF } from "@react-three/drei";
  * @returns {THREE.Object3D} Loaded model scene
  */
 export const usePOIModelLoader = (modelUrl, onComputedSize, onMaterialsLoaded, material) => {
-  const { scene } = useGLTF(modelUrl);
+  const { scene } = useGLTF(CF_WORKER_URL + modelUrl);
 
   useEffect(() => {
     if (!scene) return;

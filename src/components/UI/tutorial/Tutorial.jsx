@@ -11,6 +11,7 @@ import { WireframeLoader } from "./WireframeLoader";
 import tutorialContent from "../../../data/tutorialData.json";
 import { LanguageContext } from "../../../context/LanguageContext";
 import { LanguageSelector } from "./LanguageSelector";
+import { CF_WORKER_URL } from "../../../config";
 
 function parseContent(contentObj, replacements) {
     return Object.values(contentObj).map(({ content, type }, idx) => {
@@ -38,7 +39,7 @@ function parseContent(contentObj, replacements) {
 
 export function Tutorial({ onClose }) {
 
-    const wireframeModel = <WireframeLoader modelUrl={"/assets/models/CovaBonica_LODs/LOD_00.glb"} />
+    const wireframeModel = <WireframeLoader modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/LOD_00.glb`} />
 
     const letterSetIcon = <img
         src="/assets/icons/ui/letter_set.png"

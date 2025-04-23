@@ -52,7 +52,7 @@ export function NPCActor({
   const [playerDistance, setPlayerDistance] = useState(Infinity);
 
   // Load animations from low-res model
-  const { scene, animations } = useGLTF(model + '/LOD_01.glb');
+  const { scene, animations } = useGLTF(model + '/LOD_00.glb');
   
   useEffect(() => {
     if (animations && animations.length > 0) {
@@ -181,7 +181,7 @@ export function NPCActor({
       <Suspense fallback={null}>
         { playerDistance > 0.25 && animationsReady && (
           <HighResModel
-            modelUrl={model + '/LOD_03.glb'}
+            modelUrl={model + '/LOD_02.glb'}
             animations={animations}
             groupRef={groupRef}
             onLoad={handleHighResLoaded}
