@@ -12,7 +12,7 @@ export const useHighlightMaterial = () => {
     const highlightedMaterial = useMemo(() => new THREE.MeshBasicMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.4,
         side: THREE.DoubleSide, // Ensure both sides are rendered
     }), []);
 

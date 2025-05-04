@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useDebug } from '../../../context/DebugContext';
 
-export function useChunkedModel(modelPath) {
+export function useChunkedModel(modelPath, shouldLoad = true) {
   const [modelUrl, setModelUrl] = useState(null);
-  const [loading, setLoading] = useState(true); // NEW
+  const [loading, setLoading] = useState(false);
   const debugChunks = useDebug('Cloudflare', 'Chunks');
   const debugErrors = useDebug('Cloudflare', 'Errors');
 
   useEffect(() => {
-    setLoading(true); // Start loading on each new path
+    if (!shouldLoad || modelUrl) return;
+
+    setLoading(true);
+
     fetch(`${modelPath}chunk_manifest.json`)
       .then(r => r.json())
       .then(manifest => 
@@ -21,13 +24,15 @@ export function useChunkedModel(modelPath) {
       .then(chunks => {
         const blob = new Blob(chunks, { type: 'model/gltf-binary' });
         setModelUrl(URL.createObjectURL(blob));
-        setLoading(false); // DONE loading
+        setLoading(false);
+        if (debugChunks) console.log("[Cloudflare/Chunks] Model loaded successfully.");
       })
       .catch(err => {
-        setLoading(false); // Ensure this is set on error too
+        setLoading(false);
         if (debugErrors) console.error("[Cloudflare/Errors] Error in useChunkedModel:", err);
       });
-  }, [modelPath]);
+
+  }, [shouldLoad, modelPath, modelUrl, debugChunks, debugErrors]);
 
   return { modelUrl, loading };
 }

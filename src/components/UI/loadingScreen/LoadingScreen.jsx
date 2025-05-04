@@ -1,6 +1,8 @@
+// src/components/LoadingScreen.js
 import { useProgress } from "@react-three/drei";
-import { useTranslations } from "../hooks/useTranslations";
+import { useTranslations } from "../../../hooks/useTranslations";
 import { useEffect } from "react";
+import { Spinner } from "./Spinner";
 
 export function LoadingScreen() {
   const { progress, active } = useProgress();
@@ -25,9 +27,9 @@ export function LoadingScreen() {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(39, 38, 38, 1)', // Solid color (no transparency)
-      zIndex: 1000, // Very high to ensure it's on top
-      pointerEvents: 'auto', // Block interactions
+      backgroundColor: 'rgba(39, 38, 38, 1)',
+      zIndex: 1000,
+      pointerEvents: 'auto',
     },
     container: {
       width: '300px',
@@ -43,16 +45,6 @@ export function LoadingScreen() {
     title: {
       fontSize: '1.2rem',
       marginBottom: '20px',
-      letterSpacing: '0%',
-    },
-    spinner: {
-      width: '40px',
-      height: '40px',
-      border: '3px solid #3a3a3a',
-      borderTop: '3px solid #E2E2E2',
-      borderRadius: '50%',
-      margin: '0 auto 20px',
-      animation: 'spin 1s linear infinite',
     },
     progressBar: {
       width: '100%',
@@ -71,29 +63,26 @@ export function LoadingScreen() {
       fontSize: '0.9rem',
       letterSpacing: '0.5px',
     },
+    spinnerContainer: {
+      display: 'flex',          // Enable flexbox
+      justifyContent: 'center', // Center horizontally
+      alignItems: 'center',     // Center vertically
+      marginBottom: '20px',     // Add space below spinner
+    },
   };
 
   if (!active) return null;
 
   return (
     <div style={styles.overlay}>
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-
       <div style={styles.container}>
-        <div style={styles.title}>Loading Cova Bonica</div>
-        <div style={styles.spinner}></div>
+        <div style={styles.title}>{UILabels?.title || "Loading Cova Bonica"}</div>
+        {/* Centered Spinner */}
+        <div style={styles.spinnerContainer}>
+          <Spinner size={40} />
+        </div>
         <div style={styles.progressBar}>
-          <div
-            style={{
-              ...styles.progressFill,
-              width: `${progress}%`
-            }}
-          ></div>
+          <div style={{ ...styles.progressFill, width: `${progress}%` }}></div>
         </div>
         <div style={styles.progressText}>
           {Math.round(progress)}%

@@ -181,7 +181,7 @@ export function NPCActor({
       <Suspense fallback={null}>
         { playerDistance > 0.25 && animationsReady && (
           <HighResModel
-            modelUrl={model + '/LOD_02.glb'}
+            modelUrl={model + '/LOD_01.glb'}
             animations={animations}
             groupRef={groupRef}
             onLoad={handleHighResLoaded}

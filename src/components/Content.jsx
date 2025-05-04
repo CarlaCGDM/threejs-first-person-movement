@@ -14,7 +14,7 @@ import NPCNavigation from "./NPCs/NPCNavigation/NPCNavigation";
 import { useSettings } from "../context/SettingsContext";
 import NPCManager from "./NPCs/NPCManager/NPCManager";
 import { Suspense, useState, useEffect } from "react";
-import { LoadingScreen } from "./LoadingScreen";
+import { LoadingScreen } from "./UI/loadingScreen/LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
 import { CF_WORKER_URL } from "../config";

@@ -16,7 +16,8 @@ async function handleRequest(event) {
 	const isAllowed = ALLOWED_DOMAINS.some(domain =>
 		origin === `https://${domain}` ||
 		origin === `http://${domain}` ||
-		(domain === 'localhost' && origin.startsWith('http://localhost'))
+		(domain === 'localhost' && /^http:\/\/localhost(:\d+)?$/.test(origin))
+
 	);
 	if (!isAllowed) return new Response('Access denied', { status: 403 });
 
