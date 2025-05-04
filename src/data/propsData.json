@@ -101,12 +101,12 @@
         "size": "263 cm in height x 200 cm in width",
         "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/ElefanteSinCaja_LODs",
+      "modelFile": "ElefanteSinCaja_LODs",
       "imageFiles": [{
         "image": "/assets/images/props/elefante.jpg",
         "imageDescription":"Paleoillustration of Palaeoloxodon antiquus, as found at the site, created by Almudena Yagüe for the exhibition 'Espai prehistòria: fauna, canvi climàtic i arqueologia al Garraf' organized by the Town Hall of Castelldefels."
       }],
-      "detailedModelFile": "/assets/models/Elefante_LODs",
+      "detailedModelFile": "Elefante_LODs",
       "iconFolder": "/assets/icons/props/Elefante/",
       "teleportRotationAngle": 0
     },
@@ -124,12 +124,12 @@
         "size": "51,3 cm in height x 45,2 in width",
         "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Hapleidoceros_LODs",
+      "modelFile": "Hapleidoceros_LODs",
       "imageFiles": [{
         "image": "/assets/images/props/Haploidoceros.jpg",
         "imageDescription": "Paleoillustration of Haploidoceros mediterraneus created by Almudena Yagüe for the 2024 Virtual Conference For Women Archaeo and Paleo."
       }],
-      "detailedModelFile": "/assets/models/Hapleidoceros_LODs",
+      "detailedModelFile": "Hapleidoceros_LODs",
       "iconFolder": "/assets/icons/props/Hapleidoceros/",
       "teleportRotationAngle": 290
     },
@@ -147,9 +147,9 @@
         "size": "12 cm in height x 7,57 cm in width",
         "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/MaxilarLeon_LODs",
+      "modelFile": "MaxilarLeon_LODs",
       "imageFiles": [],
-      "detailedModelFile": "/assets/models/MaxilarLeon_LODs",
+      "detailedModelFile": "MaxilarLeon_LODs",
       "iconFolder": "/assets/icons/props/MaxilarLeon/",
       "teleportRotationAngle": 0
     },
@@ -167,9 +167,9 @@
         "size": "66,8 cm in height x 42,2 cm in width",
         "digitizedBy":"Photogrammetry conducted by Laura Gómez Morgado"
       },
-      "modelFile": "/assets/models/Rino_LODs",
+      "modelFile": "Rino_LODs",
       "imageFiles": [],
-      "detailedModelFile": "/assets/models/Rino_LODs",
+      "detailedModelFile": "Rino_LODs",
       "iconFolder": "/assets/icons/props/Rino/",
       "teleportRotationAngle": 0
     }
