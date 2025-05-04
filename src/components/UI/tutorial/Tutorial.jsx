@@ -4,6 +4,7 @@ import { TutorialContentWrapper } from "./TutorialContentWrapper";
 import { TutorialControls } from "./TutorialControls";
 import { TutorialOverlay } from "./TutorialOverlay";
 import { Fossil } from "../icons/Fossil";
+import Cave from "../icons/Cave";
 import { RightMouseButton } from "../icons/RightMouseButton";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
@@ -91,6 +92,12 @@ export function Tutorial({ onClose }) {
         style={iconStyle}
     />
 
+    const caveIcon = <Cave
+    color="#E2E2E2"
+    size={30}
+    style={iconStyle}
+/>
+
     const NPCsIcon = <NpcsOn
         color="#E2E2E2"
         size={30}
@@ -174,6 +181,7 @@ export function Tutorial({ onClose }) {
         "@@rightMouseButtonIcon@@": rightMouseButtonIcon,
         "@@minimapIcon@@": minimapIcon,
         "@@fossilIcon@@": fossilIcon,
+        "@@caveIcon@@": caveIcon,
         "@@miniaturesIcon@@": miniaturesIcon,
         "@@screenshot_01@@": screenshot_01,
         "@@screenshot_02@@": screenshot_02,

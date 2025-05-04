@@ -155,7 +155,7 @@ export function NPCActor({
 
     lastActionRef.current = nextAction;
     
-    console.log("Animation changed to:", nextActionName);
+    //console.log("Animation changed to:", nextActionName);
   };
 
   return (

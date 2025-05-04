@@ -30,7 +30,7 @@ export function Navbar() {
 
                 <div style={{ ...styles.buttonsContainer, opacity: settings.ui.isFullscreen ? 0 : 1 }}>
                     <IconButton
-                        iconOn="fossil.svg"
+                        iconOn="cave.svg"
                         isActive={settings.ui.showInstructions}
                         isHighlighted={!settings.ui.showTutorial}
                         onClick={() => dispatch({ type: "TOGGLE_INFO" })}

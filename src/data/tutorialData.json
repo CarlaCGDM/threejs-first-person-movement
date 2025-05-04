@@ -21,7 +21,7 @@
             "title": "Tutorial",
             "content": {
                 "0": {
-                    "content": "El <strong>localizador</strong> @@minimapIcon@@ del menú superior te permite mostrar u ocultar el mapa en 3D que te indicará en qué parte de la cueva te encuentras. El <strong>fósil</strong> @@fossilIcon@@ te dará acceso a información interesante sobre el yacimiento arqueológico.",
+                    "content": "El <strong>localizador</strong> @@minimapIcon@@ del menú superior te permite mostrar u ocultar el mapa en 3D que te indicará en qué parte de la cueva te encuentras. La <strong>cueva</strong> @@caveIcon@@ te dará acceso a información interesante sobre el yacimiento arqueológico.",
                     "type": "paragraph"
                 },
                 "1": {
@@ -83,7 +83,7 @@
             "title": "Tutorial",
             "content": {
                 "0": {
-                    "content": "The <strong>locator</strong> @@minimapIcon@@  in the top menu lets you toggle the 3D map on and off, which will help you better track your position within the cave. The <strong>fossil icon</strong> @@fossilIcon@@ provides access to interesting information about the archaeological site.",
+                    "content": "The <strong>locator</strong> @@minimapIcon@@  in the top menu lets you toggle the 3D map on and off, which will help you better track your position within the cave. The <strong>cave icon</strong> @@caveIcon@@ provides access to interesting information about the archaeological site.",
                     "type": "paragraph"
                 },
                 "1": {

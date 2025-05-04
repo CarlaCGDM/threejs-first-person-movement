@@ -5,6 +5,9 @@ const NPCManager = ({ children }) => {
   const childrenArray = Children.toArray(children);
   const [occupiedWaypoints, setOccupiedWaypoints] = useState(new Set());
   const reservedWaypoints = useRef(new Set());
+  const spawnTimeoutsRef = useRef([]);
+  const isSpawningRef = useRef(false);
+  const pendingSpawnsRef = useRef(new Set());
 
   // --- Waypoint Management ---
   const isWaypointOccupied = (index) => {
@@ -44,22 +47,97 @@ const NPCManager = ({ children }) => {
     reservedWaypoints.current.clear();
   };
 
-  // --- Staggered Spawning ---
-  useEffect(() => {
-    setActiveNPCIndices([]);
-    const timeouts = [];
+  // Helper to handle spawning a single NPC
+  const spawnNPC = (index) => {
+    setActiveNPCIndices((prev) => {
+      if (prev.includes(index)) return prev; // Already spawned
+      return [...prev, index];
+    });
+    
+    // Remove this NPC from pending spawns
+    pendingSpawnsRef.current.delete(index);
+    
+    // Check if all spawning is complete
+    if (pendingSpawnsRef.current.size === 0) {
+      isSpawningRef.current = false;
+    }
+  };
 
+  // Start the staggered spawning process
+  const startSpawning = () => {
+    // Clean up any existing timeouts
+    clearSpawning();
+    
+    // Reset state
+    setActiveNPCIndices([]);
+    isSpawningRef.current = true;
+    
+    // Track which NPCs we're planning to spawn
+    pendingSpawnsRef.current = new Set(childrenArray.map((_, idx) => idx));
+    
+    // Create new timeouts for staggered spawning
     childrenArray.forEach((_, index) => {
       const timeout = setTimeout(() => {
-        setActiveNPCIndices((prev) => [...prev, index]);
+        spawnNPC(index);
       }, index * 800);
-      timeouts.push(timeout);
+      
+      spawnTimeoutsRef.current.push(timeout);
     });
+  };
 
+  // Clear all spawning timeouts
+  const clearSpawning = () => {
+    spawnTimeoutsRef.current.forEach(clearTimeout);
+    spawnTimeoutsRef.current = [];
+    pendingSpawnsRef.current.clear();
+    isSpawningRef.current = false;
+  };
+
+  // --- Staggered Spawning ---
+  useEffect(() => {
+    // Restart spawning when children change
+    startSpawning();
+    
     return () => {
-      timeouts.forEach(clearTimeout);
+      // Clean up on unmount or when children change
+      clearSpawning();
     };
   }, [childrenArray.length]);
+
+  // Add a safety check to ensure all NPCs are spawned
+  useEffect(() => {
+    // If we're not actively spawning, but there are NPCs that haven't been activated,
+    // and there are children to spawn, then force-spawn the remaining NPCs
+    const checkTimer = setTimeout(() => {
+      if (!isSpawningRef.current && 
+          activeNPCIndices.length < childrenArray.length && 
+          childrenArray.length > 0) {
+        
+        console.log("Safety check: Force-spawning remaining NPCs");
+        
+        // Force-spawn any NPCs that didn't get spawned
+        const missingIndices = [];
+        childrenArray.forEach((_, index) => {
+          if (!activeNPCIndices.includes(index)) {
+            missingIndices.push(index);
+          }
+        });
+        
+        if (missingIndices.length > 0) {
+          setActiveNPCIndices(prev => [...prev, ...missingIndices]);
+        }
+      }
+    }, childrenArray.length * 800 + 1000); // Wait a bit longer than the expected spawn time
+    
+    return () => clearTimeout(checkTimer);
+  }, [activeNPCIndices, childrenArray]);
+
+  // Monitor spawning progress
+  // useEffect(() => {
+  //   if (activeNPCIndices.length === childrenArray.length && childrenArray.length > 0) {
+  //     console.log("All NPCs spawned successfully:", activeNPCIndices.length);
+  //   }
+  // }, [activeNPCIndices, childrenArray]);
 
   return (
     <>
@@ -72,6 +150,7 @@ const NPCManager = ({ children }) => {
               getAvailableWaypoint,
               commitWaypoint,
               releaseWaypoint,
+              npcIndex: index,
             })}
           </React.Fragment>
         );
@@ -79,6 +158,5 @@ const NPCManager = ({ children }) => {
     </>
   );
 };
-
 
 export default NPCManager;
