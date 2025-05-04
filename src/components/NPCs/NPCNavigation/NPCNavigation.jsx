@@ -9,8 +9,7 @@ export default function NPCNavigation({
     propsData = [],
     poisData = [],
     playerRef,
-    isWaypointOccupied,
-    reserveWaypoint,
+    getAvailableWaypoint,
     commitWaypoint,
     releaseWaypoint,
 }) {
@@ -28,11 +27,9 @@ export default function NPCNavigation({
     
         const startPos = startPosition || new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
         const endPos = new THREE.Vector3(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
-    
-        //console.log("Attempting path generation", startPos.toArray(), endPos.toArray());
-    
+
         const newPath = pathfindingRef.current.findPath(startPos, endPos);
-    
+
         if (newPath && newPath.length > 0) {
             const lastWaypoint = newPath[newPath.length - 1];
     
@@ -43,43 +40,27 @@ export default function NPCNavigation({
             );
     
             const nearestWaypointIndex = nearestWaypoint ? nearestWaypoint.index : null;
-    
-            // Step 1: Check if the waypoint is already occupied
-            if (isWaypointOccupied(nearestWaypointIndex)) {
-                console.warn("Waypoint is already occupied, trying again...");
-                return generateNewPath(startPosition); // 🔁 Try again if occupied
+            
+            // Get the next available waypoint from the manager
+            const availableWaypoint = getAvailableWaypoint();
+            if (availableWaypoint === null) {
+                console.warn("No available waypoints!");
+                return null; // No waypoints available, try again later
             }
     
-            // Step 2: Reserve the waypoint if it's free
-            const reserved = reserveWaypoint(nearestWaypointIndex);
-            if (!reserved) {
-                console.warn("Waypoint couldn't be reserved, trying again...");
-                return generateNewPath(startPosition); // 🔁 Retry logic in case it fails
-            }
-    
-            // Step 3: Release the old waypoint, if any
-            if (lastOccupiedWaypointRef.current !== null) {
-                releaseWaypoint(lastOccupiedWaypointRef.current);
-            }
-    
-            // Step 4: Commit the new waypoint
-            commitWaypoint(nearestWaypointIndex);
-            lastOccupiedWaypointRef.current = nearestWaypointIndex;
+            // Step 1: Commit the waypoint directly
+            commitWaypoint(availableWaypoint);
+            lastOccupiedWaypointRef.current = availableWaypoint;
     
             setPath(newPath);
-            //console.log("New path set:", newPath);
             return newPath;
         } else {
             console.error("Path generation failed");
             return null;
         }
     };
-    
-    
 
     const handlePathComplete = useCallback(() => {
-        //console.log("Path complete, releasing waypoint:", lastOccupiedWaypointRef.current);
-
         if (lastOccupiedWaypointRef.current !== null) {
             releaseWaypoint(lastOccupiedWaypointRef.current);
             lastOccupiedWaypointRef.current = null;

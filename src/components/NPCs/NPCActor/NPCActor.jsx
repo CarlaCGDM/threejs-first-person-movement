@@ -7,30 +7,6 @@ import { SpeechBubble } from './visuals/SpeechBubble';
 import { useNPCSpeech } from './hooks/useNPCSpeech';
 import * as THREE from 'three';
 
-const HighResModel = ({ modelUrl, animations, groupRef, onLoad, initialAnimation }) => {
-  const { scene } = useGLTF(modelUrl);
-  const { actions } = useAnimations(animations, scene);
-
-  // ✨ Set backface culling to avoid "seeing inside" NPCs
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material.side = THREE.FrontSide; // default in Three.js, but just to be explicit
-      }
-    });
-  }, [scene]);
-
-  useEffect(() => {
-    if (actions && initialAnimation) {
-      actions[initialAnimation]?.reset().fadeIn(0).play();
-      onLoad(actions);
-    }
-  }, [actions, initialAnimation]);
-
-  return <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />;
-};
-
-
 export function NPCActor({
   path,
   speed = 0.5,
@@ -43,22 +19,23 @@ export function NPCActor({
   playerRef,
   color = "lime"
 }) {
-  const [highResLoaded, setHighResLoaded] = useState(false);
   const [animationsReady, setAnimationsReady] = useState(false);
-  const highResActionsRef = useRef(null);
-  const lastLowResActionRef = useRef(null);
-  const lastHighResActionRef = useRef(null);
+  const [modelReady, setModelReady] = useState(false);
+  const lastActionRef = useRef(null);
   const [currentAnimation, setCurrentAnimation] = useState('Walk');
   const [playerDistance, setPlayerDistance] = useState(Infinity);
+  const actionsRef = useRef(null);
 
-  // Load animations from low-res model
-  const { scene, animations } = useGLTF(model + '/LOD_00.glb');
-  
+  const { scene, animations } = useGLTF(model + '/LOD_01.glb');
+
+  const { actions } = useAnimations(animations, scene);
+
+  // Store actions in ref for consistent access
   useEffect(() => {
-    if (animations && animations.length > 0) {
-      setAnimationsReady(true);
+    if (actions) {
+      actionsRef.current = actions;
     }
-  }, [animations]);
+  }, [actions]);
 
   const { groupRef } = useNPCMovement({
     path,
@@ -77,9 +54,6 @@ export function NPCActor({
     onActionComplete: onPathComplete
   });
 
-  // Get animation actions for low-res model
-  const { actions: lowResActions } = useAnimations(animations, scene);
-
   const { closestTarget, findClosestTarget } = useNPCPropInteraction({
     groupRef,
     propsData,
@@ -87,110 +61,110 @@ export function NPCActor({
     isPerformingActions
   });
 
-  // Use the speech hook
   const currentPhrase = useNPCSpeech(closestTarget);
 
-  // Handle high-res model load completion
-  const handleHighResLoaded = (highResActions) => {
-    highResActionsRef.current = highResActions;
-    
-    // Get the current animation name and state from low-res
-    const currentLowResAction = lastLowResActionRef.current;
-    let currentAnimName = currentAnimation; // Default to the tracked state
-    
-    // Find the specific animation that's currently playing in low-res
-    if (currentLowResAction) {
-      Object.entries(lowResActions).forEach(([name, action]) => {
-        if (action === currentLowResAction && action.isRunning()) {
-          currentAnimName = name;
-        }
-      });
+  useEffect(() => {
+    if (animations && animations.length > 0 && actions) {
+      setAnimationsReady(true);
     }
-    
-    // Start the same animation on high-res model immediately
-    // before setting highResLoaded to prevent any gap
-    if (currentAnimName && highResActions[currentAnimName]) {
-      const highResAction = highResActions[currentAnimName];
-      highResAction.reset().fadeIn(0).play();
-      lastHighResActionRef.current = highResAction;
-    }
-    
-    // Now that animation is already playing, update the state
-    setHighResLoaded(true);
-  };
-
-  const updateAnimation = (actionsObj, isHighRes) => {
-    if (!actionsObj) return;
-  
-    let nextActionName;
-    if (!isPerformingActions) {
-      nextActionName = 'Walk';
-    } else if (closestTarget) {
-      nextActionName = 'Idle';
-    } else {
-      nextActionName = 'LookAround';
-    }
-  
-    setCurrentAnimation(nextActionName);
-    const nextAction = actionsObj[nextActionName];
-    if (!nextAction) return;
-  
-    const lastActionRef = isHighRes ? lastHighResActionRef : lastLowResActionRef;
-    const currentAction = lastActionRef.current;
-  
-    // Don't reset the animation before crossfading
-    if (currentAction && currentAction !== nextAction) {
-      // Use proper crossfade duration for smoother transitions
-      const crossFadeDuration = 0.3;
-      
-      // Important: Use crossFadeTo which handles the reset internally
-      currentAction.crossFadeTo(nextAction, crossFadeDuration, true);
-      nextAction.play();
-    } else if (!currentAction) {
-      // If there's no current action, then we can safely reset and play
-      nextAction.reset().fadeIn(0.2).play();
-    }
-  
-    lastActionRef.current = nextAction;
-  };
+  }, [animations, actions]);
 
   useEffect(() => {
     if (!animationsReady) return;
 
-    if (highResLoaded && highResActionsRef.current) {
-      updateAnimation(highResActionsRef.current, true);
-    } else {
-      updateAnimation(lowResActions, false);
+    // Ensure materials are properly set before showing
+    scene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.side = THREE.FrontSide;
+      }
+    });
+
+    // Initialize all animations (but don't play them yet)
+    if (actions) {
+      Object.values(actions).forEach(action => {
+        // Make sure all animations are initialized
+        action.reset();
+      });
+      // Start first animation safely
+      updateAnimation('Walk');
     }
 
+    setModelReady(true); // Now safe to render
+
     return () => {
-      const actionsObj = highResLoaded ? highResActionsRef.current : lowResActions;
-      if (actionsObj) {
-        Object.values(actionsObj).forEach(action => {
-          if (action) {
-            action.fadeOut(0.1);
-            action.stop();
-          }
+      if (actions) {
+        Object.values(actions).forEach(action => {
+          action.fadeOut(0.1);
+          action.stop();
         });
       }
     };
-  }, [isPerformingActions, closestTarget, highResLoaded, animationsReady, highResActionsRef.current]);
+  }, [animationsReady]);
+
+  // Function to determine which animation to play
+  const determineAnimationName = () => {
+    if (!isPerformingActions) {
+      return 'Walk';
+    } else if (closestTarget) {
+      return 'Idle';
+    } else {
+      return 'LookAround';
+    }
+  };
+
+  // Separated animation update into its own effect
+  useEffect(() => {
+    if (!animationsReady) return;
+    const nextActionName = determineAnimationName();
+    updateAnimation(nextActionName);
+  }, [isPerformingActions, closestTarget, animationsReady]);
+
+  // Improved animation transition function
+  const updateAnimation = (nextActionName) => {
+    if (!actionsRef.current) return;
+    
+    setCurrentAnimation(nextActionName);
+    const nextAction = actionsRef.current[nextActionName];
+    if (!nextAction) {
+      console.warn(`Animation "${nextActionName}" not found`);
+      return;
+    }
+
+    const currentAction = lastActionRef.current;
+    
+    // If we're trying to play the same animation that's already playing, do nothing
+    if (currentAction === nextAction && nextAction.isRunning()) {
+      return;
+    }
+
+    // Handle transition to new animation
+    if (currentAction) {
+      // Properly stop the current animation to avoid T-pose
+      currentAction.fadeOut(0.3);
+      
+      // Reset and play the next animation
+      nextAction.reset();
+      nextAction.fadeIn(0.3);
+      nextAction.play();
+    } else {
+      // First animation
+      nextAction.reset();
+      nextAction.fadeIn(0.3);
+      nextAction.play();
+    }
+
+    lastActionRef.current = nextAction;
+    
+    console.log("Animation changed to:", nextActionName);
+  };
 
   return (
     <group ref={groupRef}>
       <Suspense fallback={null}>
-        { playerDistance > 0.25 && animationsReady && (
-          <HighResModel
-            modelUrl={model + '/LOD_01.glb'}
-            animations={animations}
-            groupRef={groupRef}
-            onLoad={handleHighResLoaded}
-            initialAnimation={currentAnimation}
-          />
+        {modelReady && (
+          <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />
         )}
       </Suspense>
-
-      {!highResLoaded && <primitive object={scene} position={[0, 0, 0]} rotation={[0, Math.PI, 0]} />}
 
       <SpeechBubble
         isPerformingActions={isPerformingActions}

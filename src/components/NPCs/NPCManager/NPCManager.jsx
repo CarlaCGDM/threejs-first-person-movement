@@ -3,13 +3,8 @@ import React, { useState, useEffect, Children, cloneElement, useRef } from 'reac
 const NPCManager = ({ children }) => {
   const [activeNPCIndices, setActiveNPCIndices] = useState([]);
   const childrenArray = Children.toArray(children);
-
   const [occupiedWaypoints, setOccupiedWaypoints] = useState(new Set());
   const reservedWaypoints = useRef(new Set());
-
-  useEffect(() => {
-    //console.log(occupiedWaypoints);
-  }, [occupiedWaypoints]);
 
   // --- Waypoint Management ---
   const isWaypointOccupied = (index) => {
@@ -21,34 +16,33 @@ const NPCManager = ({ children }) => {
     reservedWaypoints.current.add(index);
     return true;
   };
-  
 
   const commitWaypoint = (index) => {
-    setOccupiedWaypoints(prev => new Set([...prev, index]));
+    setOccupiedWaypoints((prev) => new Set([...prev, index]));
     reservedWaypoints.current.delete(index);
   };
 
   const releaseWaypoint = (index) => {
-    setOccupiedWaypoints(prev => {
+    setOccupiedWaypoints((prev) => {
       const newSet = new Set(prev);
       newSet.delete(index);
       return newSet;
     });
   };
 
+  const getAvailableWaypoint = () => {
+    for (let i = 0; i < 100; i++) { // Try up to 100 waypoints
+      if (!isWaypointOccupied(i)) {
+        return i; // Return the first available waypoint
+      }
+    }
+    return null; // If no waypoints are available, return null
+  };
+
   const clearAllWaypoints = () => {
     setOccupiedWaypoints(new Set());
     reservedWaypoints.current.clear();
   };
-
-  // --- Mount / Unmount Cleanup ---
-  useEffect(() => {
-    //console.log("NPCManager mounted, setting up waypoints");
-    return () => {
-      //console.log("NPCManager unmounted, clearing waypoints");
-      clearAllWaypoints();
-    };
-  }, []);
 
   // --- Staggered Spawning ---
   useEffect(() => {
@@ -57,7 +51,7 @@ const NPCManager = ({ children }) => {
 
     childrenArray.forEach((_, index) => {
       const timeout = setTimeout(() => {
-        setActiveNPCIndices(prev => [...prev, index]);
+        setActiveNPCIndices((prev) => [...prev, index]);
       }, index * 800);
       timeouts.push(timeout);
     });
@@ -75,8 +69,7 @@ const NPCManager = ({ children }) => {
         return (
           <React.Fragment key={`npc-${index}-${child.key || ''}`}>
             {cloneElement(child, {
-              isWaypointOccupied,
-              reserveWaypoint,
+              getAvailableWaypoint,
               commitWaypoint,
               releaseWaypoint,
             })}
@@ -86,5 +79,6 @@ const NPCManager = ({ children }) => {
     </>
   );
 };
+
 
 export default NPCManager;

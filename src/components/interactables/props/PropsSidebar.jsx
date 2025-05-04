@@ -17,10 +17,10 @@ export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
       }
     }, 50);
     // Update visited props through context
-    dispatch({
-      type: "SET_VISITED_PROP",
-      payload: { propName: prop.artifactName, visited: true }
-    });
+    // dispatch({
+    //   type: "SET_VISITED_PROP",
+    //   payload: { propName: prop.artifactName, visited: true }
+    // });
   };
 
   const handleReturnToStart = () => {
