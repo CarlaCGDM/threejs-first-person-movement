@@ -72,7 +72,7 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
       {/* Other components */}
       <AudioManager />
       <Navbar />
-      {/* <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> */}
+      <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
       {!isMobile && <InstructionsPanel />}
 
 
