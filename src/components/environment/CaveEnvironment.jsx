@@ -1,21 +1,19 @@
+import { useRef, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo } from "react";
 import { CF_WORKER_URL } from "../../config";
 import { useGLTFReady } from "./hooks/useGLTFReady";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import DisposeOnlyModel from "./DisposeOnlyModel";
 
-// Memoized standard model that notifies when loading is complete
-const MemoizedModel = ({ modelUrl}) => {
+const MemoizedModel = ({ modelUrl }) => {
   const gltf = useGLTF(modelUrl);
-
   const scene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
   return <primitive object={scene} />;
 };
 
-// Transparent variant with material tweaks
 const MemoizedTransparentModel = ({ modelUrl }) => {
   const gltf = useGLTF(modelUrl);
-
   const scene = useMemo(() => {
     const clone = gltf.scene.clone();
     clone.frustumCulled = false;
@@ -32,14 +30,16 @@ const MemoizedTransparentModel = ({ modelUrl }) => {
   return <primitive object={scene} />;
 };
 
-// Inside Ground
 export function Ground({ environmentUrl }) {
   const isHDReady = useGLTFReady(environmentUrl);
   const shouldShowHD = environmentUrl && isHDReady;
-
+  const isMobile = useIsMobile();
   const previousHDUrlRef = useRef(null);
 
-  // Track last used HD modelUrl for disposal
+  const fallbackLOD = isMobile
+    ? `${CF_WORKER_URL}CovaBonica_LODs/LOD_03.glb`
+    : `${CF_WORKER_URL}CovaBonica_LODs/LOD_03.glb`;
+
   useEffect(() => {
     if (shouldShowHD) {
       previousHDUrlRef.current = environmentUrl;
@@ -48,16 +48,15 @@ export function Ground({ environmentUrl }) {
 
   return (
     <>
-      <MemoizedTransparentModel modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb/`} />
-      <MemoizedModel modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/cb_background.glb/`} />
+      <MemoizedTransparentModel modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb`} />
+      <MemoizedModel modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/cb_background.glb`} />
 
       {shouldShowHD ? (
         <MemoizedModel modelUrl={environmentUrl} />
       ) : (
-        <MemoizedModel modelUrl={`${CF_WORKER_URL}CovaBonica_LODs/LOD_03.glb/`} />
+        <MemoizedModel modelUrl={fallbackLOD} />
       )}
 
-      {/* When HD is off, pass previous HD url for cleanup */}
       {!shouldShowHD && previousHDUrlRef.current && (
         <DisposeOnlyModel modelUrl={previousHDUrlRef.current} />
       )}

@@ -91,9 +91,9 @@ export function ModelViewer({
                     enablePan={true} 
                     enableZoom={true}
                     mouseButtons={{
-                        LEFT: THREE.MOUSE.PAN,
+                        RIGHT: THREE.MOUSE.PAN,
                         MIDDLE: THREE.MOUSE.DOLLY,
-                        RIGHT: THREE.MOUSE.ROTATE
+                        LEFT: THREE.MOUSE.ROTATE
                       }} 
                 />
                 {debug && (

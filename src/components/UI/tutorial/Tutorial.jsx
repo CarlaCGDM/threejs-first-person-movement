@@ -6,6 +6,7 @@ import { TutorialOverlay } from "./TutorialOverlay";
 import { Fossil } from "../icons/Fossil";
 import Cave from "../icons/Cave";
 import { RightMouseButton } from "../icons/RightMouseButton";
+import { LeftMouseButton } from "../icons/LeftMouseButton";
 import { MinimapOn } from "../icons/MinimapOn";
 import { NpcsOn } from "../icons/NPCsOn";
 import { WireframeLoader } from "./WireframeLoader";
@@ -81,6 +82,13 @@ export function Tutorial({ onClose }) {
         size={30}
         style={iconStyle}
     />
+
+    const leftMouseButtonIcon = <LeftMouseButton
+        color="#E2E2E2"
+        size={30}
+        style={iconStyle}
+    />
+
     const minimapIcon = <MinimapOn
         color="#E2E2E2"
         size={30}
@@ -179,6 +187,7 @@ export function Tutorial({ onClose }) {
         "@@wireframeModel@@": wireframeModel,
         "@@letterSetIcon@@": letterSetIcon,
         "@@rightMouseButtonIcon@@": rightMouseButtonIcon,
+        "@@leftMouseButtonIcon@@": leftMouseButtonIcon,
         "@@minimapIcon@@": minimapIcon,
         "@@fossilIcon@@": fossilIcon,
         "@@caveIcon@@": caveIcon,

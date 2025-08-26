@@ -7,7 +7,7 @@ import { CF_WORKER_URL } from "../../config";
 function MinimapScene({ playerRef, orbitControlsRef, customOrbitControlsRef }) {
 
     const { scene: model } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/LOD_00.glb`);
-    const { scene: path } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb/`);
+    const { scene: path } = useGLTF(`${CF_WORKER_URL}CovaBonica_LODs/cb_pasarela.glb`);
     const { scene: pawn } = useGLTF(`${CF_WORKER_URL}pawn.glb`);
     const { scene: pawnBase } = useGLTF(`${CF_WORKER_URL}pawnBase.glb`);
     const { scene: POI1 } = useGLTF(`${CF_WORKER_URL}POIs/POI1.glb`);

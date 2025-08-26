@@ -6,8 +6,13 @@ export function useCustomKeyboardControls() {
         backward: false,
         left: false,
         right: false,
-        jump: false, // Add jump state
+        jump: false,
     });
+
+    // Function to update key states - can be called by both keyboard and mobile controls
+    const updateKey = (key, pressed) => {
+        setKeys((prev) => ({ ...prev, [key]: pressed }));
+    };
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -15,25 +20,25 @@ export function useCustomKeyboardControls() {
                 case "w":
                 case "W":
                 case "ArrowUp":
-                    setKeys((prev) => ({ ...prev, forward: true }));
+                    updateKey("forward", true);
                     break;
                 case "s":
                 case "S":
                 case "ArrowDown":
-                    setKeys((prev) => ({ ...prev, backward: true }));
+                    updateKey("backward", true);
                     break;
                 case "a":
                 case "A":
                 case "ArrowLeft":
-                    setKeys((prev) => ({ ...prev, left: true }));
+                    updateKey("left", true);
                     break;
                 case "d":
                 case "D":
                 case "ArrowRight":
-                    setKeys((prev) => ({ ...prev, right: true }));
+                    updateKey("right", true);
                     break;
                 case " ":
-                    setKeys((prev) => ({ ...prev, jump: true }));
+                    updateKey("jump", true);
                     break;
                 default:
                     break;
@@ -45,25 +50,25 @@ export function useCustomKeyboardControls() {
                 case "w":
                 case "W":
                 case "ArrowUp":
-                    setKeys((prev) => ({ ...prev, forward: false }));
+                    updateKey("forward", false);
                     break;
                 case "s":
                 case "S":
                 case "ArrowDown":
-                    setKeys((prev) => ({ ...prev, backward: false }));
+                    updateKey("backward", false);
                     break;
                 case "a":
                 case "A":
                 case "ArrowLeft":
-                    setKeys((prev) => ({ ...prev, left: false }));
+                    updateKey("left", false);
                     break;
                 case "d":
                 case "D":
                 case "ArrowRight":
-                    setKeys((prev) => ({ ...prev, right: false }));
+                    updateKey("right", false);
                     break;
                 case " ":
-                    setKeys((prev) => ({ ...prev, jump: false }));
+                    updateKey("jump", false);
                     break;
                 default:
                     break;
@@ -79,5 +84,5 @@ export function useCustomKeyboardControls() {
         };
     }, []);
 
-    return keys;
+    return { keys, updateKey };
 }

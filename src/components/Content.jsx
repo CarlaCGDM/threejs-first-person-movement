@@ -18,9 +18,10 @@ import { LoadingScreen } from "./UI/loadingScreen/LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
 import { CF_WORKER_URL } from "../config";
+import MobileControls from "./UI/mobileControls/MobileControls";
 
 export default function Content({ playerRef, orbitControlsRef, propsData, POIsData, environmentUrl }) {
-    const keys = useCustomKeyboardControls();
+    const { keys, updateKey } = useCustomKeyboardControls(); // Get both keys and updateKey function
     const { settings } = useSettings();
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -34,6 +35,34 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
     }, [active, progress]);
 
     const [stats, setStats] = useState(null);
+
+    useEffect(() => {
+        const canvas = document.querySelector("canvas");
+
+        const handleTouchStart = (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const simulatedClick = new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true,
+                    clientX: touch.clientX,
+                    clientY: touch.clientY,
+                    view: window,
+                });
+                touch.target.dispatchEvent(simulatedClick);
+            }
+        };
+
+        if (canvas) {
+            canvas.addEventListener("touchstart", handleTouchStart);
+        }
+
+        return () => {
+            if (canvas) {
+                canvas.removeEventListener("touchstart", handleTouchStart);
+            }
+        };
+    }, []);
 
     return (
         <>
@@ -64,7 +93,6 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                     <Effects />
 
                     {/* NPC Management */}
-
                     <Suspense fallback={null}>
                         {settings.ui.showNPCs && (
                             <NPCManager>
@@ -100,7 +128,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                     <Suspense fallback={null}>
                         <Physics gravity={[0, -9.81, 0]}>
                             <EnvironmentColliders />
-                            <Ground environmentUrl={environmentUrl}/>
+                            <Ground environmentUrl={environmentUrl} />
                             <Player ref={playerRef} keys={keys} />
                             <PropsSetup props={propsData} />
                             <PointsOfInterestSetup POIs={POIsData} />
@@ -109,9 +137,12 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
                 </Suspense>
             </Canvas>
-            <ProfilerOverlay stats={stats} />
+            
+            {/* Mobile Controls - Only shows on mobile devices */}
+            <MobileControls updateKey={updateKey} />
+            
+            {/* <ProfilerOverlay stats={stats} /> */}
             {(!isLoaded) && <LoadingScreen />}
-
         </>
     );
 }

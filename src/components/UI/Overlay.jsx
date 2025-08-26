@@ -12,8 +12,11 @@ import { AudioManager } from "./audio/AudioManager";
 import { CreditsModal } from "./CreditsModal";
 import { QualityToggle } from "./QualityToggle";
 import { DebugPanel } from "./DebugPanel";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
+
+  const isMobile = useIsMobile();
 
   const { settings, dispatch } = useSettings();
   const { selectedProp, selectedPOI } = settings;
@@ -69,8 +72,8 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
       {/* Other components */}
       <AudioManager />
       <Navbar />
-      <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} />
-      <InstructionsPanel />
+      {/* <PropsSidebar props={props} playerRef={playerRef} orbitControlsRef={orbitControlsRef} /> */}
+      {!isMobile && <InstructionsPanel />}
 
 
       {/* Render PropInfo if a prop is selected */}
@@ -108,7 +111,7 @@ export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
 
       {settings.ui.showMinimap && <Minimap playerRef={playerRef} customOrbitControlsRef={orbitControlsRef} />}
 
-      <DebugPanel />
+      {/* <DebugPanel /> */}
 
     </div>
   );
