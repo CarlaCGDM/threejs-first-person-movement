@@ -1,37 +1,38 @@
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export const usePlayerMovement = (ref, keys, camera, playerWalkSpeed, playerJumpForce, isGrounded) => {
+export const usePlayerMovement = (ref, keys, camera, walkSpeed, jumpForce, isGrounded) => {
     const direction = new THREE.Vector3();
     const frontVector = new THREE.Vector3();
     const sideVector = new THREE.Vector3();
 
-    useFrame(() => {
-        const { forward, backward, left, right, jump } = keys;
-        const velocity = ref.current.linvel();
+    useFrame((_, delta) => {
+        if (!ref.current) return;
 
-        // Calculate movement direction
+        const { forward, backward, left, right, jump } = keys;
+        const moving = forward || backward || left || right;
+        const vel = ref.current.linvel();
+
+        // Movement
         frontVector.set(0, 0, backward - forward);
         sideVector.set(left - right, 0, 0);
         direction
             .subVectors(frontVector, sideVector)
             .normalize()
-            .multiplyScalar(playerWalkSpeed)
+            .multiplyScalar(walkSpeed)
             .applyEuler(camera.rotation);
 
-        // Apply movement
-        ref.current.setLinvel({
-            x: forward || backward || left || right ? direction.x : 0,
-            y: velocity.y, // Allow jumping only when grounded
-            z: forward || backward || left || right ? direction.z : 0,
-        });
-
-        // Prevent sliding when standing still on stairs
-        if (!forward && !backward && !left && !right && isGrounded) {
-            ref.current.setLinvel({ x: 0, y: 0.15, z: 0 });
+        if (moving) {
+            ref.current.setLinvel({
+                x: direction.x,
+                y: jump && isGrounded ? jumpForce : vel.y,
+                z: direction.z,
+            });
+        } else {
+            // Freeze movement and gravity
+            ref.current.setLinvel({ x: 0, y: 0, z: 0 });
         }
 
-        // Wake up the RigidBody if it's sleeping
         if (ref.current.isSleeping()) {
             ref.current.wakeUp();
         }

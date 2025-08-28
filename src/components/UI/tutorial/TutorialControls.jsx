@@ -84,7 +84,7 @@ const styles = {
     justifyContent: "center",
     gap: "10px",
     width: "100%",
-    '@media (max-width: 480px)': {
+    '@media (maxWidth: 480px)': {
       flexDirection: 'column',
       gap: '10px',
     }

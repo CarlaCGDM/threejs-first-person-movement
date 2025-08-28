@@ -67,11 +67,14 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
     return (
         <>
             <Canvas
-                frameloop="always"
-                gl={{ antialias: false }}
-                vsync="true"
+                frameloop="demand" // ✅ Better for performance
+                gl={{
+                    antialias: false,
+                }}
+                vsync={false} // ✅ Try disabling vsync
+                dpr={[1, 1.5]} // ✅ Fixed DPR instead of adaptive
                 shadows
-                camera={{ fov: 60, near: 0.01, far: 1000 }}
+                camera={{ fov: 60, near: 0.01, far: 1000 }} // ✅ Increased near plane
                 onPointerDown={(e) => {
                     e.target.setPointerCapture(e.pointerId);
                     e.target.focus();
@@ -126,7 +129,9 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
                     {/* Physics simulation with environment and player */}
                     <Suspense fallback={null}>
-                        <Physics gravity={[0, -9.81, 0]}>
+                        <Physics 
+                        gravity={[0, -9.81, 0]}
+                        >
                             <EnvironmentColliders />
                             <Ground environmentUrl={environmentUrl} />
                             <Player ref={playerRef} keys={keys} />
@@ -137,10 +142,10 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
                 </Suspense>
             </Canvas>
-            
+
             {/* Mobile Controls - Only shows on mobile devices */}
             <MobileControls updateKey={updateKey} />
-            
+
             {/* <ProfilerOverlay stats={stats} /> */}
             {(!isLoaded) && <LoadingScreen />}
         </>

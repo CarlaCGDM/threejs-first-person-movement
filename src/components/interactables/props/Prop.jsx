@@ -1,4 +1,4 @@
-import { Clone, Detailed, useGLTF } from "@react-three/drei";
+import { Clone, Detailed } from "@react-three/drei";
 import { forwardRef, Suspense, useState, useEffect } from "react";
 import { useSettings } from "../../../context/SettingsContext";
 import { degreesToRadians } from "../../../utils/math";
@@ -10,7 +10,6 @@ import { FloatingName } from "../FloatingName";
 import { usePlayerDistance } from "../hooks/usePlayerDistance";
 import { useLODModels } from "../hooks/useLODModels";
 import { usePropInteractions } from "../hooks/usePropInteractions";
-import { CF_WORKER_URL } from "../../../config";
 
 /**
  * Interactive 3D artifact component with:
@@ -33,7 +32,7 @@ import { CF_WORKER_URL } from "../../../config";
  * 
  */
 const Prop = forwardRef((props, ref) => {
-    // Destructure all component props (keep existing)
+    // Destructure all component props
     const {
         position,
         rotation,
@@ -48,7 +47,7 @@ const Prop = forwardRef((props, ref) => {
         occlusionMeshRef
     } = props;
 
-    // Access global settings and state (keep existing)
+    // Access global settings and state
     const { dispatch, settings } = useSettings();
     const {
         devMode,
@@ -57,33 +56,7 @@ const Prop = forwardRef((props, ref) => {
         playerRef
     } = settings;
 
-    // State for low-res model (new)
-    const [lowResModel, setLowResModel] = useState(null);
-    const [lowResSize, setLowResSize] = useState({ x: 1, y: 1, z: 1 });
-
-    // Load low-res model immediately (new)
-    useEffect(() => {
-        const loadLowRes = async () => {
-            try {
-                const url = modelFile || "Hapleidoceros_LODs";
-                const lowResUrl = `${CF_WORKER_URL + url}/LOD_00.glb`;
-                const model = await useGLTF(lowResUrl);
-                
-                // Calculate size for the low-res model
-                const box = new THREE.Box3().setFromObject(model.scene);
-                const size = box.getSize(new THREE.Vector3());
-                
-                setLowResModel(model.scene);
-                setLowResSize(size);
-            } catch (error) {
-                console.error("Failed to load low-res model:", error);
-            }
-        };
-        
-        loadLowRes();
-    }, [modelFile]);
-
-    // Existing hooks (keep all these)
+    // Existing hooks
     const [validUrl, setValidUrl] = useState("Hapleidoceros_LODs");
     const playerDistance = usePlayerDistance(position, playerRef);
     const { models, size, materials } = useLODModels(validUrl, useModelLoader);
@@ -101,24 +74,18 @@ const Prop = forwardRef((props, ref) => {
     const teleportOffset = useTeleportPosition(size, rotation, teleportRotationAngle);
     const radRotation = degreesToRadians(rotation || [0, 0, 0]);
 
-    // Update model URL when prop changes (keep existing)
+    // Update model URL when prop changes
     useEffect(() => {
         if (modelFile) {
             setValidUrl(modelFile);
         }
     }, [modelFile]);
 
-    // Determine which size to use (new)
-    const currentSize = models.high ? size : lowResSize;
-
     return (
         <group ref={ref} position={position}>
             {/* Rotated container for model and interactions */}
             <group rotation={radRotation} {...interactionHandlers}>
-                {/* Always show low-res model if available */}
-                {lowResModel && <primitive object={lowResModel} />}
-                
-                {/* Suspense-wrapped LODs (existing functionality) */}
+                {/* Suspense-wrapped LODs */}
                 <Suspense fallback={null}>
                     <Detailed distances={[0, 10, 20]}>
                         {models.high && <Clone object={models.high} />}
@@ -127,20 +94,20 @@ const Prop = forwardRef((props, ref) => {
                     </Detailed>
                 </Suspense>
 
-                {/* Debug bounding box (using current size) */}
-                {devMode && <DebugCube size={currentSize} />}
+                {/* Debug bounding box */}
+                {devMode && <DebugCube size={size} />}
             </group>
 
-            {/* Teleport target marker (using current size) */}
+            {/* Teleport target marker */}
             {devMode && <TeleportMarker position={teleportOffset} />}
 
-            {/* Floating name tag (using current size) */}
+            {/* Floating name tag */}
             {!selectedPOI && !selectedProp && (
                 <FloatingName
                     name={artifactName}
                     playerDistance={playerDistance}
                     distanceFactor={5}
-                    position={[0, currentSize.y + 0.3, 0]}
+                    position={[0, size.y + 0.3, 0]}
                     occlusionMeshRef={occlusionMeshRef}
                 />
             )}

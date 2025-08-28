@@ -28,7 +28,7 @@ function parseContent(contentObj, replacements) {
         );
 
         if (type === "paragraph") {
-            return <p key={idx}>{children}</p>;
+            return <div key={idx}>{children}</div>;
         } else if (type === "media") {
             return <div key={idx} className="media-block">{children}</div>;
         } else {

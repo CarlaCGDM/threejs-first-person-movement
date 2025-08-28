@@ -35,6 +35,7 @@ export const Player = forwardRef(({ keys }, ref) => {
                 position={initialPlayerPosition}
                 enabledRotations={[false, false, false]} // Disable rotation for stability
                 name="player"
+                
             >
                 {/* Player's main collider */}
                 <CapsuleCollider args={[0.75, 0.25]} />

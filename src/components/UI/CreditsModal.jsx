@@ -63,13 +63,13 @@ const styles = {
         overflowY: "auto",
         scrollbarWidth: "thin",
         scrollbarColor: "gray transparent",
-        "&::-webkit-scrollbar": {
+        "&::WebkitScrollbar": {
             width: "6px",
         },
-        "&::-webkit-scrollbar-track": {
+        "&::WebkitScrollbarTrack": {
             background: "transparent",
         },
-        "&::-webkit-scrollbar-thumb": {
+        "&::WebkitScrollbarThumb": {
             backgroundColor: "gray",
             borderRadius: "3px",
         },
