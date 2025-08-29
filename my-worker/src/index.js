@@ -25,7 +25,7 @@ function isAllowedOrigin(origin) {
 
     // Allow localhost + your LAN IP (any port)
     if (o.startsWith('http://localhost')) return true;
-    if (o.startsWith('http://192.168.1.132')) return true;
+    if (o.startsWith('http://192.168.1.128')) return true;
 
     // Exact prod/dev
     if (o === 'https://cova-bonica-virtual-tour.netlify.app') return true;
