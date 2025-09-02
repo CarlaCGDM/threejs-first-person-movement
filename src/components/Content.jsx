@@ -18,7 +18,7 @@ import { LoadingScreen } from "./UI/loadingScreen/LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
 import { CF_WORKER_URL } from "../config";
-import MobileControls from "./UI/mobileControls/MobileControls";
+import MobileJoystick from "./UI/mobileControls/MobileJoystick";
 
 export default function Content({ playerRef, orbitControlsRef, propsData, POIsData, environmentUrl }) {
     const { keys, updateKey } = useCustomKeyboardControls(); // Get both keys and updateKey function
@@ -144,7 +144,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
             </Canvas>
 
             {/* Mobile Controls - Only shows on mobile devices */}
-            <MobileControls updateKey={updateKey} />
+            <MobileJoystick updateKey={updateKey} />
 
             {/* <ProfilerOverlay stats={stats} /> */}
             {(!isLoaded) && <LoadingScreen />}
