@@ -6,14 +6,18 @@ import { usePlayerCamera } from "./hooks/usePlayerCamera";
 import { usePlayerMovement } from "./hooks/usePlayerMovement";
 import { usePlayerPhysics } from "./hooks/usePlayerPhysics";
 import { usePlayerPosition } from "./hooks/usePlayerPosition";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export const Player = forwardRef(({ keys }, ref) => {
     const groupRef = useRef(); // Ref for grouping the player
     const { camera } = useThree(); // Access Three.js camera
     const { settings, dispatch } = useSettings();
-    const { playerWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
+    const { playerWalkSpeed, playerMobileWalkSpeed, initialPlayerPosition, playerJumpForce } = settings;
 
     const [isGrounded, setIsGrounded] = useState(true); // Track if the player is grounded
+
+    const isMobile = useIsMobile();
+    const speed = isMobile ? playerMobileWalkSpeed : playerWalkSpeed
 
     // Store player reference in settings context
     useEffect(() => {
@@ -21,7 +25,7 @@ export const Player = forwardRef(({ keys }, ref) => {
     }, [groupRef]);
 
     usePlayerPosition(); // Handle player positioning logic
-    usePlayerMovement(ref, keys, camera, playerWalkSpeed, playerJumpForce, isGrounded); // Handle movement
+    usePlayerMovement(ref, keys, camera, speed, playerJumpForce, isGrounded); // Handle movement
     usePlayerCamera(groupRef, camera); // Attach camera to the player
     usePlayerPhysics(ref, groupRef); // Apply physics logic
 

@@ -13,12 +13,13 @@ import { Effects } from "./environment/Effects";
 import NPCNavigation from "./NPCs/NPCNavigation/NPCNavigation";
 import { useSettings } from "../context/SettingsContext";
 import NPCManager from "./NPCs/NPCManager/NPCManager";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { LoadingScreen } from "./UI/loadingScreen/LoadingScreen";
 import { ProfilerOverlay } from "./profiling/ProfilerOverlay";
 import { StatsCollector } from "./profiling/StatsCollector";
 import { CF_WORKER_URL } from "../config";
 import MobileJoystick from "./UI/mobileControls/MobileJoystick";
+import CameraJoystick from "./UI/mobileControls/CameraJoystick";
 
 export default function Content({ playerRef, orbitControlsRef, propsData, POIsData, environmentUrl }) {
     const { keys, updateKey } = useCustomKeyboardControls(); // Get both keys and updateKey function
@@ -26,6 +27,8 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
     const [isLoaded, setIsLoaded] = useState(false);
     const { active, progress } = useProgress();
+
+    const externalAimRef = useRef({ vx: 0, vy: 0 });
 
     // Check if everything is loaded
     useEffect(() => {
@@ -92,7 +95,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
                     <SceneWithRoomEnvironment />
                     <ambientLight intensity={0} />
                     {/* Camera controls and post-processing effects */}
-                    <CustomOrbitControls ref={orbitControlsRef} />
+                    <CustomOrbitControls ref={orbitControlsRef} externalAimRef={externalAimRef} />
                     <Effects />
 
                     {/* NPC Management */}
@@ -129,8 +132,8 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
                     {/* Physics simulation with environment and player */}
                     <Suspense fallback={null}>
-                        <Physics 
-                        gravity={[0, -9.81, 0]}
+                        <Physics
+                            gravity={[0, -9.81, 0]}
                         >
                             <EnvironmentColliders />
                             <Ground environmentUrl={environmentUrl} />
@@ -145,6 +148,7 @@ export default function Content({ playerRef, orbitControlsRef, propsData, POIsDa
 
             {/* Mobile Controls - Only shows on mobile devices */}
             <MobileJoystick updateKey={updateKey} />
+            <CameraJoystick externalAimRef={externalAimRef} position="right" />
 
             {/* <ProfilerOverlay stats={stats} /> */}
             {(!isLoaded) && <LoadingScreen />}

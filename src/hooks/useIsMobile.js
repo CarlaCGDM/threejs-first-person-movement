@@ -12,7 +12,7 @@ export function useIsMobile() {
       const isUAStringMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
 
       const isPortrait = height > width;
-      const isMobileByScreen = width <= 820 || (isPortrait && dpr >= 2);
+      const isMobileByScreen = width <= 1000 || (isPortrait && dpr >= 2);
 
       const result = isUAStringMobile || isMobileByScreen;
 

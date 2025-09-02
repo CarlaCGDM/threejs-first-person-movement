@@ -1,23 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-
-/** Detect mobile/touch in an effect so we don't access window during render */
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const checkMobile = () =>
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      ) ||
-      "ontouchstart" in window ||
-      window.innerWidth <= 768;
-
-    const onResize = () => setIsMobile(checkMobile());
-    onResize(); // initial
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-  return isMobile;
-};
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 /** Track viewport size via state (SSR/browser-safe) */
 const useViewport = () => {
@@ -221,25 +203,6 @@ export default function MobileJoystick({ updateKey, position = "left", size }) {
     color: "rgba(0,0,0,0.6)",
   };
 
-  const jumpSize = Math.round(baseSize * 0.55);
-  const jumpButtonStyle = {
-    position: "fixed",
-    bottom: 20 + baseSize * 0.25,
-    right: 20, // keep jump on the right side
-    width: jumpSize,
-    height: jumpSize,
-    borderRadius: "50%",
-    background: "rgba(255,255,255,0.3)",
-    backdropFilter: "blur(8px)",
-    color: "#fff",
-    fontSize: Math.round(jumpSize * 0.28),
-    fontWeight: "bold",
-    border: "none",
-    touchAction: "manipulation",
-    userSelect: "none",
-    zIndex: 1000,
-  };
-
   // Decide what to render *after* all hooks are called
   if (!isMobile) return null;
 
@@ -269,27 +232,6 @@ export default function MobileJoystick({ updateKey, position = "left", size }) {
         /> */}
         <div style={knobStyle}>●</div>
       </div>
-
-      {/* Jump button */}
-      <button
-        aria-label="Jump"
-        style={jumpButtonStyle}
-        onPointerDown={(e) => {
-          e.preventDefault();
-          updateKey("jump", true);
-        }}
-        onPointerUp={(e) => {
-          e.preventDefault();
-          updateKey("jump", false);
-        }}
-        onPointerCancel={(e) => {
-          e.preventDefault();
-          updateKey("jump", false);
-        }}
-        onContextMenu={(e) => e.preventDefault()}
-      >
-        ⤒
-      </button>
     </>
   );
 }
