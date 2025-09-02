@@ -3,10 +3,17 @@ import { PropButton } from "./PropButton";
 import { usePlayerTeleport } from "../../player/hooks/usePlayerTeleport";
 import { useSettings } from "../../../context/SettingsContext";
 import * as THREE from "three";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 export function PropsSidebar({ props, playerRef, orbitControlsRef }) {
   const { teleportToProp, teleportToStart } = usePlayerTeleport(playerRef);
   const { settings, dispatch } = useSettings(); // Get dispatch from context
+
+  // Detect mobile devices
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return;
+  }
 
   const handleTeleport = (prop) => {
     teleportToProp(prop);

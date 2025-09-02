@@ -1,0 +1,209 @@
+.tutorial-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #272626cc;
+    border: 1px solid #3a3a3a;
+    padding: 30px;
+    width: 60vw;
+    max-width: 800px;
+    min-height: 50vh;
+    max-height: 80vh;
+    z-index: 2000;
+    font-family: 'Mulish', sans-serif;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.25vw;
+    overflow: hidden;
+}
+
+@media (max-width: 1000px) {
+    .tutorial-wrapper {
+        margin-top: 5vh;
+        width: 95vw;
+        max-width: "none";
+        height: 80vh;
+        padding: 10px;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* Container */
+.tutorial-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    pointer-events: auto;
+    position: relative;
+
+    /* Scrollbar (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: #e5b688 transparent;
+}
+
+/* Scrollbar (WebKit) */
+.tutorial-screen::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tutorial-screen::-webkit-scrollbar-thumb {
+    background: #e5b688;
+    border-radius: 8px;
+}
+
+.tutorial-screen::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Progress dots */
+.tutorial-progress {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.tutorial-dot {
+    width: 1vh;
+    height: 1vh;
+    border-radius: 50%;
+    background: #3a3a3a;
+    transition: background-color 0.3s ease;
+}
+
+.tutorial-dot.is-active {
+    background: #e2e2e2;
+}
+
+/* Content */
+.tutorial-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tutorial-title {
+    color: #e2e2e2;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.tutorial-content {
+    color: #e2e2e2;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* “Nested” rules translated to plain CSS */
+.tutorial-content p {
+    margin-bottom: 1rem;
+}
+
+.tutorial-content img {
+    vertical-align: middle;
+    height: 1.2em;
+    margin: 0 0.2em;
+}
+
+.tutorial-content svg {
+    vertical-align: middle;
+    margin: 0 0.2em;
+}
+
+.tutorial-content strong {
+    color: #e5b688;
+    font-weight: 600;
+}
+
+.media-block {
+    height: 20vh;
+}
+
+/* Optional: mobile tweaks if you want smaller text/spacing on phones */
+@media (max-width: 1000px) {
+    .tutorial-dot {
+        width: 2vh;
+        height: 2vh;
+    }
+
+    .tutorial-title {
+        font-size: 0rem;
+        margin-bottom: 1rem;
+    }
+
+    .tutorial-content {
+        font-size: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tutorial-screen {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow-y: auto;
+        pointer-events: auto;
+        position: relative;
+
+        /* Scrollbar (Firefox) */
+        scrollbar-width: thin;
+        scrollbar-color: #e5b688 transparent;
+    }
+
+    .media-block {
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/* Base button — mirrors your inline style object exactly */
+.tutorial-btn {
+    padding: 0 2%;
+    border-radius: 1vw;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    min-width: 60px;
+    font-family: 'Mulish', sans-serif;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Variants — exact same colors as your JS config */
+.tutorial-btn.variant-primary {
+    background-color: #FAE6D5;
+    color: #272626;
+}
+
+.tutorial-btn.variant-primary.is-hovered {
+    background-color: #E5B688;
+}
+
+.tutorial-btn.variant-secondary {
+    background-color: #FAE6D5;
+    color: #E5B688;
+}
+
+.tutorial-btn.variant-secondary.is-hovered {
+    background-color: #E5B688;
+}
+
+/* Optional: mobile tweaks if you want smaller text/spacing on phones */
+@media (max-width: 1000px) {}

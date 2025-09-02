@@ -29,8 +29,6 @@ export const usePlayerMovement = (ref, keys, camera, playerWalkSpeed, playerJump
         // Prevent sliding when standing still on stairs
          // Prevent sliding when standing still on stairs - only if we're actually moving
         const hasVelocity = Math.abs(velocity.x) > 0.01 || Math.abs(velocity.y) > 0.01 || Math.abs(velocity.z) > 0.01;
-        console.log(hasVelocity)
-        console.log(velocity)
         if (!forward && !backward && !left && !right && isGrounded && hasVelocity) {
             ref.current.setLinvel({ x: 0, y: 0.15, z: 0 });
         }
