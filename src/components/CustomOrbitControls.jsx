@@ -148,7 +148,7 @@ export const CustomOrbitControls = forwardRef((props, ref) => {
 
     if (vx !== 0 || vy !== 0) {
       // Scale joystick feel; tweak the factor to taste. Higher = faster turn.
-      const joyFactor = cameraRotationSpeed * 0.0025 * (isMobile ? 0.25 : 1.0);
+      const joyFactor = cameraRotationSpeed * 0.0025 * (isMobile ? 0.75 : 1.0);
       // Horizontal: yaw (left/right)
       targetYaw.current -= vx * joyFactor;
       // Vertical: pitch (up/down); clamp pitch

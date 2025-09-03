@@ -8,13 +8,13 @@ export function InstructionsPanel() {
     return (
       <div style={styles.instructionsPanel}>
         <p style={styles.text}><img
-                            src={`/assets/icons/ui/mouse_right_02.svg`}
+                            src={`/assets/icons/ui/mouse_left.svg`}
                             alt={"guía"}
                             style={{
-                                height: "2em",
+                                height: "1.8em",
                                 width: "auto",
                                 verticalAlign: "middle",
-                                margin: "0 0.3em",
+                                margin: "0 0.65em",
                                 marginBottom: "0.1em"
                             }}
                         /> {UIlabels.camera}</p>

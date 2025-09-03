@@ -4,7 +4,7 @@ const initialSettings = {
   workerUrl: "https://my-worker.nadinaccg.workers.dev/?path=",
   cameraRotationSpeed: 8.0,
   playerWalkSpeed: 1.25,
-  playerMobileWalkSpeed: 0.75,
+  playerMobileWalkSpeed: 1,
   playerJumpForce: 4,
   initialPlayerPosition: [0.91, -2.0, 8.8],
   playerPosition: [0.91, -2.0, 8.8],

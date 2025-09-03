@@ -1,6 +1,8 @@
 import "./tutorial-styles.css";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 export function TutorialScreen({ title, content, currentIndex, totalScreens }) {
+  const isMobile = useIsMobile();
   return (
     <div className="tutorial-screen">
       <div className="tutorial-progress">
@@ -13,7 +15,7 @@ export function TutorialScreen({ title, content, currentIndex, totalScreens }) {
       </div>
 
       <div className="tutorial-content-wrapper">
-        <h2 className="tutorial-title">{title}</h2>
+        {((currentIndex === 0 && isMobile) || !isMobile) && <h2 className="tutorial-title">{title}</h2>}
         <div className="tutorial-content">{content}</div>
       </div>
     </div>

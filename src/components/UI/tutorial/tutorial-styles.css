@@ -1,5 +1,10 @@
+/* ===============================
+   Tutorial modal (base / desktop)
+   =============================== */
+
 .tutorial-wrapper {
     position: fixed;
+    /* Desktop: center */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -18,19 +23,10 @@
     overflow: hidden;
 }
 
-@media (max-width: 1000px) {
-    .tutorial-wrapper {
-        margin-top: 5vh;
-        width: 95vw;
-        max-width: "none";
-        height: 80vh;
-        padding: 10px;
-    }
-}
+/* ===========================
+   Tutorial screen + scrollbar
+   =========================== */
 
-/* ------------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-/* Container */
 .tutorial-screen {
     flex: 1;
     display: flex;
@@ -58,7 +54,10 @@
     background: transparent;
 }
 
-/* Progress dots */
+/* ===============
+   Progress dots
+   =============== */
+
 .tutorial-progress {
     display: flex;
     justify-content: center;
@@ -78,11 +77,15 @@
     background: #e2e2e2;
 }
 
-/* Content */
+/* ===============
+   Content area
+   =============== */
+
 .tutorial-content-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .tutorial-title {
@@ -99,77 +102,29 @@
     font-size: 1.1rem;
     line-height: 1.6;
     text-align: center;
+    overflow-wrap: anywhere;
+    /* prevent overlap by long words */
 }
 
-/* “Nested” rules translated to plain CSS */
+/* Text/media defaults */
 .tutorial-content p {
     margin-bottom: 1rem;
 }
 
-.tutorial-content img {
-    vertical-align: middle;
-    height: 1.2em;
-    margin: 0 0.2em;
-}
-
+.tutorial-content img,
 .tutorial-content svg {
     vertical-align: middle;
     margin: 0 0.2em;
 }
 
-.tutorial-content strong {
-    color: #e5b688;
-    font-weight: 600;
-}
+/* ===========================
+   Buttons (keep your palette)
+   =========================== */
 
-.media-block {
-    height: 20vh;
-}
-
-/* Optional: mobile tweaks if you want smaller text/spacing on phones */
-@media (max-width: 1000px) {
-    .tutorial-dot {
-        width: 2vh;
-        height: 2vh;
-    }
-
-    .tutorial-title {
-        font-size: 0rem;
-        margin-bottom: 1rem;
-    }
-
-    .tutorial-content {
-        font-size: 0.8rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .tutorial-screen {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow-y: auto;
-        pointer-events: auto;
-        position: relative;
-
-        /* Scrollbar (Firefox) */
-        scrollbar-width: thin;
-        scrollbar-color: #e5b688 transparent;
-    }
-
-    .media-block {
-    }
-}
-
-/* ------------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-/* Base button — mirrors your inline style object exactly */
 .tutorial-btn {
     padding: 0 2%;
-    border-radius: 1vw;
+    border-radius: 12px;
+    /* fixed px works better across DPIs */
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -186,7 +141,6 @@
     overflow: hidden;
 }
 
-/* Variants — exact same colors as your JS config */
 .tutorial-btn.variant-primary {
     background-color: #FAE6D5;
     color: #272626;
@@ -205,5 +159,147 @@
     background-color: #E5B688;
 }
 
-/* Optional: mobile tweaks if you want smaller text/spacing on phones */
-@media (max-width: 1000px) {}
+/* The flex container that holds all media for a screen */
+
+.media-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* or flex-start */
+    gap: 2px;
+    /* small gap between screenshots */
+    flex-wrap: nowrap;
+    /* keep them on one line in wide cases */
+    
+}
+
+/* The direct children of .media-row are <span> wrappers from replacements */
+.media-row>span {
+    display: inline-flex;
+    /* make them behave like flex items nicely */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Make sure images don’t introduce extra margins/line-height weirdness */
+.media-row img,
+.media-row video,
+.media-row canvas {
+    display: block;
+    margin: 0;
+    height: auto;
+    /* allow your inline 20vh to rule size */
+    max-width: 100%;
+}
+
+/* =========================================
+   Mobile (any orientation) base adjustments
+   ========================================= */
+@media (max-width: 1000px) {
+    .tutorial-wrapper {
+        /* Use insets + tiny margins, not translate, to avoid empty bottom space */
+        transform: none;
+        /* leave a tiny margin (min of 1svh / 1svw) around the card,
+       and keep it below the fixed navbar (~5svh) */
+        top: calc(5svh + min(1svh, 1svw));
+        right: min(2svh, 2svw);
+        bottom: min(2svh, 2svw);
+        left: min(2svh, 2svw);
+
+        width: auto;
+        height: auto;
+        max-width: none;
+        max-height: calc(100dvh - 5svh - 2 * min(1svh, 1svw));
+        padding: 12px;
+        border-radius: 12px;
+        /* less rounded on mobile */
+    }
+
+    .tutorial-progress {
+        margin-bottom: 14px;
+        display: none;
+    }
+
+    .tutorial-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .tutorial-title {
+        font-size: clamp(1.05rem, 3.2vw, 1.3rem);
+        margin-bottom: 0.8rem;
+    }
+
+    .tutorial-content {
+        font-size: 0.8rem;
+        line-height: 1.55;
+    }
+    
+}
+
+/* ===================================
+   Mobile PORTRAIT — maximize content
+   =================================== */
+@media (max-width: 1000px) and (orientation: portrait) {
+    .tutorial-wrapper {
+        /* Fill nearly all vertical space under navbar, tiny margins all around */
+        top: calc(5svh + min(3svh, 3svw));
+        right: min(3svh, 3svw);
+        bottom: min(3svh, 3svw);
+        left: min(3svh, 3svw);
+
+        /* Ensure it can grow vertically as needed */
+        max-height: calc(100dvh - 5svh - 2 * min(1svh, 1svw));
+        padding: 14px 16px;
+    }
+
+    /* Portrait: let media be as tall as it needs (up to a sane cap) */
+    .media-block {
+        height: auto;
+        max-height: 65svh;
+        /* generous in portrait to avoid overlap */
+    }
+
+    .media-block img,
+    .media-block video,
+    .media-block canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .tutorial-content {
+        font-size: 1rem;
+    }
+
+    .media-row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* =====================================
+   Mobile LANDSCAPE — small consistency
+   ===================================== */
+@media (max-width: 1000px) and (orientation: landscape) {
+
+    .tutorial-wrapper {
+        /* Fill nearly all vertical space under navbar, tiny margins all around */
+        top: calc(5svh + min(8svh, 8svw));
+        right: min(3svh, 3svw);
+        bottom: min(3svh, 3svw);
+        left: min(3svh, 3svw);
+
+        /* Ensure it can grow vertically as needed */
+        max-height: calc(100dvh - 5svh - 2 * min(1svh, 1svw));
+        padding: 14px 16px;
+    }
+
+    
+
+    .media-row {
+        gap: 0px;
+        height: 35vh;
+    }
+}

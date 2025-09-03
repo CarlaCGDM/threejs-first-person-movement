@@ -4,7 +4,7 @@ import { InstructionsPanel } from "./InstructionsPanel";
 import PropInfo from "../interactables/props/PropInfo";
 import PointOfInterestInfo from "../interactables/pointsofinterest/PointOfInterestInfo"; // Import the PointOfInterestInfo component
 import { useSettings } from "../../context/SettingsContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Minimap } from "../environment/Minimap";
 import { Navbar } from "./Navbar";
 import { Tutorial } from "./tutorial/Tutorial"; // Import the Tutorial component
@@ -16,10 +16,25 @@ import { useIsMobile } from "../../hooks/useIsMobile";
 
 export function Overlay({ props, playerRef, orbitControlsRef, caveData }) {
 
-  const isMobile = useIsMobile();
 
   const { settings, dispatch } = useSettings();
   const { selectedProp, selectedPOI } = settings;
+
+  const isMobile = useIsMobile();
+
+  // Use a ref to track if we've already initialized mobile settings
+  const hasInitializedMobile = useRef(false);
+
+  useEffect(() => {
+    console.log("Is mobile:", isMobile);
+
+    // Only run this initialization once when mobile is detected
+    if (isMobile && !hasInitializedMobile.current && settings.ui.showMinimap) {
+      console.log("Initializing mobile settings - disabling minimap");
+      dispatch({ type: "TOGGLE_MINIMAP" });
+      hasInitializedMobile.current = true;
+    }
+  }, [isMobile, settings.ui.showMinimap]); // Still need showMinimap to detect initial state
 
   const handleClosePropInfo = () => {
     dispatch({ type: "CLEAR_SELECTED_PROP" });

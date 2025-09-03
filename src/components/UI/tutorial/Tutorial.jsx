@@ -16,26 +16,67 @@ import { LanguageSelector } from "./LanguageSelector";
 import { CF_WORKER_URL } from "../../../config";
 
 function parseContent(contentObj, replacements) {
-    return Object.values(contentObj).map(({ content, type }, idx) => {
-        const parts = content.split(/(@@[^@]+@@)/g); // split at placeholders
+  const entries = Object.values(contentObj);
 
-        const children = parts.map((part, i) =>
-            replacements[part] !== undefined ? (
-                <span key={i}>{replacements[part]}</span>
-            ) : (
-                <span key={i} dangerouslySetInnerHTML={{ __html: part }} />
-            )
-        );
+  // helper to transform content string into JSX parts
+  const makeChildren = (raw, keyPrefix) =>
+    raw
+      .split(/(@@[^@]+@@)/g)
+      .filter(Boolean)
+      .map((part, idx) =>
+        replacements[part] !== undefined ? (
+          // wrap replacements so they're flex items
+          <span key={`${keyPrefix}-r-${idx}`}>{replacements[part]}</span>
+        ) : (
+          <span
+            key={`${keyPrefix}-t-${idx}`}
+            dangerouslySetInnerHTML={{ __html: part }}
+          />
+        )
+      );
 
-        if (type === "paragraph") {
-            return <div key={idx}>{children}</div>;
-        } else if (type === "media") {
-            return <div key={idx} className="media-block">{children}</div>;
-        } else {
-            console.warn(`Unknown content type: ${type}`);
-            return <div key={idx}>{children}</div>;
-        }
-    });
+  const out = [];
+  let i = 0;
+
+  while (i < entries.length) {
+    const { content, type } = entries[i];
+
+    if (type === "media") {
+      // collect *all consecutive* media entries into one row
+      const group = [];
+      let j = i;
+      while (j < entries.length && entries[j].type === "media") {
+        group.push(...makeChildren(entries[j].content, `m${j}`));
+        j++;
+      }
+      out.push(
+        <div key={`media-row-${i}`} className="media-row">
+          {group}
+        </div>
+      );
+      i = j; // jump past the media group
+      continue;
+    }
+
+    if (type === "paragraph") {
+      out.push(
+        <div key={`p-${i}`} className="paragraph-block">
+          {makeChildren(content, `p${i}`)}
+        </div>
+      );
+    } else {
+      console.warn(`Unknown content type: ${type}`);
+      out.push(
+        <div key={`u-${i}`} className="paragraph-block">
+          {makeChildren(content, `u${i}`)}
+        </div>
+      );
+    }
+
+    i++;
+  }
+
+  return out;
 }
 
 
